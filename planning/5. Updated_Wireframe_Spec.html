@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe Specification — Sustainable Farming App</title>
+<style>
+  :root{
+    --soil: #3d3225;
+    --soil-light: #6b5c47;
+    --field: #4a6741;
+    --field-dark: #35492f;
+    --wheat: #c99a3e;
+    --paper: #faf7f0;
+    --paper-line: #e6ddc9;
+    --ink: #2a2620;
+    --ink-soft: #5c5546;
+    --danger: #a14a3a;
+    --card-bg: #ffffff;
+    --rule: #d8cfb8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua", Georgia, serif;
+    line-height:1.55;
+  }
+  .wrap{ max-width:1000px; margin:0 auto; padding:0 32px 80px; }
+
+  header.doc-header{
+    background: linear-gradient(180deg, var(--field-dark), var(--field));
+    color:#f3ecd9; padding:56px 32px 40px; margin-bottom:48px; position:relative;
+    border-bottom:6px solid var(--wheat);
+  }
+  header.doc-header::before{
+    content:""; position:absolute; top:0; left:0; right:0; bottom:0;
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 42px);
+    pointer-events:none;
+  }
+  .doc-header-inner{ max-width:1000px; margin:0 auto; position:relative; }
+  .eyebrow{ text-transform:uppercase; letter-spacing:0.18em; font-size:12.5px; color:var(--wheat); font-weight:600; margin-bottom:14px; }
+  h1.doc-title{ font-size:36px; line-height:1.2; margin:0 0 18px; font-weight:700; letter-spacing:-0.01em; color:#fbf5e6; }
+  .doc-meta{ font-size:14px; color:#d9d0b6; }
+  .doc-meta strong{ color:#f3ecd9; font-weight:600; }
+
+  section.spec-section{ margin-bottom:44px; }
+  .section-head{ display:flex; align-items:baseline; gap:16px; border-bottom:2px solid var(--field); padding-bottom:10px; margin-bottom:20px; }
+  .section-num{ font-size:15px; font-weight:700; color:#fff; background:var(--field); padding:3px 10px; border-radius:3px; letter-spacing:0.02em; flex-shrink:0; }
+  h2.section-title{ font-size:23px; margin:0; color:var(--field-dark); font-weight:700; letter-spacing:-0.01em; }
+  p{ margin:0 0 14px; font-size:16px; }
+
+  /* ===== 1. Screen-to-workflow mapping table ===== */
+  table.map-table{ width:100%; border-collapse:collapse; background:var(--card-bg); border:1px solid var(--rule); border-radius:6px; overflow:hidden; font-size:14.5px; }
+  table.map-table th{ background:var(--field-dark); color:#f3ecd9; text-align:left; padding:10px 16px; font-size:12px; text-transform:uppercase; letter-spacing:0.04em; }
+  table.map-table td{ padding:11px 16px; border-top:1px solid var(--paper-line); }
+  table.map-table tr:nth-child(even) td{ background:#f9f6ee; }
+  td.screen-cell{ font-weight:700; color:var(--soil); }
+  .wf-pill{ display:inline-block; font-family:"Courier New", monospace; font-size:12px; font-weight:700; color:#fff; background:var(--field); padding:2px 8px; border-radius:3px; margin-right:4px; }
+
+  /* ===== 2. Global nav map ===== */
+  .nav-card{ background:var(--card-bg); border:1px solid var(--rule); border-left:4px solid var(--wheat); border-radius:6px; padding:16px 20px; margin-bottom:12px; }
+  .nav-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.09em; color:var(--soil-light); font-weight:700; margin-bottom:8px; }
+  .tab-bar{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .tab-chip{ background:#eef1e7; border:1px solid var(--rule); color:var(--field-dark); font-weight:700; padding:6px 14px; border-radius:14px; font-size:13.5px; }
+  .tab-chip.fab{ background:var(--field); color:#fff; border-color:var(--field); }
+
+  /* ===== 3. Screen spec cards ===== */
+  .screen-card{ background:var(--card-bg); border:1px solid var(--rule); border-radius:8px; overflow:hidden; margin-bottom:26px; }
+  .screen-head{ background:var(--field-dark); color:#f3ecd9; padding:14px 22px; }
+  .screen-head-name{ font-size:18px; font-weight:700; }
+  .screen-head-wf{ font-size:12.5px; color:var(--wheat); font-weight:600; margin-top:4px; }
+  .screen-body{ padding:20px 22px; }
+
+  .meta-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+  .meta-tag{ font-size:12.5px; background:#f3f0e5; border:1px solid var(--rule); border-radius:14px; padding:4px 12px; color:var(--soil); }
+  .meta-tag strong{ color:var(--field-dark); }
+
+  .block-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; color:var(--soil-light); margin:16px 0 8px; }
+  .block-label:first-child{ margin-top:0; }
+
+  .wireframe-box{ background:#faf9f4; border:1px solid var(--rule); border-radius:6px; overflow:hidden; margin-bottom:6px; }
+  pre.wireframe{
+    margin:0; padding:18px; font-family:"Courier New", monospace; font-size:12.5px;
+    color:var(--ink); white-space:pre; overflow-x:auto; line-height:1.55;
+  }
+  .wf-alert-text{ color:var(--danger); font-weight:700; }
+  .wf-success-text{ color:var(--field-dark); font-weight:700; }
+
+  .interaction-note{ background:#fbf3e3; border:1px solid #e8d9ae; border-left:3px solid var(--wheat); border-radius:4px; padding:10px 16px; font-size:14.5px; margin-bottom:8px; }
+  .state-note{ background:#eef1e7; border:1px solid var(--rule); border-left:3px solid var(--field); border-radius:4px; padding:10px 16px; font-size:14.5px; margin-bottom:8px; }
+  .state-note strong{ color:var(--field-dark); }
+
+  /* ===== 4/5/6 supporting sections ===== */
+  .note-card{ background:var(--card-bg); border:1px solid var(--rule); border-left:4px solid var(--soil-light); border-radius:6px; padding:12px 18px; margin-bottom:10px; font-size:14.5px; }
+  .note-card strong{ color:var(--soil); }
+  code.inline-code{ font-family:"Courier New", monospace; background:#eef1e7; padding:1px 5px; border-radius:3px; font-size:12.5px; color:var(--field-dark); }
+
+  footer.doc-footer{ text-align:center; font-size:12.5px; color:var(--soil-light); margin-top:60px; padding-top:20px; border-top:1px solid var(--rule); font-style:italic; }
+
+  @media (max-width:760px){
+    header.doc-header{ padding:40px 20px 32px; }
+    h1.doc-title{ font-size:26px; }
+    .wrap{ padding:0 18px 60px; }
+    table.map-table{ font-size:13px; }
+    pre.wireframe{ font-size:11px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <div class="doc-header-inner">
+    <div class="eyebrow">Wireframe Specification</div>
+    <h1 class="doc-title">Sustainable Farming App</h1>
+    <div class="doc-meta"><strong>Phase:</strong> UI/UX Design — Wireframing</div>
+    <span><strong>Date:</strong> July 2026</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 1. Screen Inventory & Screen-to-Workflow Mapping -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">1</span>
+      <h2 class="section-title">Screen Inventory &amp; Screen-to-Workflow Mapping</h2>
+    </div>
+    <table class="map-table">
+      <thead>
+        <tr><th>Screen</th><th>Mapped Workflow(s)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="screen-cell">Login Screen</td><td><span class="wf-pill">WF-01</span>Auth</td></tr>
+        <tr><td class="screen-cell">OTP Verification Screen</td><td><span class="wf-pill">WF-01</span>Auth</td></tr>
+        <tr><td class="screen-cell">Home Dashboard</td><td><span class="wf-pill">WF-05</span>Alerts&nbsp;&nbsp;<span class="wf-pill">WF-06</span>Schemes</td></tr>
+        <tr><td class="screen-cell">Fields Dashboard</td><td><span class="wf-pill">WF-02</span>Map Field&nbsp;&nbsp;<span class="wf-pill">WF-03</span>Add Planting</td></tr>
+        <tr><td class="screen-cell">Add Field (Map Interface)</td><td><span class="wf-pill">WF-02</span>Map Field</td></tr>
+        <tr><td class="screen-cell">Add Planting Form</td><td><span class="wf-pill">WF-03</span>Add Planting</td></tr>
+        <tr><td class="screen-cell">Quick Log Form</td><td><span class="wf-pill">WF-04</span>Intervention/Expense</td></tr>
+        <tr><td class="screen-cell">Alert Detail &amp; Vendor Screen</td><td><span class="wf-pill">WF-05</span>Alerts</td></tr>
+        <tr><td class="screen-cell">Scheme Detail Screen</td><td><span class="wf-pill">WF-06</span>Schemes</td></tr>
+        <tr><td class="screen-cell">Crop Cycle Ledger (Profit Margin View)</td><td><span class="wf-pill">WF-04</span>Intervention/Expense tracking outcome</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 2. Global Navigation Map -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">2</span>
+      <h2 class="section-title">Global Navigation Map</h2>
+    </div>
+
+    <div class="nav-card">
+      <div class="nav-label">App Entry</div>
+      <p style="margin:0;">Login &rarr; OTP &rarr; Home.</p>
+    </div>
+
+    <div class="nav-card">
+      <div class="nav-label">Primary Persistent Navigation</div>
+      <p style="margin:0 0 6px;">Bottom Tab Bar available on all top-level dashboards.</p>
+      <div class="tab-bar">
+        <span class="tab-chip">Home</span>
+        <span class="tab-chip">Fields</span>
+        <span class="tab-chip fab">(FAB) +</span>
+        <span class="tab-chip">Schemes</span>
+        <span class="tab-chip">Profile</span>
+      </div>
+    </div>
+
+    <div class="nav-card">
+      <div class="nav-label">Modal / Overlay Navigation</div>
+      <p style="margin:0;">Action-oriented screens (Quick Log, Add Field, Add Planting) open as full-screen modals covering the bottom tab bar, requiring explicit closure (Save/Cancel) to return to the previous state.</p>
+    </div>
+  </section>
+
+  <!-- 3. Screen Specifications -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">3</span>
+      <h2 class="section-title">Screen Specifications (Detailed Wireframes)</h2>
+    </div>
+
+    <!-- Screens 1 & 2 -->
+    <div class="screen-card">
+      <div class="screen-head">
+        <div class="screen-head-name">Screens 1 &amp; 2: Authentication Flow (Login &amp; OTP)</div>
+        <div class="screen-head-wf">Associated Workflow: WF-01</div>
+      </div>
+      <div class="screen-body">
+        <div class="meta-row">
+          <span class="meta-tag"><strong>Purpose:</strong> Secure entry point requiring zero passwords</span>
+          <span class="meta-tag"><strong>Entry:</strong> App launch (unauthenticated)</span>
+          <span class="meta-tag"><strong>Exit:</strong> Success &rarr; Home Dashboard; Error &rarr; Retry input</span>
+        </div>
+        <div class="block-label">Layout Structure</div>
+        <p style="margin:0 0 8px;">Top alignment for logo/header, center alignment for input to accommodate system keyboard.</p>
+
+        <div class="block-label">Textual Wireframe</div>
+        <div class="wireframe-box">
+          <pre class="wireframe">+---------------------------------------+
+|                                       |
+|  [App Title / Placeholder Logo]       |
+|                                       |
+|  Welcome. Enter your mobile number.   |
+|                                       |
+|  +----+ +--------------------------+  |
+|  | +91| | 9999 9999 99             |  |
+|  +----+ +--------------------------+  |
+|                                       |
+|  [ LARGE BUTTON: GET OTP ]            |
+|                                       |
++---------------------------------------+
+        (Transitions to OTP Screen)
++---------------------------------------+
+|  &lt; Back                               |
+|                                       |
+|  Enter the 6-digit code sent to       |
+|  +91 9999 9999 99                     |
+|                                       |
+|  [ _ ] [ _ ] [ _ ] - [ _ ] [ _ ] [ _ ]|
+|                                       |
+|  [ LARGE BUTTON: VERIFY ]             |
+|                                       |
+|  Resend code in 00:59                 |
++---------------------------------------+</pre>
+        </div>
+
+        <div class="block-label">Interaction Notes</div>
+        <div class="interaction-note">Mobile number input triggers numeric keyboard. OTP input auto-advances focus to the next box.</div>
+      </div>
+    </div>
+
+    <!-- Screen 3 -->
+    <div class="screen-card">
+      <div class="screen-head">
+        <div class="screen-head-name">Screen 3: Home Dashboard</div>
+        <div class="screen-head-wf">Associated Workflows: WF-05, WF-06, WF-07</div>
+      </div>
+      <div class="screen-body">
+        <div class="meta-row">
+          <span class="meta-tag"><strong>Purpose:</strong> Immediate situational awareness, offline sync status, actionable intelligence</span>
+          <span class="meta-tag"><strong>Entry:</strong> Successful login or Bottom Tab navigation</span>
+          <span class="meta-tag"><strong>Exit:</strong> Tap Alert &rarr; Alert Detail; Tap Scheme &rarr; Scheme Detail</span>
+        </div>
+        <div class="block-label">Information Hierarchy</div>
+        <p style="margin:0 0 8px;">Primary: Critical Alerts. Secondary: Sync Status &amp; Weather. Supporting: Subsidies.</p>
+
+        <div class="block-label">Textual Wireframe</div>
+        <div class="wireframe-box">
+          <pre class="wireframe">+---------------------------------------+
+| Hello, Farmer Name!      [Sync: OK]   |
++---------------------------------------+
+| [Weather Widget]                      |
+| Mysuru: 32°C | 88% Hum | Rain Expected|
++---------------------------------------+
+| 📈 SEASON FINANCIALS                  |
+| Total Spent: ₹ 15,000                 |
+| Total Earned: ₹ 0 (Growing phase)     |
+| [ BUTTON: View Full Ledger ]          |
++---------------------------------------+
+|  <span class="wf-alert-text">⚠️ CRITICAL ALERT
+|  High Risk: Leaf Rust
+|  Target: Field A (Wheat)
+|  [ BUTTON: View Treatment ]</span>           |
++---------------------------------------+
+|  <span class="wf-success-text">✅ SCHEME MATCH
+|  Krishi Bhagya Subsidy
+|  [ BUTTON: View Details ]</span>            |
++---------------------------------------+
+|                                       |
+| [ Home ] [ Fields ] [+] [ Schemes ]   |
++---------------------------------------+</pre>
+        </div>
+
+        <div class="block-label">Screen States</div>
+        <div class="state-note"><strong>Offline State:</strong> [Sync: OK] changes to [⚠️ Offline]. Weather widget grays out with "Last updated X hours ago".</div>
+        <div class="state-note"><strong>Empty State:</strong> If no alerts/schemes, show "Your farm is running smoothly. Ready to log an activity?" with an arrow pointing to the [+] FAB.</div>
+      </div>
+    </div>
+
+    <!-- Screens 4 & 5 -->
+    <div class="screen-card">
+      <div class="screen-head">
+        <div class="screen-head-name">Screens 4 &amp; 5: Fields &amp; Field Mapping</div>
+        <div class="screen-head-wf">Associated Workflows: WF-02, WF-03</div>
+      </div>
+      <div class="screen-body">
+        <div class="meta-row">
+          <span class="meta-tag"><strong>Purpose:</strong> Manage physical land assets and biological crop cycles</span>
+          <span class="meta-tag"><strong>Entry:</strong> Bottom Tab [ Fields ]</span>
+          <span class="meta-tag"><strong>Exit:</strong> Tap 'Add Field' &rarr; Map Screen; Tap 'Add Planting' &rarr; Planting Form</span>
+        </div>
+
+        <div class="block-label">Textual Wireframe (Map Screen — WF-02)</div>
+        <div class="wireframe-box">
+          <pre class="wireframe">+---------------------------------------+
+|  (X) Close                Save Field  |
++---------------------------------------+
+|                                       |
+|       [ INTERACTIVE MAP AREA ]        |
+|       [ CENTER PIN MARKER ]           |
+|                                       |
+|   Drag map to place pin on your farm  |
++---------------------------------------+
+| Field Name: [ Input Box ]             |
+| Area Size:  [ Num Input ] [Unit Drop] |
+|             (e.g., 2)     (Guntha)    |
+|                                       |
+| [ BUTTON: Confirm Location & Save ]   |
++---------------------------------------+</pre>
+        </div>
+
+        <div class="block-label">Interaction Notes</div>
+        <div class="interaction-note">"Unit Drop" is a bottom-sheet picker (Guntha, Bigha, Acre). User types "2", selects "Guntha". Backend stores metric. If offline, map tiles may not load, but the grid remains and GPS coordinates are fetched from device hardware.</div>
+      </div>
+    </div>
+
+    <!-- Screen 6 -->
+    <div class="screen-card">
+      <div class="screen-head">
+        <div class="screen-head-name">Screen 6: Add Planting (Crop Cycle)</div>
+        <div class="screen-head-wf">Associated Workflow: WF-03</div>
+      </div>
+      <div class="screen-body">
+        <div class="meta-row">
+          <span class="meta-tag"><strong>Purpose:</strong> Anchor the season to a specific genetic seed</span>
+          <span class="meta-tag"><strong>Entry:</strong> Fields Dashboard &rarr; 'Add Planting'</span>
+          <span class="meta-tag"><strong>Exit:</strong> Save &rarr; Fields Dashboard</span>
+        </div>
+
+        <div class="block-label">Textual Wireframe</div>
+        <div class="wireframe-box">
+          <pre class="wireframe">+---------------------------------------+
+|  &lt; Back               Start Planting  |
++---------------------------------------+
+| Select Field:                         |
+| [ Dropdown: e.g., "North Plot" ]      |
+|                                       |
+| Select Crop:                          |
+| [ Dropdown: e.g., "Wheat" ]           |
+|                                       |
+| Select Variety:                       |
+| [ Dropdown: e.g., "Kalyansona" ]      |
+|                                       |
+| Sowing Date:                          |
+| [ Date Picker: Default Today ]        |
+|                                       |
+| [ LARGE BUTTON: Start Tracking ]      |
++---------------------------------------+</pre>
+        </div>
+
+        <div class="block-label">Component Inventory</div>
+        <div class="interaction-note">Sequential dropdowns. 'Variety' dropdown remains disabled until 'Crop' is selected.</div>
+      </div>
+    </div>
+
+    <!-- Screen 7 -->
+    <div class="screen-card">
+      <div class="screen-head">
+        <div class="screen-head-name">Screen 7: Quick Log Form (Intervention/Expense)</div>
+        <div class="screen-head-wf">Associated Workflow: WF-04</div>
+      </div>
+      <div class="screen-body">
+        <div class="meta-row">
+          <span class="meta-tag"><strong>Purpose:</strong> Frictionless offline data entry for day-to-day operations</span>
+          <span class="meta-tag"><strong>Entry:</strong> Global Center Tab [+] FAB tapped</span>
+          <span class="meta-tag"><strong>Exit:</strong> Save &rarr; Toast Confirmation &rarr; Returns to previous screen</span>
+        </div>
+
+        <div class="block-label">Textual Wireframe</div>
+        <div class="wireframe-box">
+          <pre class="wireframe">+---------------------------------------+
+|  (X) Close               Log Activity |
++---------------------------------------+
+| Field: [ Dropdown: Select Field ]     |
++---------------------------------------+
+| Type of Activity:                     |
+| (o) Chemical/Spray   ( ) Irrigation   |
+| ( ) Labor            ( ) Harvest      |
++---------------------------------------+
+| Product:                              |
+| [ Dropdown: Search Input Catalog ]    |
+|                                       |
+| Quantity Applied:                     |
+| [ Numpad Input ] [ Unit Dropdown ]    |
+| (e.g., 50)       (e.g., Liters)       |
+|                                       |
+| Date: [ Today ]                       |
+|                                       |
+| [ LARGE BUTTON: Save to Ledger ]      |
++---------------------------------------+</pre>
+        </div>
+
+        <div class="block-label">Screen States</div>
+        <div class="state-note"><strong>Validation State:</strong> If 'Product' is unselected, 'Save' button is disabled (opacity 50%).</div>
+        <div class="state-note"><strong>Interaction:</strong> Choosing (o) Labor hides 'Product/Quantity' and displays 'Number of Workers' and 'Total Wages Paid'.</div>
+      </div>
+    </div>
+
+    <!-- Screen 8 -->
+    <div class="screen-card">
+      <div class="screen-head">
+        <div class="screen-head-name">Screen 8: Alert Detail &amp; Vendor Map</div>
+        <div class="screen-head-wf">Associated Workflow: WF-05</div>
+      </div>
+      <div class="screen-body">
+        <div class="meta-row">
+          <span class="meta-tag"><strong>Purpose:</strong> Explain the AI recommendation and show where to buy the solution</span>
+          <span class="meta-tag"><strong>Entry:</strong> Home Dashboard &rarr; Tap Alert Card</span>
+        </div>
+
+        <div class="block-label">Textual Wireframe</div>
+        <div class="wireframe-box">
+          <pre class="wireframe">+---------------------------------------+
+|  &lt; Back                 Alert Details |
++---------------------------------------+
+|  ⚠️ THREAT DETECTED: Leaf Rust        |
+|  Target: Field A                      |
+|  Confidence: High (Based on Humidity) |
++---------------------------------------+
+|  💡 RECOMMENDATION                    |
+|  Apply: Fungicide X (Active Ing: Y)   |
+|  Dosage: 2 Liters / Hectare           |
+|                                       |
+|  [ BUTTON: Log this Action Now ]      |
++---------------------------------------+
+|  📍 NEARBY VENDORS                    |
+|  [ Map Snippet showing 3 pins ]       |
+|  1. AgriStore Mysuru (2km)            |
+|  2. Farmer Supply Co (5km)            |
++---------------------------------------+</pre>
+        </div>
+
+        <div class="block-label">Screen States</div>
+        <div class="state-note"><strong>Offline State:</strong> The "Nearby Vendors" section displays a placeholder block: "Map unavailable while offline. Connect to network to view vendors." The rest of the alert remains fully readable.</div>
+      </div>
+    </div>
+
+    <!-- Screen 9 -->
+    <div class="screen-card">
+      <div class="screen-head">
+        <div class="screen-head-name">Screen 9: Scheme Detail Screen</div>
+        <div class="screen-head-wf">Associated Workflow: WF-06</div>
+      </div>
+      <div class="screen-body">
+        <div class="meta-row">
+          <span class="meta-tag"><strong>Purpose:</strong> Display subsidy eligibility criteria and claim instructions</span>
+          <span class="meta-tag"><strong>Entry:</strong> Home Dashboard or Schemes Tab &rarr; Tap Scheme Card</span>
+        </div>
+
+        <div class="block-label">Textual Wireframe</div>
+        <div class="wireframe-box">
+          <pre class="wireframe">+---------------------------------------+
+|  &lt; Back                Scheme Details |
++---------------------------------------+
+|  ✅ Krishi Bhagya Subsidy             |
+|  Provider: Govt of Karnataka          |
++---------------------------------------+
+|  Why you match:                       |
+|  • Location: Mysuru                   |
+|  • Land Size: &lt; 2 Hectares            |
++---------------------------------------+
+|  Benefits:                            |
+|  Up to 80% subsidy on drip irrigation |
++---------------------------------------+
+|  How to apply:                        |
+|  Visit your local Raitha Samparka     |
+|  Kendra before Oct 31st.              |
+|                                       |
+|  [ BUTTON: Mark as 'Applying' ]       |
++---------------------------------------+</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 10 -->
+    <div class="screen-card">
+      <div class="screen-head">
+        <div class="screen-head-name">Screen 10: Crop Cycle Ledger (Profit Margin View)</div>
+        <div class="screen-head-wf">Associated Workflow: WF-04 (Viewing the outcome of Quick Logs)</div>
+      </div>
+      <div class="screen-body">
+        <div class="meta-row">
+          <span class="meta-tag"><strong>Purpose:</strong> Calculate and display the exact Cost of Cultivation, Total Income (from harvest), and the resulting Net Profit Margin for a specific planting cycle</span>
+          <span class="meta-tag"><strong>Entry:</strong> Tapping "View Full Ledger" from Home Dashboard OR selecting an active planting from the Fields Dashboard</span>
+          <span class="meta-tag"><strong>Exit:</strong> Back &rarr; Dashboard</span>
+        </div>
+        <div class="block-label">Information Hierarchy</div>
+        <p style="margin:0 0 8px;">Primary: Net Profit &amp; Profit Margin Percentage. Secondary: High-level Income vs. Expense breakdown. Supporting: Itemized category expenses (Chemicals, Labor).</p>
+
+        <div class="block-label">Textual Wireframe</div>
+        <div class="wireframe-box">
+          <pre class="wireframe">+---------------------------------------+
+|  &lt; Back                 Crop Ledger   |
++---------------------------------------+
+| Field A: Wheat (Kalyansona)           |
+| Status: Harvested                     |
++---------------------------------------+
+| 📊 FINANCIAL SUMMARY                  |
+| Total Income:    ₹ 45,000             |
+| Total Expenses:  ₹ 35,000             |
+| ------------------------------------- |
+| Net Profit:      ₹ 10,000             |
+| PROFIT MARGIN:   + 22.2%              |
++---------------------------------------+
+| EXPENSE BREAKDOWN                     |
+| 🧪 Fertilizer &amp; Spray: ₹ 12,000       |
+| 👷 Labor Costs:        ₹ 18,000       |
+| 💧 Irrigation:         ₹  5,000       |
++---------------------------------------+
+| RECENT LOGS                           |
+| • Harvest Sold (Oct 12)  + ₹ 45,000   |
+| • Labor Paid (Oct 10)    - ₹  2,000   |
++---------------------------------------+
+| [ Home ] [ Fields ] [+] [ Schemes ]   |
++---------------------------------------+</pre>
+        </div>
+
+        <div class="block-label">Interaction &amp; UX Notes for the Ledger</div>
+        <div class="interaction-note"><strong>Dynamic Profit Margins:</strong> While the crop is still growing (before harvest), the "Profit Margin" will naturally be negative. The UI must clearly label this state as "Current Cost of Cultivation" rather than "Loss," so the farmer understands it is an ongoing investment, not a failure.</div>
+        <div class="interaction-note"><strong>Auto-Calculation:</strong> Every time a user completes a Quick Log (WF-04) for an expense or harvest, this screen updates instantly in the local database. No internet is required to calculate the profit margin.</div>
+      </div>
+    </div>
+  </section>
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">4</span>
+      <h2 class="section-title">Responsive Layout Notes</h2>
+    </div>
+    <div class="note-card"><strong>Mobile Phone (Target Device):</strong> All layouts are single-column, scrolling vertically.</div>
+    <div class="note-card"><strong>Form Elements:</strong> All input fields and primary buttons span 100% of the screen width (minus a standard 16px padding on left/right) to maximize touch target area.</div>
+    <div class="note-card"><strong>Orientation:</strong> Application is locked to Portrait mode to simplify data entry and prevent map rendering glitches during orientation shifts.</div>
+  </section>
+
+  <!-- 5. Accessibility Considerations -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">5</span>
+      <h2 class="section-title">Accessibility Considerations</h2>
+    </div>
+    <div class="note-card"><strong>Focus Order:</strong> Standard logical DOM order (Top to Bottom, Left to Right).</div>
+    <div class="note-card"><strong>Keyboard Types:</strong> When the user taps 'Area Size', 'Quantity', or 'Phone Number', the OS native numeric keypad MUST trigger. The standard alphabetical keyboard should only ever appear for the "Field Name" input.</div>
+    <div class="note-card"><strong>Screen Reader Logic:</strong> The [+] button in the navigation bar must be explicitly labeled "Log new activity" in the code so screen readers do not just announce "Plus."</div>
+  </section>
+
+  <!-- 6. Developer Notes -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">6</span>
+      <h2 class="section-title">Developer Notes</h2>
+    </div>
+    <div class="note-card"><strong>Dropdowns vs. Pickers:</strong> Any input labeled <code class="inline-code">[ Dropdown ]</code> in this wireframe should be implemented natively as a Bottom-Sheet scrolling picker (like native iOS UIPickerView or Android BottomSheetDialogFragment) rather than an inline HTML <code class="inline-code">&lt;select&gt;</code> style box. This is significantly easier to use one-handed.</div>
+    <div class="note-card"><strong>Optimistic UI:</strong> When the user taps "Save" on the Quick Log or Add Field forms, the app should immediately return to the dashboard and display a success toast, even if the background sync is currently running or paused due to offline status.</div>
+  </section>
+
+  <footer class="doc-footer">
+    Wireframe Specification — Sustainable Farming App (AgroSense)
+  </footer>
+
+</div>
+
+</body>
+</html>

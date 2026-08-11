@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Workflow Specification — Sustainable Farming App</title>
+<style>
+  :root{
+    --soil: #3d3225;
+    --soil-light: #6b5c47;
+    --field: #4a6741;
+    --field-dark: #35492f;
+    --wheat: #c99a3e;
+    --paper: #faf7f0;
+    --paper-line: #e6ddc9;
+    --ink: #2a2620;
+    --ink-soft: #5c5546;
+    --danger: #a14a3a;
+    --card-bg: #ffffff;
+    --rule: #d8cfb8;
+    --primary-wf: #4a6741;
+    --secondary-wf: #8a6d3b;
+    --system-wf: #6b5c78;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype","Book Antiqua", Georgia, serif;
+    line-height:1.55;
+  }
+  .wrap{ max-width:1020px; margin:0 auto; padding:0 32px 80px; }
+
+  header.doc-header{
+    background: linear-gradient(180deg, var(--field-dark), var(--field));
+    color:#f3ecd9; padding:56px 32px 40px; margin-bottom:48px; position:relative;
+    border-bottom:6px solid var(--wheat);
+  }
+  header.doc-header::before{
+    content:""; position:absolute; top:0; left:0; right:0; bottom:0;
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 42px);
+    pointer-events:none;
+  }
+  .doc-header-inner{ max-width:1020px; margin:0 auto; position:relative; }
+  .eyebrow{ text-transform:uppercase; letter-spacing:0.18em; font-size:12.5px; color:var(--wheat); font-weight:600; margin-bottom:14px; }
+  h1.doc-title{ font-size:36px; line-height:1.2; margin:0 0 18px; font-weight:700; letter-spacing:-0.01em; color:#fbf5e6; }
+  .doc-meta{ font-size:14px; color:#d9d0b6; }
+  .doc-meta strong{ color:#f3ecd9; font-weight:600; }
+
+  section.spec-section{ margin-bottom:44px; }
+  .section-head{ display:flex; align-items:baseline; gap:16px; border-bottom:2px solid var(--field); padding-bottom:10px; margin-bottom:20px; }
+  .section-num{ font-size:15px; font-weight:700; color:#fff; background:var(--field); padding:3px 10px; border-radius:3px; letter-spacing:0.02em; flex-shrink:0; }
+  h2.section-title{ font-size:23px; margin:0; color:var(--field-dark); font-weight:700; letter-spacing:-0.01em; }
+  h3.sub-title{ font-size:14px; text-transform:uppercase; letter-spacing:0.07em; color:var(--soil-light); font-weight:700; margin:22px 0 10px; }
+  p{ margin:0 0 14px; font-size:16px; }
+
+  /* ===== 1. Goals inventory ===== */
+  .goals-list{ display:flex; flex-direction:column; gap:10px; }
+  .goal-item{ display:flex; gap:12px; background:var(--card-bg); border:1px solid var(--rule); border-left:4px solid var(--wheat); border-radius:6px; padding:12px 18px; font-size:14.5px; align-items:flex-start; }
+  .goal-check{ flex-shrink:0; color:var(--field); font-weight:700; }
+
+  /* ===== 2. Workflow inventory ===== */
+  .wf-group{ margin-bottom:22px; }
+  .wf-group-label{ font-size:13px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; color:var(--soil-light); margin-bottom:10px; }
+  .wf-chip-list{ display:flex; flex-direction:column; gap:8px; }
+  .wf-chip{ display:flex; gap:12px; align-items:center; background:var(--card-bg); border:1px solid var(--rule); border-radius:6px; padding:10px 16px; font-size:14.5px; }
+  .wf-id{ flex-shrink:0; font-family:"Courier New", monospace; font-weight:700; font-size:12.5px; color:#fff; padding:3px 9px; border-radius:3px; }
+  .wf-id.primary{ background:var(--primary-wf); }
+  .wf-id.secondary{ background:var(--secondary-wf); }
+  .wf-id.system{ background:var(--system-wf); }
+
+  /* ===== 3. Detailed workflow cards ===== */
+  .workflow-card{ background:var(--card-bg); border:1px solid var(--rule); border-radius:8px; overflow:hidden; margin-bottom:26px; }
+  .workflow-head{ padding:14px 22px; color:#fff; }
+  .workflow-head.primary{ background:var(--primary-wf); }
+  .workflow-head.secondary{ background:var(--secondary-wf); }
+  .workflow-head.system{ background:var(--system-wf); }
+  .workflow-id{ font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; opacity:0.85; margin-bottom:4px; }
+  .workflow-name{ font-size:18px; font-weight:700; }
+  .workflow-body{ padding:20px 22px; }
+
+  .wf-meta-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; }
+  .wf-meta-tag{ font-size:12.5px; background:#f3f0e5; border:1px solid var(--rule); border-radius:14px; padding:4px 12px; color:var(--soil); }
+  .wf-meta-tag strong{ color:var(--field-dark); }
+
+  .wf-block{ margin-bottom:16px; }
+  .wf-block-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.06em; font-weight:700; color:var(--soil-light); margin-bottom:8px; }
+
+  ol.flow-steps{ margin:0; padding-left:0; list-style:none; counter-reset:flowstep; display:flex; flex-direction:column; gap:8px; }
+  ol.flow-steps li{ counter-increment:flowstep; display:flex; gap:12px; font-size:14.5px; align-items:flex-start; }
+  ol.flow-steps li::before{
+    content:counter(flowstep); flex-shrink:0; width:22px; height:22px; border-radius:50%;
+    background:var(--field); color:#fff; font-size:12px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+
+  .decision-block{ background:#fbf3e3; border:1px solid #e8d9ae; border-left:3px solid var(--wheat); border-radius:4px; padding:12px 16px; font-size:14.5px; margin-bottom:10px; }
+  .decision-block strong{ color:var(--soil); }
+
+  .exception-item{ background:#f7efec; border:1px solid #e8d5cd; border-left:3px solid var(--danger); border-radius:4px; padding:10px 16px; font-size:14.5px; margin-bottom:8px; }
+  .exception-tag{ font-family:"Courier New", monospace; font-weight:700; font-size:12.5px; color:var(--danger); margin-right:6px; }
+
+  .alt-block{ background:#eef1e7; border:1px solid var(--rule); border-left:3px solid var(--field); border-radius:4px; padding:10px 16px; font-size:14.5px; margin-bottom:8px; }
+
+  .exit-post-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+  .exit-post-card{ background:#f9f6ee; border:1px solid var(--rule); border-radius:6px; padding:12px 16px; font-size:14px; }
+  .exit-post-card strong{ display:block; margin-bottom:4px; color:var(--field-dark); font-size:12.5px; text-transform:uppercase; letter-spacing:0.05em; }
+
+  /* ===== 4. Cross-workflow review ===== */
+  .traceability-card{ background:var(--card-bg); border:1px solid var(--rule); border-left:4px solid var(--field); border-radius:6px; padding:14px 18px; margin-bottom:10px; font-size:14.5px; }
+  .risk-card{ background:var(--card-bg); border:1px solid var(--rule); border-radius:8px; overflow:hidden; margin-bottom:16px; }
+  .risk-head{ background:#7a2e20; color:#fdf0ec; padding:12px 20px; font-weight:700; font-size:15.5px; }
+  .risk-body{ padding:16px 20px; }
+  .risk-desc{ font-size:14.5px; margin-bottom:12px; }
+  .mitigation-block{ background:#f2f5ec; border:1px solid var(--rule); border-left:3px solid var(--field); border-radius:4px; padding:12px 16px; font-size:14.5px; }
+  .mitigation-block strong{ color:var(--field-dark); }
+
+  footer.doc-footer{ text-align:center; font-size:12.5px; color:var(--soil-light); margin-top:60px; padding-top:20px; border-top:1px solid var(--rule); font-style:italic; }
+
+  @media (max-width:760px){
+    header.doc-header{ padding:40px 20px 32px; }
+    h1.doc-title{ font-size:26px; }
+    .wrap{ padding:0 18px 60px; }
+    .exit-post-row{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <div class="doc-header-inner">
+    <div class="eyebrow">User Workflow Specification</div>
+    <h1 class="doc-title">Sustainable Farming App</h1>
+    <div class="doc-meta"><strong>Phase:</strong> UI/UX Design — User Workflow Design</div>
+    <span><strong>Date:</strong> July 2026</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 1. User Goals Inventory -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">1</span>
+      <h2 class="section-title">User Goals Inventory</h2>
+    </div>
+    <div class="goals-list">
+      <div class="goal-item"><span class="goal-check">&#10003;</span><span>Securely access the platform without remembering passwords.</span></div>
+      <div class="goal-item"><span class="goal-check">&#10003;</span><span>Establish a digital baseline of the farm (Fields and Soil).</span></div>
+      <div class="goal-item"><span class="goal-check">&#10003;</span><span>Track active growing seasons (Crop Cycles).</span></div>
+      <div class="goal-item"><span class="goal-check">&#10003;</span><span>Log day-to-day farm activities (chemicals, water, labor, expenses) reliably, regardless of internet connectivity.</span></div>
+      <div class="goal-item"><span class="goal-check">&#10003;</span><span>Receive, understand, and act upon predictive agronomic alerts.</span></div>
+      <div class="goal-item"><span class="goal-check">&#10003;</span><span>Discover and pursue eligible government agricultural subsidies.</span></div>
+      <div class="goal-item"><span class="goal-check">&#10003;</span><span>Ensure all inputted data is safely backed up to the cloud without manual effort.</span></div>
+    </div>
+  </section>
+
+  <!-- 2. Workflow Inventory & Prioritization -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">2</span>
+      <h2 class="section-title">Workflow Inventory &amp; Prioritization</h2>
+    </div>
+
+    <div class="wf-group">
+      <div class="wf-group-label">Primary Workflows (Critical Path)</div>
+      <div class="wf-chip-list">
+        <div class="wf-chip"><span class="wf-id primary">WF-01</span><span>Authentication &amp; Onboarding (Phone + OTP)</span></div>
+        <div class="wf-chip"><span class="wf-id primary">WF-02</span><span>Field Mapping &amp; Soil Initialization</span></div>
+        <div class="wf-chip"><span class="wf-id primary">WF-03</span><span>Initialize Crop Cycle (Planting)</span></div>
+        <div class="wf-chip"><span class="wf-id primary">WF-04</span><span>Quick Log Intervention / Expense (Offline-First)</span></div>
+      </div>
+    </div>
+
+    <div class="wf-group">
+      <div class="wf-group-label">Secondary Workflows (Value &amp; Engagement)</div>
+      <div class="wf-chip-list">
+        <div class="wf-chip"><span class="wf-id secondary">WF-05</span><span>View &amp; Acknowledge Agronomic Alert</span></div>
+        <div class="wf-chip"><span class="wf-id secondary">WF-06</span><span>View &amp; Claim Government Scheme</span></div>
+      </div>
+    </div>
+
+    <div class="wf-group">
+      <div class="wf-group-label">System / Administrative Workflows</div>
+      <div class="wf-chip-list">
+        <div class="wf-chip"><span class="wf-id system">WF-07</span><span>Background Data Synchronization</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Detailed User Workflows -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">3</span>
+      <h2 class="section-title">Detailed User Workflows</h2>
+    </div>
+
+    <!-- WF-01 -->
+    <div class="workflow-card">
+      <div class="workflow-head primary">
+        <div class="workflow-id">WF-01</div>
+        <div class="workflow-name">Authentication &amp; Onboarding</div>
+      </div>
+      <div class="workflow-body">
+        <p><strong>Purpose:</strong> Securely authenticate the user using a frictionless passwordless method.</p>
+        <div class="wf-meta-row">
+          <span class="wf-meta-tag"><strong>Requirements:</strong> FR1.1</span>
+          <span class="wf-meta-tag"><strong>Trigger:</strong> App opened for the first time or after logout</span>
+          <span class="wf-meta-tag"><strong>Preconditions:</strong> Valid phone number, cellular reception</span>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Main Flow (Happy Path)</div>
+          <ol class="flow-steps">
+            <li>User enters their 10-digit mobile number.</li>
+            <li>System requests OTP from SMS Gateway.</li>
+            <li>System displays the OTP entry state.</li>
+            <li>User receives SMS and inputs the 6-digit OTP.</li>
+            <li>System validates the OTP.</li>
+            <li>System issues a persistent local authentication token.</li>
+            <li>System routes user to the Home Dashboard.</li>
+          </ol>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Decision Points</div>
+          <div class="decision-block"><strong>Is this a new or returning user?</strong> If new, prompt for basic profile name and preferred language before routing to Dashboard.</div>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Alternative Flows</div>
+          <div class="alt-block">Auto-read OTP (if device OS allows, system auto-fills the OTP and proceeds to validation).</div>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Exception Flows</div>
+          <div class="exception-item"><span class="exception-tag">E1</span>No Network. System displays "No connection. Please connect to request OTP." (User must wait).</div>
+          <div class="exception-item"><span class="exception-tag">E2</span>Invalid OTP. System displays "Incorrect code." User clears input and retries.</div>
+          <div class="exception-item"><span class="exception-tag">E3</span>Max Retries Exceeded. System locks request for 5 minutes. Displays countdown timer.</div>
+        </div>
+
+        <div class="exit-post-row">
+          <div class="exit-post-card"><strong>Exit Conditions</strong>Success (Authenticated), Failure (Cannot authenticate).</div>
+          <div class="exit-post-card"><strong>Postconditions</strong>App state is authenticated. Offline database is unlocked and ready for queries/writes.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF-02 -->
+    <div class="workflow-card">
+      <div class="workflow-head primary">
+        <div class="workflow-id">WF-02</div>
+        <div class="workflow-name">Field Mapping &amp; Soil Initialization</div>
+      </div>
+      <div class="workflow-body">
+        <p><strong>Purpose:</strong> Define the geographic boundaries of a field to fetch automated soil baseline data.</p>
+        <div class="wf-meta-row">
+          <span class="wf-meta-tag"><strong>Requirements:</strong> FR1.2</span>
+          <span class="wf-meta-tag"><strong>Trigger:</strong> "Add Field" action from the Fields Dashboard</span>
+          <span class="wf-meta-tag"><strong>Preconditions:</strong> Authenticated; location services enabled (optional)</span>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Main Flow (Happy Path)</div>
+          <ol class="flow-steps">
+            <li>System requests location permission.</li>
+            <li>User grants permission.</li>
+            <li>System centres the map on the user's current GPS location.</li>
+            <li>User drags the pin to the exact center of their field and confirms location.</li>
+            <li>User inputs Field Name and Area Size (using local measurement units picker).</li>
+            <li>System converts local units to standard metric in the background.</li>
+            <li>System calls the external Regional Soil API using the pin coordinates.</li>
+            <li>System saves Field parameters and fetched Soil Profile to the local database.</li>
+            <li>System returns user to Fields Dashboard with success confirmation.</li>
+          </ol>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Decision Points</div>
+          <div class="decision-block"><strong>Location Permission Denied?</strong> Map centres on a default regional view; user must manually pan to their farm.</div>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Exception Flows</div>
+          <div class="exception-item"><span class="exception-tag">E1</span>API Failure / Offline. System cannot fetch Regional Soil data.<br><strong>Recovery:</strong> System saves the Field Name, Area, and GPS coordinates locally. Flags the Field as <code>requiresSoilSync = true</code>. Returns user to Dashboard. System will fetch soil data silently in the background when connectivity returns.</div>
+        </div>
+
+        <div class="exit-post-row">
+          <div class="exit-post-card"><strong>Exit Conditions</strong>Field successfully created.</div>
+          <div class="exit-post-card"><strong>Postconditions</strong>Field entity exists in the database. Area is standardized to metric for future ML calculations.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF-03 -->
+    <div class="workflow-card">
+      <div class="workflow-head primary">
+        <div class="workflow-id">WF-03</div>
+        <div class="workflow-name">Initialize Crop Cycle (Planting)</div>
+      </div>
+      <div class="workflow-body">
+        <p><strong>Purpose:</strong> Anchor upcoming activities and ML predictions to a specific biological planting.</p>
+        <div class="wf-meta-row">
+          <span class="wf-meta-tag"><strong>Requirements:</strong> FR2.1, Product Plan (Crop Cycle Tracking)</span>
+          <span class="wf-meta-tag"><strong>Trigger:</strong> "Add Planting" for a specific Field</span>
+          <span class="wf-meta-tag"><strong>Preconditions:</strong> At least one Field exists (WF-02 completed)</span>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Main Flow (Happy Path)</div>
+          <ol class="flow-steps">
+            <li>User selects the target Field.</li>
+            <li>User selects the Crop Category (e.g., Wheat).</li>
+            <li>User selects the specific Crop Variety from the Master Catalog.</li>
+            <li>User selects Sowing Date (defaults to today).</li>
+            <li>User confirms planting.</li>
+            <li>System saves FieldPlanting record locally and flags for cloud sync.</li>
+          </ol>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Exception Flows</div>
+          <div class="exception-item"><span class="exception-tag">—</span>Missing input (e.g., no variety selected). System disables the "Save" action until required selections are made.</div>
+        </div>
+
+        <div class="exit-post-row">
+          <div class="exit-post-card"><strong>Exit Conditions</strong>Crop Cycle successfully initialized.</div>
+          <div class="exit-post-card"><strong>Postconditions</strong>Field status changes to "Active". ML engine begins tracking weather against this specific variety.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF-04 -->
+    <div class="workflow-card">
+      <div class="workflow-head primary">
+        <div class="workflow-id">WF-04</div>
+        <div class="workflow-name">Quick Log Intervention / Expense (Offline-First)</div>
+      </div>
+      <div class="workflow-body">
+        <p><strong>Purpose:</strong> Frictionlessly record daily farming activities (chemicals, labor, harvest) in any network condition.</p>
+        <div class="wf-meta-row">
+          <span class="wf-meta-tag"><strong>Requirements:</strong> FR2.1, FR5.1, FR5.2, BR1</span>
+          <span class="wf-meta-tag"><strong>Trigger:</strong> Global "Quick Log" action</span>
+          <span class="wf-meta-tag"><strong>Preconditions:</strong> At least one active Crop Cycle exists</span>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Main Flow (Happy Path — Action Logging)</div>
+          <ol class="flow-steps">
+            <li>User selects the target Field/Planting.</li>
+            <li>User selects the Action Type (e.g., Chemical Application).</li>
+            <li>System loads the local AgriInputCatalog.</li>
+            <li>User selects the specific Product.</li>
+            <li>User inputs the Quantity applied and selects the local Unit (e.g., Bags, Liters).</li>
+            <li>User confirms the log.</li>
+            <li>System applies unit conversion, saves FieldIntervention locally, and flags <code>isSynced = false</code>.</li>
+            <li>System displays success confirmation and returns to previous screen.</li>
+          </ol>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Decision Points</div>
+          <div class="decision-block"><strong>Is this logging fulfilling a prior ML Recommendation?</strong> If the user logs a product that matches an active recommendation, the system links the intervention_id to the recommendation_id automatically behind the scenes (Closing the ML loop).</div>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Alternative Flows</div>
+          <div class="alt-block">User selects "Labor Expense". System skips the Product Catalog and prompts for "Number of Workers" and "Total Wage Paid".</div>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Exception Flows</div>
+          <div class="exception-item"><span class="exception-tag">E1</span>Missing numerical quantity. System highlights the quantity field and requires input before saving.</div>
+        </div>
+
+        <div class="exit-post-row">
+          <div class="exit-post-card"><strong>Exit Conditions</strong>Activity saved locally.</div>
+          <div class="exit-post-card"><strong>Postconditions</strong>Farm operational ledger is updated. ML feedback loop is updated.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF-05 -->
+    <div class="workflow-card">
+      <div class="workflow-head secondary">
+        <div class="workflow-id">WF-05</div>
+        <div class="workflow-name">View &amp; Acknowledge Agronomic Alert</div>
+      </div>
+      <div class="workflow-body">
+        <p><strong>Purpose:</strong> Act upon AI-driven predictive insights regarding crop threats.</p>
+        <div class="wf-meta-row">
+          <span class="wf-meta-tag"><strong>Requirements:</strong> FR3.1, FR3.2, FR4.1</span>
+          <span class="wf-meta-tag"><strong>Trigger:</strong> Push Notification tap or Alert Card selection on Home Dashboard</span>
+          <span class="wf-meta-tag"><strong>Preconditions:</strong> ML engine has generated a Recommendation for an active planting</span>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Main Flow</div>
+          <ol class="flow-steps">
+            <li>System displays Alert Details (Threat type, Confidence, Affected Field).</li>
+            <li>System displays the actionable Recommendation (Specific product and dosage).</li>
+            <li>System queries mapping API and displays a list of nearby vendors carrying the product.</li>
+            <li>User acknowledges the alert (Dismisses or selects "Log Action Now").</li>
+          </ol>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Alternative Flows</div>
+          <div class="alt-block">User selects "Log Action Now." System routes directly to WF-04 (Quick Log) with the Field, Action Type, and Product pre-filled.</div>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Exception Flows</div>
+          <div class="exception-item"><span class="exception-tag">E1</span>Offline while viewing vendor map. System hides the map module and displays a message: "Vendor map unavailable offline. Check back when connected." The alert details remain fully readable.</div>
+        </div>
+
+        <div class="exit-post-row">
+          <div class="exit-post-card"><strong>Exit Conditions</strong>Alert acknowledged or acted upon.</div>
+          <div class="exit-post-card"><strong>Postconditions</strong>Recommendation state changes if acted upon.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF-06 -->
+    <div class="workflow-card">
+      <div class="workflow-head secondary">
+        <div class="workflow-id">WF-06</div>
+        <div class="workflow-name">View &amp; Claim Government Scheme</div>
+      </div>
+      <div class="workflow-body">
+        <p><strong>Purpose:</strong> Inform the farmer of matched financial subsidies and provide claim instructions.</p>
+        <div class="wf-meta-row">
+          <span class="wf-meta-tag"><strong>Requirements:</strong> FR6.1, FR6.2, FR6.3, FR6.4</span>
+          <span class="wf-meta-tag"><strong>Trigger:</strong> Scheme Notification selection from the Dashboard</span>
+          <span class="wf-meta-tag"><strong>Preconditions:</strong> Backend ML/Rules engine has matched user parameters to scheme criteria</span>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Main Flow</div>
+          <ol class="flow-steps">
+            <li>System displays Scheme Details (Subsidy amount, purpose, deadline).</li>
+            <li>System displays the exact matched criteria (e.g., "Matched because you own &lt; 2 Hectares in Mysuru").</li>
+            <li>System provides Claim Instructions (External link or local office phone number).</li>
+            <li>User takes action externally (calls office/visits link).</li>
+            <li>User marks the scheme as "Application Started" within the app.</li>
+          </ol>
+        </div>
+
+        <div class="exit-post-row">
+          <div class="exit-post-card"><strong>Exit Conditions</strong>Scheme viewed and tracked.</div>
+          <div class="exit-post-card"><strong>Postconditions</strong>Scheme tracking status updated in the user's profile.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WF-07 -->
+    <div class="workflow-card">
+      <div class="workflow-head system">
+        <div class="workflow-id">WF-07 — System Workflow</div>
+        <div class="workflow-name">Background Data Synchronization</div>
+      </div>
+      <div class="workflow-body">
+        <p><strong>Purpose:</strong> Automatically upload offline data to the cloud without user intervention.</p>
+        <div class="wf-meta-row">
+          <span class="wf-meta-tag"><strong>Requirements:</strong> FR2.2</span>
+          <span class="wf-meta-tag"><strong>Trigger:</strong> Device OS detects restoration of internet connectivity</span>
+          <span class="wf-meta-tag"><strong>Preconditions:</strong> Local database contains records flagged <code>isSynced = false</code></span>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Main Flow</div>
+          <ol class="flow-steps">
+            <li>System detects network stability.</li>
+            <li>System aggregates all unsynced local records (Interventions, Harvests, New Fields).</li>
+            <li>System dispatches a bulk mutation payload to the Cloud Database.</li>
+            <li>Cloud Database acknowledges successful write.</li>
+            <li>System updates local records to <code>isSynced = true</code>.</li>
+            <li>System updates the UI global sync indicator to a "Success" state.</li>
+          </ol>
+        </div>
+
+        <div class="wf-block">
+          <div class="wf-block-label">Exception Flows</div>
+          <div class="exception-item"><span class="exception-tag">E1</span>Network drops during payload dispatch. System halts process. Records remain <code>isSynced = false</code>. System waits for next network restoration trigger.</div>
+          <div class="exception-item"><span class="exception-tag">E2</span>Timestamp conflict (e.g., record modified on another device). Cloud Database rejects the specific conflicting record. System resolves conflict by prioritizing the most recent updated_at timestamp, overwrites local state, and marks as synced.</div>
+        </div>
+
+        <div class="exit-post-row">
+          <div class="exit-post-card"><strong>Exit Conditions</strong>All local data matches cloud data.</div>
+          <div class="exit-post-card"><strong>Postconditions</strong>Cloud analytics and ML engines can now process the newly uploaded data.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Cross-Workflow Review & UX Risks -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">4</span>
+      <h2 class="section-title">Cross-Workflow Review &amp; UX Risks</h2>
+    </div>
+
+    <h3 class="sub-title">Traceability Check</h3>
+    <div class="traceability-card">All functional requirements (FR1.x through FR6.x) are represented in the workflows.</div>
+    <div class="traceability-card">The strict Offline-First mandate is inherently satisfied by routing all data creation (WF-02, WF-03, WF-04) strictly to the local database first, relying on WF-07 (System Sync) to handle cloud communication.</div>
+
+    <h3 class="sub-title">Identified UX Risks &amp; Mitigations</h3>
+
+    <div class="risk-card">
+      <div class="risk-head">Risk 1 — Data Stagnation</div>
+      <div class="risk-body">
+        <div class="risk-desc">A farmer logs data offline (WF-04) but does not connect to the internet for three weeks. The ML engine cannot analyze the data or send alerts, defeating the product's value.</div>
+        <div class="mitigation-block"><strong>Mitigation:</strong> If <code>isSynced = false</code> persists for more than 48 hours, the UI should trigger a local notification urging the user to briefly connect to Wi-Fi/Cellular to secure their farm data.</div>
+      </div>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-head">Risk 2 — Duplicate Logging</div>
+      <div class="risk-body">
+        <div class="risk-desc">The user receives an Alert (WF-05), clicks "Log Action Now," saves it, but later forgets and logs the same chemical spray manually via Quick Log (WF-04).</div>
+        <div class="mitigation-block"><strong>Mitigation:</strong> During the Quick Log workflow, if the system detects an identical product logged for the same field within a 24-hour window, it displays a warning: "This action was recently logged. Are you sure you want to duplicate it?"</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="doc-footer">
+    User Workflow Specification — Sustainable Farming App (AgroSense)
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detailed Project Execution Blueprint — Sustainable Farming App</title>
+<style>
+  :root{
+    --soil: #3d3225;
+    --soil-light: #6b5c47;
+    --field: #4a6741;
+    --field-dark: #35492f;
+    --wheat: #c99a3e;
+    --paper: #faf7f0;
+    --paper-line: #e6ddc9;
+    --ink: #2a2620;
+    --ink-soft: #5c5546;
+    --danger: #a14a3a;
+    --card-bg: #ffffff;
+    --rule: #d8cfb8;
+    --owner-eng: #4a6741;
+    --owner-des: #8a6d3b;
+    --owner-ast: #6b5c78;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family: "Iowan Old Style","Palatino Linotype","Book Antiqua", Georgia, serif;
+    line-height:1.55;
+  }
+  .wrap{ max-width:1040px; margin:0 auto; padding:0 32px 80px; }
+
+  header.doc-header{
+    background: linear-gradient(180deg, var(--field-dark), var(--field));
+    color:#f3ecd9;
+    padding:56px 32px 40px;
+    margin-bottom:48px;
+    position:relative;
+    border-bottom:6px solid var(--wheat);
+  }
+  header.doc-header::before{
+    content:""; position:absolute; top:0; left:0; right:0; bottom:0;
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 42px);
+    pointer-events:none;
+  }
+  .doc-header-inner{ max-width:1040px; margin:0 auto; position:relative; }
+  .eyebrow{ text-transform:uppercase; letter-spacing:0.18em; font-size:12.5px; color:var(--wheat); font-weight:600; margin-bottom:14px; }
+  h1.doc-title{ font-size:36px; line-height:1.2; margin:0; font-weight:700; letter-spacing:-0.01em; color:#fbf5e6; }
+
+  section.spec-section{ margin-bottom:44px; }
+  .section-head{ display:flex; align-items:baseline; gap:16px; border-bottom:2px solid var(--field); padding-bottom:10px; margin-bottom:20px; }
+  .section-num{ font-size:15px; font-weight:700; color:#fff; background:var(--field); padding:3px 10px; border-radius:3px; letter-spacing:0.02em; flex-shrink:0; }
+  h2.section-title{ font-size:23px; margin:0; color:var(--field-dark); font-weight:700; letter-spacing:-0.01em; }
+  h3.sub-title{ font-size:17px; color:var(--soil); margin:22px 0 12px; font-weight:700; }
+  p{ margin:0 0 14px; font-size:16px; }
+
+  /* ===== 1. Daily Rhythm ===== */
+  .rhythm-card{ background:var(--card-bg); border:1px solid var(--rule); border-left:4px solid var(--wheat); border-radius:6px; padding:18px 22px; margin-bottom:14px; }
+  .rhythm-label{ font-size:12px; text-transform:uppercase; letter-spacing:0.09em; color:var(--soil-light); font-weight:700; margin-bottom:8px; }
+  .rhythm-agenda{ font-style:italic; margin-bottom:8px; }
+  .rule-highlight{ background:#fbf3e3; border:1px solid #e8d9ae; border-left:3px solid var(--wheat); padding:10px 14px; border-radius:4px; font-size:14.5px; margin-top:10px; }
+  .kanban-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:14px 0; font-size:13px; }
+  .flow-step{ background:#eef1e7; border:1px solid var(--rule); color:var(--field-dark); font-weight:700; padding:5px 11px; border-radius:14px; }
+  .flow-arrow{ color:var(--soil-light); font-size:13px; }
+  .zero-friction{ background:#f7efec; border:1px solid #e8d5cd; border-left:4px solid var(--danger); border-radius:4px; padding:12px 16px; font-size:14.5px; margin-top:10px; }
+
+  /* ===== 2. Micro-task tables ===== */
+  .phase-card{ background:var(--card-bg); border:1px solid var(--rule); border-radius:8px; overflow:hidden; margin-bottom:22px; }
+  .phase-head{ background:var(--field-dark); color:#f3ecd9; padding:14px 22px; }
+  .phase-head-top{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px; }
+  .phase-head-name{ font-weight:700; font-size:17px; }
+  .phase-days{ font-size:12px; font-weight:600; color:var(--wheat); text-transform:uppercase; letter-spacing:0.05em; }
+  .phase-goal{ font-size:13.5px; color:#d9d0b6; font-style:italic; }
+
+  table.task-table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  table.task-table th{ background:#eef1e7; color:var(--field-dark); text-align:left; padding:9px 12px; font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; border-bottom:2px solid var(--rule); }
+  table.task-table td{ padding:10px 12px; border-top:1px solid var(--paper-line); vertical-align:top; }
+  table.task-table tr:nth-child(even) td{ background:#f9f6ee; }
+  .task-id{ font-family:"Courier New", monospace; font-weight:700; color:var(--soil-light); white-space:nowrap; }
+  .task-name{ font-weight:700; color:var(--ink); }
+  .owner-badge{ display:inline-block; font-size:11px; font-weight:700; padding:2px 9px; border-radius:12px; color:#fff; white-space:nowrap; }
+  .owner-engineer{ background:var(--owner-eng); }
+  .owner-designer{ background:var(--owner-des); }
+  .owner-assistant{ background:var(--owner-ast); }
+  .prereq{ font-family:"Courier New", monospace; font-size:12.5px; color:var(--soil-light); }
+  .dod-cell{ font-size:13px; }
+
+  /* ===== 3. QA Protocol ===== */
+  .test-card{ background:var(--card-bg); border:1px solid var(--rule); border-left:4px solid var(--field); border-radius:6px; padding:16px 20px; margin-bottom:14px; }
+  .test-name{ font-weight:700; color:var(--field-dark); font-size:15.5px; margin-bottom:6px; }
+  .test-desc{ font-size:14.5px; }
+
+  /* ===== 4. Change management ===== */
+  .change-flow{ display:flex; flex-direction:column; gap:10px; }
+  .change-step{ display:flex; gap:14px; background:var(--card-bg); border:1px solid var(--rule); border-radius:6px; padding:12px 18px; align-items:flex-start; }
+  .change-num{ flex-shrink:0; font-weight:700; color:#fff; background:var(--soil-light); width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12.5px; margin-top:2px; }
+  .change-text{ font-size:14.5px; }
+  .hard-stop{ margin-top:14px; background:#f7efec; border:1px solid #e8d5cd; border-left:4px solid var(--danger); border-radius:4px; padding:14px 18px; font-size:14.5px; font-weight:600; color:var(--danger); }
+
+  .closing-quote{
+    margin-top:8px;
+    background:var(--card-bg);
+    border:1px solid var(--rule);
+    border-left:4px solid var(--wheat);
+    border-radius:6px;
+    padding:18px 22px;
+    font-style:italic;
+    font-size:15.5px;
+    color:var(--ink);
+  }
+
+  footer.doc-footer{ text-align:center; font-size:12.5px; color:var(--soil-light); margin-top:60px; padding-top:20px; border-top:1px solid var(--rule); font-style:italic; }
+
+  @media (max-width: 800px){
+    header.doc-header{ padding:40px 20px 32px; }
+    h1.doc-title{ font-size:26px; }
+    .wrap{ padding:0 18px 60px; }
+    table.task-table{ font-size:12px; }
+    table.task-table th, table.task-table td{ padding:8px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <div class="doc-header-inner">
+    <div class="eyebrow">Execution Blueprint</div>
+    <h1 class="doc-title">Detailed Project Execution Blueprint</h1>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 1. Daily Operating Rhythm -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">1</span>
+      <h2 class="section-title">The Daily Operating Rhythm (Kanban Mechanics)</h2>
+    </div>
+    <p>To succeed in 6 weeks, the team must operate with ruthless efficiency.</p>
+
+    <div class="rhythm-card">
+      <div class="rhythm-label">The Daily Sync — 15 Minutes, Morning</div>
+      <div class="rhythm-agenda">Agenda: What did we move to "Done" yesterday? What is blocking the Engineer today?</div>
+      <div class="rule-highlight"><strong>Rule:</strong> The Technical Assistant's primary job is to resolve any blocker the Engineer raises within 2 hours.</div>
+    </div>
+
+    <div class="rhythm-card">
+      <div class="rhythm-label">Kanban Board Columns</div>
+      <div class="kanban-flow">
+        <span class="flow-step">Backlog</span><span class="flow-arrow">&rarr;</span>
+        <span class="flow-step">Design in Progress</span><span class="flow-arrow">&rarr;</span>
+        <span class="flow-step">Design Approved</span><span class="flow-arrow">&rarr;</span>
+        <span class="flow-step">Ready for Dev</span><span class="flow-arrow">&rarr;</span>
+        <span class="flow-step">Dev in Progress</span><span class="flow-arrow">&rarr;</span>
+        <span class="flow-step">Ready for QA (Assistant)</span><span class="flow-arrow">&rarr;</span>
+        <span class="flow-step">Done</span>
+      </div>
+    </div>
+
+    <div class="rhythm-card">
+      <div class="rhythm-label">The "Zero Friction" Rule for Dev</div>
+      <div class="zero-friction">The Engineer should never have to look up an API endpoint, create test user accounts, or write placeholder data. The Assistant prepares all of this in advance.</div>
+    </div>
+  </section>
+
+  <!-- 2. Micro-Task Execution Matrix -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">2</span>
+      <h2 class="section-title">Micro-Task Execution Matrix</h2>
+    </div>
+    <p>This matrix breaks down the high-level phases into granular tasks, assigning estimated effort and strict Definition of Done (DoD) criteria. Effort is estimated in standard 8-hour working days.</p>
+
+    <!-- Phase 1 -->
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-head-top">
+          <span class="phase-head-name">Phase 1: Foundation, Infrastructure &amp; Design</span>
+          <span class="phase-days">Days 1–7</span>
+        </div>
+        <div class="phase-goal">Goal: The cloud is ready, the mobile repository compiles, and the Designer has mapped the core user flows.</div>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr><th>ID</th><th>Task</th><th>Owner</th><th>Effort</th><th>Pre-Req</th><th>Definition of Done</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="task-id">1.1</td>
+            <td class="task-name">Wireframe Core Flows (Auth, Dashboard, Forms)</td>
+            <td><span class="owner-badge owner-designer">Designer</span></td>
+            <td>2 Days</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">Low-fidelity screens approved for logical flow.</td>
+          </tr>
+          <tr>
+            <td class="task-id">1.2</td>
+            <td class="task-name">High-Fidelity UI: Auth &amp; Onboarding</td>
+            <td><span class="owner-badge owner-designer">Designer</span></td>
+            <td>2 Days</td>
+            <td class="prereq">1.1</td>
+            <td class="dod-cell">Figma screens exported with assets and hex codes ready for Dev.</td>
+          </tr>
+          <tr>
+            <td class="task-id">1.3</td>
+            <td class="task-name">High-Fidelity UI: Field Mapping &amp; Dashboard</td>
+            <td><span class="owner-badge owner-designer">Designer</span></td>
+            <td>2 Days</td>
+            <td class="prereq">1.1</td>
+            <td class="dod-cell">Figma screens exported; empty states (e.g., "No crops planted") included.</td>
+          </tr>
+          <tr>
+            <td class="task-id">1.4</td>
+            <td class="task-name">Setup Cloud Backend (Firebase/Supabase)</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>1 Day</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">Project created; Auth, Firestore/Database, and Storage buckets initialized.</td>
+          </tr>
+          <tr>
+            <td class="task-id">1.5</td>
+            <td class="task-name">Initialize Mobile Repo (React Native/Flutter)</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>1 Day</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">App compiles on both iOS simulator and Android emulator.</td>
+          </tr>
+          <tr>
+            <td class="task-id">1.6</td>
+            <td class="task-name">Implement Local Offline DB Schema</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>2 Days</td>
+            <td class="prereq">1.4</td>
+            <td class="dod-cell">SQLite/WatermelonDB initialized with Users, Fields, Plantings tables.</td>
+          </tr>
+          <tr>
+            <td class="task-id">1.7</td>
+            <td class="task-name">Provision &amp; Secure External APIs</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>1 Day</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">API keys for MSG91, Maps, and Weather generated and stored securely.</td>
+          </tr>
+          <tr>
+            <td class="task-id">1.8</td>
+            <td class="task-name">Test APIs &amp; Document JSON Responses</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>2 Days</td>
+            <td class="prereq">1.7</td>
+            <td class="dod-cell">Postman collection created; exact JSON responses documented for the Engineer.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-head-top">
+          <span class="phase-head-name">Phase 2: Core Engineering &amp; Synchronization</span>
+          <span class="phase-days">Days 8–14</span>
+        </div>
+        <div class="phase-goal">Goal: The app can log users in, store data locally, and push it to the cloud without crashing.</div>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr><th>ID</th><th>Task</th><th>Owner</th><th>Effort</th><th>Pre-Req</th><th>Definition of Done</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="task-id">2.1</td>
+            <td class="task-name">High-Fidelity UI: Interventions &amp; Ledger</td>
+            <td><span class="owner-badge owner-designer">Designer</span></td>
+            <td>2 Days</td>
+            <td class="prereq">1.3</td>
+            <td class="dod-cell">Forms for chemical application, harvest, and expenses completed.</td>
+          </tr>
+          <tr>
+            <td class="task-id">2.2</td>
+            <td class="task-name">Build Phone + OTP Auth Logic</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>2 Days</td>
+            <td class="prereq">1.4, 1.5</td>
+            <td class="dod-cell">User receives SMS via MSG91, enters OTP, and receives a persistent login token.</td>
+          </tr>
+          <tr>
+            <td class="task-id">2.3</td>
+            <td class="task-name">Code Onboarding &amp; Auth UI</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>1.5 Days</td>
+            <td class="prereq">1.2, 2.2</td>
+            <td class="dod-cell">Pixel-perfect implementation of Designer's Figma screens.</td>
+          </tr>
+          <tr>
+            <td class="task-id">2.4</td>
+            <td class="task-name">Build Background Data Sync Queue</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>2.5 Days</td>
+            <td class="prereq">1.6</td>
+            <td class="dod-cell">Local data changes are flagged isSynced = false; network listener automatically pushes them to Cloud when online.</td>
+          </tr>
+          <tr>
+            <td class="task-id">2.5</td>
+            <td class="task-name">Build Agronomic Rule Logic Matrix</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>3 Days</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">Spreadsheet mapping exactly which Weather/Soil conditions trigger which API Alerts.</td>
+          </tr>
+          <tr>
+            <td class="task-id">2.6</td>
+            <td class="task-name">Compile Local Measurement Conversions</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>1 Day</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">Exact math formulas mapped (e.g., 1 Guntha = 0.025 Acres).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-head-top">
+          <span class="phase-head-name">Phase 3: Application Logic</span>
+          <span class="phase-days">Days 15–21</span>
+        </div>
+        <div class="phase-goal">Goal: The farmer can map a field, plant a crop, and log their actions/expenses completely offline.</div>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr><th>ID</th><th>Task</th><th>Owner</th><th>Effort</th><th>Pre-Req</th><th>Definition of Done</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="task-id">3.1</td>
+            <td class="task-name">Implement Field Mapping Logic (Pin Drop)</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>2 Days</td>
+            <td class="prereq">1.8</td>
+            <td class="dod-cell">User drops pin; backend calls Google Maps API &amp; Regional Soil DB; saves to local DB.</td>
+          </tr>
+          <tr>
+            <td class="task-id">3.2</td>
+            <td class="task-name">Implement Crop Cycle &amp; Ledger UI</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>3 Days</td>
+            <td class="prereq">2.1</td>
+            <td class="dod-cell">User can log a planting, add an expense, and record an intervention.</td>
+          </tr>
+          <tr>
+            <td class="task-id">3.3</td>
+            <td class="task-name">Implement Dynamic Unit Converter</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>1 Day</td>
+            <td class="prereq">2.6</td>
+            <td class="dod-cell">UI shows local units, but DB saves strict metric units.</td>
+          </tr>
+          <tr>
+            <td class="task-id">3.4</td>
+            <td class="task-name">Populate AgriInputCatalog DB</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>3 Days</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">Master list of fertilizers/pesticides formatted in JSON and uploaded to Cloud DB.</td>
+          </tr>
+          <tr>
+            <td class="task-id">3.5</td>
+            <td class="task-name">Populate GovernmentSchemes DB</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>2 Days</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">Top 10 Karnataka/Central schemes formatted with eligibility criteria in JSON.</td>
+          </tr>
+          <tr>
+            <td class="task-id">3.6</td>
+            <td class="task-name">QA Testing: Auth &amp; Offline Sync</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>2 Days</td>
+            <td class="prereq">2.4</td>
+            <td class="dod-cell">Physical device testing: Turn on airplane mode, log data, turn off airplane mode, verify cloud sync.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-head-top">
+          <span class="phase-head-name">Phase 4: The Intelligence Engine</span>
+          <span class="phase-days">Days 22–28</span>
+        </div>
+        <div class="phase-goal">Goal: The app becomes "smart." It reads the data, matches schemes, and sends alerts.</div>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr><th>ID</th><th>Task</th><th>Owner</th><th>Effort</th><th>Pre-Req</th><th>Definition of Done</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="task-id">4.1</td>
+            <td class="task-name">Code Rule-Based Prescriptive Engine</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>2.5 Days</td>
+            <td class="prereq">2.5</td>
+            <td class="dod-cell">Daily cron job checks active plantings vs. weather API, generates Recommendations.</td>
+          </tr>
+          <tr>
+            <td class="task-id">4.2</td>
+            <td class="task-name">Code Government Scheme Matcher</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>1.5 Days</td>
+            <td class="prereq">3.5</td>
+            <td class="dod-cell">Engine checks user's area_size/region against Scheme JSON and flags matches.</td>
+          </tr>
+          <tr>
+            <td class="task-id">4.3</td>
+            <td class="task-name">Implement Push &amp; SMS Fallback Alerts</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>2 Days</td>
+            <td class="prereq">1.8</td>
+            <td class="dod-cell">System triggers MSG91 text if critical recommendation is generated.</td>
+          </tr>
+          <tr>
+            <td class="task-id">4.4</td>
+            <td class="task-name">Code Alert UI &amp; Scheme Dashboard</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>1 Day</td>
+            <td class="prereq">2.2</td>
+            <td class="dod-cell">User can view their matched subsidies and agronomic alerts in-app.</td>
+          </tr>
+          <tr>
+            <td class="task-id">4.5</td>
+            <td class="task-name">End-to-End Logic Testing</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>2 Days</td>
+            <td class="prereq">4.1, 4.2</td>
+            <td class="dod-cell">Assistant manipulates test weather data to artificially force the engine to fire alerts.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="phase-card">
+      <div class="phase-head">
+        <div class="phase-head-top">
+          <span class="phase-head-name">Phase 5: Polish, Localization &amp; Launch</span>
+          <span class="phase-days">Days 29–35</span>
+        </div>
+        <div class="phase-goal">Goal: The app is translated, bug-free, and submitted to the app stores.</div>
+      </div>
+      <table class="task-table">
+        <thead>
+          <tr><th>ID</th><th>Task</th><th>Owner</th><th>Effort</th><th>Pre-Req</th><th>Definition of Done</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="task-id">5.1</td>
+            <td class="task-name">Map i18n Strings (EN, KN, HI)</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>3 Days</td>
+            <td class="prereq">None</td>
+            <td class="dod-cell">Every text element in the app translated into a JSON localization file.</td>
+          </tr>
+          <tr>
+            <td class="task-id">5.2</td>
+            <td class="task-name">Implement Localization UI</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>1 Day</td>
+            <td class="prereq">5.1</td>
+            <td class="dod-cell">User can toggle language; app dynamically updates without restarting.</td>
+          </tr>
+          <tr>
+            <td class="task-id">5.3</td>
+            <td class="task-name">UI Polish &amp; Bug Squashing</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>3 Days</td>
+            <td class="prereq">All</td>
+            <td class="dod-cell">Fixing padding, loading spinners, error states, and QA findings.</td>
+          </tr>
+          <tr>
+            <td class="task-id">5.4</td>
+            <td class="task-name">Final "Dead-Zone" Field Test</td>
+            <td><span class="owner-badge owner-assistant">Assistant</span></td>
+            <td>1 Day</td>
+            <td class="prereq">All</td>
+            <td class="dod-cell">Take a physical phone to a rural area with no reception, use app for 1 hour, return to city, verify sync.</td>
+          </tr>
+          <tr>
+            <td class="task-id">5.5</td>
+            <td class="task-name">App Store / Play Store Submission</td>
+            <td><span class="owner-badge owner-engineer">Engineer</span></td>
+            <td>1 Day</td>
+            <td class="prereq">5.3</td>
+            <td class="dod-cell">Provisioning profiles signed, screenshots (from Designer) uploaded, app submitted for review.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 3. Strict Quality & Testing Protocol -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">3</span>
+      <h2 class="section-title">Strict Quality &amp; Testing Protocol</h2>
+    </div>
+    <p>Because this is an offline-first agricultural app, standard web testing is insufficient. The Technical Assistant must execute the following QA script for every major feature:</p>
+
+    <div class="test-card">
+      <div class="test-name">The "Tunnel" Test</div>
+      <div class="test-desc">Open the app, start filling out a form (e.g., logging a chemical spray), and turn on Airplane Mode halfway through. Submit the form. Verify the app does not crash and the data saves locally.</div>
+    </div>
+    <div class="test-card">
+      <div class="test-name">The "Reconnection" Test</div>
+      <div class="test-desc">Turn Airplane Mode off. Wait 10 seconds. Check the Cloud Database (Firebase/Supabase console) to verify the data arrived perfectly.</div>
+    </div>
+    <div class="test-card">
+      <div class="test-name">The Conflict Test</div>
+      <div class="test-desc">Edit a field name on Device A (offline). Edit the same field name on Device B (online). Bring Device A online. Ensure the system handles the timestamp resolution gracefully without corrupting the database.</div>
+    </div>
+  </section>
+
+  <!-- 4. Change Management -->
+  <section class="spec-section">
+    <div class="section-head">
+      <span class="section-num">4</span>
+      <h2 class="section-title">Change Management (The Hard Stop)</h2>
+    </div>
+    <p>If the project is constrained to 6 weeks with one developer, Scope Creep is fatal.</p>
+    <div class="change-flow">
+      <div class="change-step">
+        <span class="change-num">1</span>
+        <span class="change-text">If a new feature idea arises (e.g., "Let's add a social feed for farmers to chat"), the Assistant logs it in a "Version 1" backlog document.</span>
+      </div>
+    </div>
+    <div class="hard-stop">Under no circumstances is the Engineer allowed to write code for a feature that is not on the Matrix above until Day 35 is reached and the MVP is submitted to the app stores.</div>
+
+    <div class="closing-quote">
+      This is your battle plan. The Designer builds the blueprint, the Assistant clears the road and supplies the ammunition (data/testing), and the Engineer acts as the execution engine.
+    </div>
+  </section>
+
+  <footer class="doc-footer">
+    Detailed Project Execution Blueprint — Sustainable Farming App (AgroSense)
+  </footer>
+
+</div>
+
+</body>
+</html>
