@@ -1,0 +1,158 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "continue": "Continue",
+    "loading": "Loading...",
+    "savedOffline": "Saved Offline",
+    "syncedToCloud": "Data synced to cloud.",
+    "retry": "Retry"
+  },
+  "auth": {
+    "loginTitle": "Welcome",
+    "loginSubtitle": "Enter your mobile number to continue",
+    "phoneLabel": "Mobile Number",
+    "getOtp": "GET OTP",
+    "otpTitle": "Verify your number",
+    "otpSubtitle": "Enter the 6-digit code sent to {{phone}}",
+    "verify": "VERIFY",
+    "resendIn": "Resend code in {{seconds}}s",
+    "resend": "Resend Code",
+    "invalidOtp": "Incorrect code. Please try again.",
+    "hintOtp": "Use {{otp}} for this demo"
+  },
+  "onboarding": {
+    "step1Title": "Let's get started",
+    "languageLabel": "Select your language",
+    "step2NameTitle": "What should we call you?",
+    "nameLabel": "Your full name",
+    "namePlaceholder": "Enter your name",
+    "step2Title": "Farm scale & units",
+    "unitLabel": "How do you measure land?",
+    "areaLabel": "Total farm size",
+    "step3Title": "Location & infrastructure",
+    "irrigationLabel": "Primary irrigation source",
+    "stateLabel": "State",
+    "districtLabel": "District",
+    "selectState": "Select State",
+    "selectDistrict": "Select District",
+    "completeProfile": "Complete Profile",
+    "irrigation": {
+      "rainfed": "Rainfed / Monsoon",
+      "borewell": "Borewell",
+      "canal": "Canal",
+      "drip_sprinkler": "Drip / Sprinkler"
+    }
+  },
+  "home": {
+    "welcome": "Welcome, {{name}}!",
+    "emptyStateTitle": "Map Your First Field",
+    "emptyStateSubtitle": "Tap '+' below to map your first field.",
+    "weatherOffline": "Last updated {{hours}}h ago",
+    "seasonFinancials": "Season Financials",
+    "totalSpent": "Total Spent",
+    "totalEarned": "Total Earned",
+    "viewFullLedger": "View Full Ledger",
+    "alertsTitle": "Alerts",
+    "noAlerts": "No active alerts right now.",
+    "viewTreatment": "View Recommendation"
+  },
+  "fields": {
+    "title": "My Fields",
+    "addField": "Add Field",
+    "startPlanting": "Start Planting",
+    "noFieldsTitle": "No fields yet",
+    "noFieldsSubtitle": "Map your first field to start tracking a planting.",
+    "activePlantings": "Active Plantings",
+    "harvested": "Harvested"
+  },
+  "addField": {
+    "title": "Map Field",
+    "mapPlaceholder": "Tap on the map to drop a pin at your field location",
+    "fieldNameLabel": "Field Name",
+    "fieldNamePlaceholder": "e.g. North Ragi Field",
+    "areaSizeLabel": "Area Size",
+    "confirmSave": "Confirm Location & Save"
+  },
+  "addPlanting": {
+    "title": "Start Planting",
+    "fieldLabel": "Field",
+    "cropLabel": "Crop",
+    "varietyLabel": "Variety",
+    "sowingDateLabel": "Sowing Date",
+    "selectCrop": "Select Crop",
+    "selectVariety": "Select Variety",
+    "startTracking": "Start Tracking"
+  },
+  "quickLog": {
+    "title": "Log Activity",
+    "fieldLabel": "Field",
+    "activityType": "Activity Type",
+    "productLabel": "Product",
+    "quantityLabel": "Quantity",
+    "costLabel": "Cost (₹)",
+    "dateLabel": "Date",
+    "saveActivity": "Save Activity",
+    "activityTypes": {
+      "chemical": "Chemical / Spray",
+      "irrigation": "Irrigation",
+      "labor": "Labor",
+      "harvest": "Harvest"
+    }
+  },
+  "schemes": {
+    "title": "Government Schemes",
+    "eligibleFor": "You are eligible for",
+    "noSchemesTitle": "No matches yet",
+    "noSchemesSubtitle": "Complete your profile to see eligible schemes.",
+    "central": "Central Scheme",
+    "state": "State Scheme"
+  },
+  "schemeDetail": {
+    "eligibility": "Eligibility Criteria",
+    "benefits": "Benefits",
+    "howToApply": "How to Apply",
+    "contact": "Contact",
+    "markApplying": "Mark as Applying",
+    "markedApplying": "Marked as Applying"
+  },
+  "alertDetail": {
+    "title": "Alert Details",
+    "confidence": "Confidence: {{pct}}%",
+    "recommendation": "Recommendation",
+    "logAction": "Log this Action Now",
+    "nearbyVendors": "Nearby Vendors",
+    "mapUnavailable": "Map unavailable offline"
+  },
+  "ledger": {
+    "title": "Crop Cycle Ledger",
+    "netProfit": "Net Profit",
+    "profitMargin": "Profit Margin",
+    "currentCostOfCultivation": "Current Cost of Cultivation",
+    "expenseBreakdown": "Expense Breakdown",
+    "recentTransactions": "Recent Transactions",
+    "noTransactions": "No activity logged yet."
+  },
+  "profile": {
+    "title": "Profile",
+    "language": "Language",
+    "syncStatus": "Sync Status",
+    "synced": "Synced",
+    "pendingSync": "Offline - pending sync",
+    "phoneNumber": "Phone Number",
+    "unitPreference": "Unit Preference",
+    "demoDataTitle": "Demo Data",
+    "loadSampleData": "Load Sample Data",
+    "resetDemo": "Reset Demo (New User)",
+    "logout": "Log Out"
+  },
+  "units": {
+    "hectare": "Hectare",
+    "acre": "Acre",
+    "guntha": "Guntha",
+    "bigha": "Bigha",
+    "cent": "Cent",
+    "killa": "Killa"
+  }
+}

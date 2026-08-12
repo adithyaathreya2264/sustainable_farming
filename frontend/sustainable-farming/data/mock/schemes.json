@@ -1,0 +1,44 @@
+[
+  {
+    "id": "s1",
+    "name": "PM-KISAN Samman Nidhi",
+    "level": "central",
+    "summary": "Income support of ₹6,000/year for all landholding farmer families.",
+    "eligibilityCriteria": [
+      "Must be a landholding farmer",
+      "Total cultivable land under 2 hectares preferred (priority category)"
+    ],
+    "benefits": "₹2,000 paid every 4 months directly to your bank account.",
+    "howToApply": "Visit your nearest Common Service Centre (CSC) or apply online via the PM-KISAN portal with your land records and Aadhaar.",
+    "contactOffice": "Raitha Samparka Kendra, Mysuru",
+    "contactPhone": "+911800115526"
+  },
+  {
+    "id": "s2",
+    "name": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+    "level": "central",
+    "summary": "Crop insurance covering yield losses from natural calamities, pests, and disease.",
+    "eligibilityCriteria": [
+      "Farmers growing notified crops in notified areas",
+      "Must enroll before the cut-off date for the season"
+    ],
+    "benefits": "Low premium (2% for Kharif, 1.5% for Rabi) with full sum insured on crop loss.",
+    "howToApply": "Apply through your bank branch, CSC, or the PMFBY mobile app before the sowing season deadline.",
+    "contactOffice": "Raitha Samparka Kendra, Mysuru",
+    "contactPhone": "+911800116515"
+  },
+  {
+    "id": "s3",
+    "name": "Karnataka Krishi Bhagya",
+    "level": "state",
+    "summary": "Subsidy for farm ponds, polythene lining, and micro-irrigation to improve water security.",
+    "eligibilityCriteria": [
+      "Farmland located in Karnataka",
+      "Priority given to rainfed farmers and drought-prone taluks"
+    ],
+    "benefits": "Up to 80% subsidy on farm pond construction and drip/sprinkler irrigation sets.",
+    "howToApply": "Apply at your local Raitha Samparka Kendra with land records and Aadhaar-linked bank passbook.",
+    "contactOffice": "Raitha Samparka Kendra, Mysuru",
+    "contactPhone": "+918212345678"
+  }
+]

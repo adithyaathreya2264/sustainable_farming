@@ -1,0 +1,42 @@
+[
+  {
+    "id": "c1",
+    "name": "Ragi (Finger Millet)",
+    "varieties": [
+      { "id": "c1v1", "name": "GPU-28" },
+      { "id": "c1v2", "name": "Indaf-9" }
+    ]
+  },
+  {
+    "id": "c2",
+    "name": "Paddy (Rice)",
+    "varieties": [
+      { "id": "c2v1", "name": "IR-64" },
+      { "id": "c2v2", "name": "Jyothi" }
+    ]
+  },
+  {
+    "id": "c3",
+    "name": "Maize",
+    "varieties": [
+      { "id": "c3v1", "name": "NK-6240" },
+      { "id": "c3v2", "name": "DHM-117" }
+    ]
+  },
+  {
+    "id": "c4",
+    "name": "Tur (Pigeon Pea)",
+    "varieties": [
+      { "id": "c4v1", "name": "BRG-2" },
+      { "id": "c4v2", "name": "TS-3R" }
+    ]
+  },
+  {
+    "id": "c5",
+    "name": "Cotton",
+    "varieties": [
+      { "id": "c5v1", "name": "Bunny Bt" },
+      { "id": "c5v2", "name": "RCH-2" }
+    ]
+  }
+]

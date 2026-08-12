@@ -1,0 +1,158 @@
+{
+  "common": {
+    "save": "ಉಳಿಸಿ",
+    "cancel": "ರದ್ದುಮಾಡಿ",
+    "back": "ಹಿಂದೆ",
+    "continue": "ಮುಂದುವರಿಸಿ",
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "savedOffline": "ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಉಳಿಸಲಾಗಿದೆ",
+    "syncedToCloud": "ಡೇಟಾ ಕ್ಲೌಡ್‌ಗೆ ಸಿಂಕ್ ಆಗಿದೆ.",
+    "retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ"
+  },
+  "auth": {
+    "loginTitle": "ಸ್ವಾಗತ",
+    "loginSubtitle": "ಮುಂದುವರಿಸಲು ನಿಮ್ಮ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ",
+    "phoneLabel": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+    "getOtp": "OTP ಪಡೆಯಿರಿ",
+    "otpTitle": "ನಿಮ್ಮ ಸಂಖ್ಯೆಯನ್ನು ಪರಿಶೀಲಿಸಿ",
+    "otpSubtitle": "{{phone}} ಗೆ ಕಳುಹಿಸಲಾದ 6-ಅಂಕಿಯ ಕೋಡ್ ನಮೂದಿಸಿ",
+    "verify": "ಪರಿಶೀಲಿಸಿ",
+    "resendIn": "{{seconds}} ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಮರುಕಳುಹಿಸಿ",
+    "resend": "ಕೋಡ್ ಮರುಕಳುಹಿಸಿ",
+    "invalidOtp": "ತಪ್ಪಾದ ಕೋಡ್. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    "hintOtp": "ಈ ಡೆಮೊಗಾಗಿ {{otp}} ಬಳಸಿ"
+  },
+  "onboarding": {
+    "step1Title": "ಪ್ರಾರಂಭಿಸೋಣ",
+    "languageLabel": "ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "step2NameTitle": "ನಿಮ್ಮನ್ನು ಏನೆಂದು ಕರೆಯೋಣ?",
+    "nameLabel": "ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರು",
+    "namePlaceholder": "ನಿಮ್ಮ ಹೆಸರನ್ನು ನಮೂದಿಸಿ",
+    "step2Title": "ಜಮೀನಿನ ಪ್ರಮಾಣ ಮತ್ತು ಅಳತೆ",
+    "unitLabel": "ನೀವು ಜಮೀನನ್ನು ಹೇಗೆ ಅಳೆಯುತ್ತೀರಿ?",
+    "areaLabel": "ಒಟ್ಟು ಜಮೀನಿನ ಗಾತ್ರ",
+    "step3Title": "ಸ್ಥಳ ಮತ್ತು ಮೂಲಸೌಕರ್ಯ",
+    "irrigationLabel": "ಮುಖ್ಯ ನೀರಾವರಿ ಮೂಲ",
+    "stateLabel": "ರಾಜ್ಯ",
+    "districtLabel": "ಜಿಲ್ಲೆ",
+    "selectState": "ರಾಜ್ಯ ಆಯ್ಕೆಮಾಡಿ",
+    "selectDistrict": "ಜಿಲ್ಲೆ ಆಯ್ಕೆಮಾಡಿ",
+    "completeProfile": "ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ",
+    "irrigation": {
+      "rainfed": "ಮಳೆಯಾಶ್ರಿತ / ಮುಂಗಾರು",
+      "borewell": "ಕೊಳವೆ ಬಾವಿ",
+      "canal": "ಕಾಲುವೆ",
+      "drip_sprinkler": "ಹನಿ / ತುಂತುರು ನೀರಾವರಿ"
+    }
+  },
+  "home": {
+    "welcome": "ಸ್ವಾಗತ, {{name}}!",
+    "emptyStateTitle": "ನಿಮ್ಮ ಮೊದಲ ಹೊಲವನ್ನು ಗುರುತಿಸಿ",
+    "emptyStateSubtitle": "ನಿಮ್ಮ ಮೊದಲ ಹೊಲವನ್ನು ಗುರುತಿಸಲು ಕೆಳಗಿನ '+' ಒತ್ತಿರಿ.",
+    "weatherOffline": "{{hours}} ಗಂಟೆಗಳ ಹಿಂದೆ ನವೀಕರಿಸಲಾಗಿದೆ",
+    "seasonFinancials": "ಋತುವಿನ ಆರ್ಥಿಕ ಸ್ಥಿತಿ",
+    "totalSpent": "ಒಟ್ಟು ಖರ್ಚು",
+    "totalEarned": "ಒಟ್ಟು ಗಳಿಕೆ",
+    "viewFullLedger": "ಪೂರ್ಣ ಲೆಡ್ಜರ್ ವೀಕ್ಷಿಸಿ",
+    "alertsTitle": "ಎಚ್ಚರಿಕೆಗಳು",
+    "noAlerts": "ಸದ್ಯಕ್ಕೆ ಯಾವುದೇ ಎಚ್ಚರಿಕೆಗಳಿಲ್ಲ.",
+    "viewTreatment": "ಶಿಫಾರಸು ವೀಕ್ಷಿಸಿ"
+  },
+  "fields": {
+    "title": "ನನ್ನ ಹೊಲಗಳು",
+    "addField": "ಹೊಲ ಸೇರಿಸಿ",
+    "startPlanting": "ಬಿತ್ತನೆ ಪ್ರಾರಂಭಿಸಿ",
+    "noFieldsTitle": "ಇನ್ನೂ ಹೊಲಗಳಿಲ್ಲ",
+    "noFieldsSubtitle": "ಬಿತ್ತನೆ ಟ್ರ್ಯಾಕ್ ಮಾಡಲು ನಿಮ್ಮ ಮೊದಲ ಹೊಲವನ್ನು ಗುರುತಿಸಿ.",
+    "activePlantings": "ಸಕ್ರಿಯ ಬೆಳೆಗಳು",
+    "harvested": "ಕೊಯ್ಲು ಮಾಡಲಾಗಿದೆ"
+  },
+  "addField": {
+    "title": "ಹೊಲವನ್ನು ಗುರುತಿಸಿ",
+    "mapPlaceholder": "ನಿಮ್ಮ ಹೊಲದ ಸ್ಥಳದಲ್ಲಿ ಪಿನ್ ಇಡಲು ನಕ್ಷೆಯನ್ನು ಒತ್ತಿರಿ",
+    "fieldNameLabel": "ಹೊಲದ ಹೆಸರು",
+    "fieldNamePlaceholder": "ಉದಾ. ಉತ್ತರ ರಾಗಿ ಹೊಲ",
+    "areaSizeLabel": "ಜಮೀನಿನ ಗಾತ್ರ",
+    "confirmSave": "ಸ್ಥಳವನ್ನು ದೃಢೀಕರಿಸಿ ಮತ್ತು ಉಳಿಸಿ"
+  },
+  "addPlanting": {
+    "title": "ಬಿತ್ತನೆ ಪ್ರಾರಂಭಿಸಿ",
+    "fieldLabel": "ಹೊಲ",
+    "cropLabel": "ಬೆಳೆ",
+    "varietyLabel": "ತಳಿ",
+    "sowingDateLabel": "ಬಿತ್ತನೆ ದಿನಾಂಕ",
+    "selectCrop": "ಬೆಳೆ ಆಯ್ಕೆಮಾಡಿ",
+    "selectVariety": "ತಳಿ ಆಯ್ಕೆಮಾಡಿ",
+    "startTracking": "ಟ್ರ್ಯಾಕಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ"
+  },
+  "quickLog": {
+    "title": "ಚಟುವಟಿಕೆ ದಾಖಲಿಸಿ",
+    "fieldLabel": "ಹೊಲ",
+    "activityType": "ಚಟುವಟಿಕೆಯ ಪ್ರಕಾರ",
+    "productLabel": "ಉತ್ಪನ್ನ",
+    "quantityLabel": "ಪ್ರಮಾಣ",
+    "costLabel": "ವೆಚ್ಚ (₹)",
+    "dateLabel": "ದಿನಾಂಕ",
+    "saveActivity": "ಚಟುವಟಿಕೆ ಉಳಿಸಿ",
+    "activityTypes": {
+      "chemical": "ರಾಸಾಯನಿಕ / ಸಿಂಪಡಣೆ",
+      "irrigation": "ನೀರಾವರಿ",
+      "labor": "ಕೂಲಿ ಕಾರ್ಮಿಕ",
+      "harvest": "ಕೊಯ್ಲು"
+    }
+  },
+  "schemes": {
+    "title": "ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು",
+    "eligibleFor": "ನೀವು ಅರ್ಹರಾಗಿದ್ದೀರಿ",
+    "noSchemesTitle": "ಇನ್ನೂ ಯಾವುದೇ ಹೊಂದಾಣಿಕೆಗಳಿಲ್ಲ",
+    "noSchemesSubtitle": "ಅರ್ಹ ಯೋಜನೆಗಳನ್ನು ನೋಡಲು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ.",
+    "central": "ಕೇಂದ್ರ ಯೋಜನೆ",
+    "state": "ರಾಜ್ಯ ಯೋಜನೆ"
+  },
+  "schemeDetail": {
+    "eligibility": "ಅರ್ಹತಾ ಮಾನದಂಡಗಳು",
+    "benefits": "ಪ್ರಯೋಜನಗಳು",
+    "howToApply": "ಅರ್ಜಿ ಸಲ್ಲಿಸುವುದು ಹೇಗೆ",
+    "contact": "ಸಂಪರ್ಕ",
+    "markApplying": "ಅರ್ಜಿ ಸಲ್ಲಿಸುತ್ತಿರುವುದಾಗಿ ಗುರುತಿಸಿ",
+    "markedApplying": "ಅರ್ಜಿ ಸಲ್ಲಿಸುತ್ತಿರುವುದಾಗಿ ಗುರುತಿಸಲಾಗಿದೆ"
+  },
+  "alertDetail": {
+    "title": "ಎಚ್ಚರಿಕೆಯ ವಿವರಗಳು",
+    "confidence": "ವಿಶ್ವಾಸಾರ್ಹತೆ: {{pct}}%",
+    "recommendation": "ಶಿಫಾರಸು",
+    "logAction": "ಈಗಲೇ ಈ ಕ್ರಮವನ್ನು ದಾಖಲಿಸಿ",
+    "nearbyVendors": "ಹತ್ತಿರದ ಮಾರಾಟಗಾರರು",
+    "mapUnavailable": "ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ನಕ್ಷೆ ಲಭ್ಯವಿಲ್ಲ"
+  },
+  "ledger": {
+    "title": "ಬೆಳೆ ಚಕ್ರ ಲೆಡ್ಜರ್",
+    "netProfit": "ನಿವ್ವಳ ಲಾಭ",
+    "profitMargin": "ಲಾಭದ ಪ್ರಮಾಣ",
+    "currentCostOfCultivation": "ಪ್ರಸ್ತುತ ಬೇಸಾಯದ ವೆಚ್ಚ",
+    "expenseBreakdown": "ವೆಚ್ಚದ ವಿವರ",
+    "recentTransactions": "ಇತ್ತೀಚಿನ ವಹಿವಾಟುಗಳು",
+    "noTransactions": "ಇನ್ನೂ ಯಾವುದೇ ಚಟುವಟಿಕೆ ದಾಖಲಾಗಿಲ್ಲ."
+  },
+  "profile": {
+    "title": "ಪ್ರೊಫೈಲ್",
+    "language": "ಭಾಷೆ",
+    "syncStatus": "ಸಿಂಕ್ ಸ್ಥಿತಿ",
+    "synced": "ಸಿಂಕ್ ಆಗಿದೆ",
+    "pendingSync": "ಆಫ್‌ಲೈನ್ - ಸಿಂಕ್ ಬಾಕಿ ಇದೆ",
+    "phoneNumber": "ಫೋನ್ ಸಂಖ್ಯೆ",
+    "unitPreference": "ಅಳತೆಯ ಆದ್ಯತೆ",
+    "demoDataTitle": "ಡೆಮೊ ಡೇಟಾ",
+    "loadSampleData": "ಮಾದರಿ ಡೇಟಾ ಲೋಡ್ ಮಾಡಿ",
+    "resetDemo": "ಡೆಮೊ ಮರುಹೊಂದಿಸಿ (ಹೊಸ ಬಳಕೆದಾರ)",
+    "logout": "ಲಾಗ್ ಔಟ್"
+  },
+  "units": {
+    "hectare": "ಹೆಕ್ಟೇರ್",
+    "acre": "ಎಕರೆ",
+    "guntha": "ಗುಂಟೆ",
+    "bigha": "ಬಿಘಾ",
+    "cent": "ಸೆಂಟ್",
+    "killa": "ಕಿಲ್ಲಾ"
+  }
+}

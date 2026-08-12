@@ -1,0 +1,97 @@
+{
+  "fields": [
+    {
+      "id": "f1",
+      "userId": "u1",
+      "name": "North Ragi Field",
+      "areaHectares": 0.8094,
+      "lat": 12.3052,
+      "long": 76.6552,
+      "soilType": "Red Sandy Loam"
+    }
+  ],
+  "plantings": [
+    {
+      "id": "pl1",
+      "fieldId": "f1",
+      "cropId": "c1",
+      "varietyId": "c1v1",
+      "sowingDate": "2026-06-15",
+      "status": "active"
+    }
+  ],
+  "interventions": [
+    {
+      "id": "i1",
+      "plantingId": "pl1",
+      "type": "chemical",
+      "date": "2026-06-20",
+      "productId": "p1",
+      "quantityMetric": 25,
+      "quantityUnit": "kg",
+      "costInInr": 650,
+      "notes": "Basal dose after sowing",
+      "isSynced": true
+    },
+    {
+      "id": "i2",
+      "plantingId": "pl1",
+      "type": "irrigation",
+      "date": "2026-06-25",
+      "productId": "p5",
+      "quantityMetric": 3,
+      "quantityUnit": "hour",
+      "costInInr": 300,
+      "isSynced": true
+    },
+    {
+      "id": "i3",
+      "plantingId": "pl1",
+      "type": "labor",
+      "date": "2026-07-05",
+      "productId": "p7",
+      "quantityMetric": 2,
+      "quantityUnit": "person-day",
+      "costInInr": 1000,
+      "isSynced": false
+    },
+    {
+      "id": "i4",
+      "plantingId": "pl1",
+      "type": "chemical",
+      "date": "2026-07-12",
+      "productId": "p3",
+      "quantityMetric": 2,
+      "quantityUnit": "liter",
+      "costInInr": 480,
+      "notes": "Preventive spray after alert",
+      "isSynced": true
+    }
+  ],
+  "alerts": [
+    {
+      "id": "a1",
+      "plantingId": "pl1",
+      "title": "Blast Disease Risk Rising",
+      "description": "High humidity and recent rainfall in Mysuru district have created favorable conditions for Ragi Blast. Apply a preventive fungicide spray within the next 3 days to protect your crop.",
+      "severity": "high",
+      "confidencePct": 82,
+      "recommendedProductId": "p3",
+      "createdAt": "2026-07-10T06:00:00.000Z"
+    },
+    {
+      "id": "a2",
+      "plantingId": "pl1",
+      "title": "Irrigation Due Soon",
+      "description": "Soil moisture near North Ragi Field is trending low based on regional weather data. Plan an irrigation cycle in the next 2 days.",
+      "severity": "medium",
+      "confidencePct": 68,
+      "recommendedProductId": "p5",
+      "createdAt": "2026-07-18T06:00:00.000Z"
+    }
+  ],
+  "vendors": [
+    { "id": "v1", "name": "AgriStore Mysuru", "distanceKm": 2.1, "lat": 12.315, "long": 76.64 },
+    { "id": "v2", "name": "Krishi Kendra Co-op", "distanceKm": 4.6, "lat": 12.29, "long": 76.68 }
+  ]
+}

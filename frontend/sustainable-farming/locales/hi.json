@@ -1,0 +1,158 @@
+{
+  "common": {
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "back": "वापस",
+    "continue": "जारी रखें",
+    "loading": "लोड हो रहा है...",
+    "savedOffline": "ऑफ़लाइन सहेजा गया",
+    "syncedToCloud": "डेटा क्लाउड पर सिंक हो गया।",
+    "retry": "पुनः प्रयास करें"
+  },
+  "auth": {
+    "loginTitle": "स्वागत है",
+    "loginSubtitle": "जारी रखने के लिए अपना मोबाइल नंबर दर्ज करें",
+    "phoneLabel": "मोबाइल नंबर",
+    "getOtp": "OTP प्राप्त करें",
+    "otpTitle": "अपना नंबर सत्यापित करें",
+    "otpSubtitle": "{{phone}} पर भेजा गया 6-अंकीय कोड दर्ज करें",
+    "verify": "सत्यापित करें",
+    "resendIn": "{{seconds}} सेकंड में पुनः भेजें",
+    "resend": "कोड पुनः भेजें",
+    "invalidOtp": "गलत कोड। कृपया पुनः प्रयास करें।",
+    "hintOtp": "इस डेमो के लिए {{otp}} का उपयोग करें"
+  },
+  "onboarding": {
+    "step1Title": "चलिए शुरू करते हैं",
+    "languageLabel": "अपनी भाषा चुनें",
+    "step2NameTitle": "हम आपको क्या कहकर बुलाएँ?",
+    "nameLabel": "आपका पूरा नाम",
+    "namePlaceholder": "अपना नाम दर्ज करें",
+    "step2Title": "खेत का आकार और माप इकाई",
+    "unitLabel": "आप ज़मीन कैसे नापते हैं?",
+    "areaLabel": "कुल खेत का क्षेत्रफल",
+    "step3Title": "स्थान और बुनियादी सुविधाएँ",
+    "irrigationLabel": "मुख्य सिंचाई स्रोत",
+    "stateLabel": "राज्य",
+    "districtLabel": "ज़िला",
+    "selectState": "राज्य चुनें",
+    "selectDistrict": "ज़िला चुनें",
+    "completeProfile": "प्रोफ़ाइल पूर्ण करें",
+    "irrigation": {
+      "rainfed": "वर्षा आधारित / मानसून",
+      "borewell": "बोरवेल",
+      "canal": "नहर",
+      "drip_sprinkler": "ड्रिप / स्प्रिंकलर"
+    }
+  },
+  "home": {
+    "welcome": "स्वागत है, {{name}}!",
+    "emptyStateTitle": "अपना पहला खेत मैप करें",
+    "emptyStateSubtitle": "अपना पहला खेत मैप करने के लिए नीचे '+' दबाएँ।",
+    "weatherOffline": "{{hours}} घंटे पहले अपडेट किया गया",
+    "seasonFinancials": "सीज़न वित्तीय स्थिति",
+    "totalSpent": "कुल खर्च",
+    "totalEarned": "कुल कमाई",
+    "viewFullLedger": "पूरा लेजर देखें",
+    "alertsTitle": "अलर्ट",
+    "noAlerts": "अभी कोई सक्रिय अलर्ट नहीं है।",
+    "viewTreatment": "सिफ़ारिश देखें"
+  },
+  "fields": {
+    "title": "मेरे खेत",
+    "addField": "खेत जोड़ें",
+    "startPlanting": "बुवाई शुरू करें",
+    "noFieldsTitle": "अभी तक कोई खेत नहीं",
+    "noFieldsSubtitle": "बुवाई ट्रैक करने के लिए अपना पहला खेत मैप करें।",
+    "activePlantings": "सक्रिय फ़सलें",
+    "harvested": "कटाई हो चुकी"
+  },
+  "addField": {
+    "title": "खेत मैप करें",
+    "mapPlaceholder": "अपने खेत के स्थान पर पिन लगाने के लिए नक्शे पर टैप करें",
+    "fieldNameLabel": "खेत का नाम",
+    "fieldNamePlaceholder": "जैसे: उत्तर रागी खेत",
+    "areaSizeLabel": "क्षेत्रफल",
+    "confirmSave": "स्थान की पुष्टि करें और सहेजें"
+  },
+  "addPlanting": {
+    "title": "बुवाई शुरू करें",
+    "fieldLabel": "खेत",
+    "cropLabel": "फ़सल",
+    "varietyLabel": "किस्म",
+    "sowingDateLabel": "बुवाई की तारीख",
+    "selectCrop": "फ़सल चुनें",
+    "selectVariety": "किस्म चुनें",
+    "startTracking": "ट्रैकिंग शुरू करें"
+  },
+  "quickLog": {
+    "title": "गतिविधि दर्ज करें",
+    "fieldLabel": "खेत",
+    "activityType": "गतिविधि का प्रकार",
+    "productLabel": "उत्पाद",
+    "quantityLabel": "मात्रा",
+    "costLabel": "लागत (₹)",
+    "dateLabel": "तारीख",
+    "saveActivity": "गतिविधि सहेजें",
+    "activityTypes": {
+      "chemical": "रसायन / छिड़काव",
+      "irrigation": "सिंचाई",
+      "labor": "मज़दूरी",
+      "harvest": "कटाई"
+    }
+  },
+  "schemes": {
+    "title": "सरकारी योजनाएँ",
+    "eligibleFor": "आप इसके लिए पात्र हैं",
+    "noSchemesTitle": "अभी तक कोई मेल नहीं",
+    "noSchemesSubtitle": "पात्र योजनाएँ देखने के लिए अपनी प्रोफ़ाइल पूर्ण करें।",
+    "central": "केंद्रीय योजना",
+    "state": "राज्य योजना"
+  },
+  "schemeDetail": {
+    "eligibility": "पात्रता मानदंड",
+    "benefits": "लाभ",
+    "howToApply": "आवेदन कैसे करें",
+    "contact": "संपर्क",
+    "markApplying": "आवेदन कर रहे हैं के रूप में चिह्नित करें",
+    "markedApplying": "आवेदन कर रहे हैं के रूप में चिह्नित किया गया"
+  },
+  "alertDetail": {
+    "title": "अलर्ट विवरण",
+    "confidence": "विश्वास स्तर: {{pct}}%",
+    "recommendation": "सिफ़ारिश",
+    "logAction": "अभी यह कार्रवाई दर्ज करें",
+    "nearbyVendors": "आस-पास के विक्रेता",
+    "mapUnavailable": "ऑफ़लाइन में नक्शा उपलब्ध नहीं है"
+  },
+  "ledger": {
+    "title": "फ़सल चक्र लेजर",
+    "netProfit": "शुद्ध लाभ",
+    "profitMargin": "लाभ मार्जिन",
+    "currentCostOfCultivation": "वर्तमान खेती लागत",
+    "expenseBreakdown": "खर्च का विवरण",
+    "recentTransactions": "हाल के लेन-देन",
+    "noTransactions": "अभी तक कोई गतिविधि दर्ज नहीं हुई।"
+  },
+  "profile": {
+    "title": "प्रोफ़ाइल",
+    "language": "भाषा",
+    "syncStatus": "सिंक स्थिति",
+    "synced": "सिंक हो गया",
+    "pendingSync": "ऑफ़लाइन - सिंक बाकी है",
+    "phoneNumber": "फ़ोन नंबर",
+    "unitPreference": "माप इकाई प्राथमिकता",
+    "demoDataTitle": "डेमो डेटा",
+    "loadSampleData": "नमूना डेटा लोड करें",
+    "resetDemo": "डेमो रीसेट करें (नया उपयोगकर्ता)",
+    "logout": "लॉग आउट"
+  },
+  "units": {
+    "hectare": "हेक्टेयर",
+    "acre": "एकड़",
+    "guntha": "गुंठा",
+    "bigha": "बीघा",
+    "cent": "सेंट",
+    "killa": "किल्ला"
+  }
+}
