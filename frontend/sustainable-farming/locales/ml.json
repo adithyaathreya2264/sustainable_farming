@@ -1,0 +1,164 @@
+{
+  "common": {
+    "save": "സേവ് ചെയ്യുക",
+    "cancel": "റദ്ദാക്കുക",
+    "back": "തിരികെ",
+    "continue": "തുടരുക",
+    "loading": "ലോഡ് ചെയ്യുന്നു...",
+    "savedOffline": "ഓഫ്‌ലൈനിൽ സേവ് ചെയ്തു",
+    "syncedToCloud": "ഡാറ്റ ക്ലൗഡിലേക്ക് സിങ്ക് ചെയ്തു.",
+    "retry": "വീണ്ടും ശ്രമിക്കുക"
+  },
+  "auth": {
+    "loginTitle": "സ്വാഗതം",
+    "loginSubtitle": "തുടരാൻ നിങ്ങളുടെ മൊബൈൽ നമ്പർ നൽകുക",
+    "phoneLabel": "മൊബൈൽ നമ്പർ",
+    "getOtp": "OTP നേടുക",
+    "otpTitle": "നിങ്ങളുടെ നമ്പർ പരിശോധിക്കുക",
+    "otpSubtitle": "{{phone}} ലേക്ക് അയച്ച 6 അക്ക കോഡ് നൽകുക",
+    "verify": "പരിശോധിക്കുക",
+    "resendIn": "{{seconds}} സെക്കൻഡിൽ വീണ്ടും അയയ്ക്കുക",
+    "resend": "കോഡ് വീണ്ടും അയയ്ക്കുക",
+    "invalidOtp": "തെറ്റായ കോഡ്. വീണ്ടും ശ്രമിക്കുക.",
+    "hintOtp": "ഈ ഡെമോയ്ക്കായി {{otp}} ഉപയോഗിക്കുക"
+  },
+  "onboarding": {
+    "step1Title": "നമുക്ക് ആരംഭിക്കാം",
+    "languageLabel": "നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക",
+    "step2NameTitle": "നിങ്ങളെ എന്ത് വിളിക്കണം?",
+    "nameLabel": "നിങ്ങളുടെ പൂർണ്ണ നാമം",
+    "namePlaceholder": "നിങ്ങളുടെ പേര് നൽകുക",
+    "step2Title": "കൃഷിഭൂമിയുടെ വലുപ്പവും അളവുകളും",
+    "unitLabel": "നിങ്ങൾ ഭൂമി എങ്ങനെ അളക്കുന്നു?",
+    "areaLabel": "മൊത്തം കൃഷിഭൂമിയുടെ വിസ്തീർണ്ണം",
+    "step3Title": "സ്ഥലവും അടിസ്ഥാന സൗകര്യങ്ങളും",
+    "irrigationLabel": "പ്രധാന ജലസേചന സ്രോതസ്സ്",
+    "stateLabel": "സംസ്ഥാനം",
+    "districtLabel": "ജില്ല",
+    "selectState": "സംസ്ഥാനം തിരഞ്ഞെടുക്കുക",
+    "selectDistrict": "ജില്ല തിരഞ്ഞെടുക്കുക",
+    "completeProfile": "പ്രൊഫൈൽ പൂർത്തിയാക്കുക",
+    "irrigation": {
+      "rainfed": "മഴയെ ആശ്രയിച്ചത് / മൺസൂൺ",
+      "borewell": "കുഴൽക്കിണർ",
+      "canal": "കനാൽ",
+      "drip_sprinkler": "ഡ്രിപ്പ് / സ്പ്രിംഗ്ലർ"
+    }
+  },
+  "home": {
+    "welcome": "സ്വാഗതം, {{name}}!",
+    "emptyStateTitle": "നിങ്ങളുടെ ആദ്യ വയൽ മാപ്പ് ചെയ്യുക",
+    "emptyStateSubtitle": "നിങ്ങളുടെ ആദ്യ വയൽ മാപ്പ് ചെയ്യാൻ താഴെയുള്ള '+' അമർത്തുക.",
+    "weatherOffline": "{{hours}} മണിക്കൂർ മുമ്പ് പുതുക്കി",
+    "seasonFinancials": "സീസൺ സാമ്പത്തിക നില",
+    "totalSpent": "ആകെ ചെലവ്",
+    "totalEarned": "ആകെ വരുമാനം",
+    "viewFullLedger": "മുഴുവൻ ലെഡ്ജർ കാണുക",
+    "alertsTitle": "മുന്നറിയിപ്പുകൾ",
+    "noAlerts": "നിലവിൽ സജീവമായ മുന്നറിയിപ്പുകൾ ഇല്ല.",
+    "viewTreatment": "ശുപാർശ കാണുക"
+  },
+  "fields": {
+    "title": "എന്റെ വയലുകൾ",
+    "addField": "വയൽ ചേർക്കുക",
+    "startPlanting": "നടീൽ ആരംഭിക്കുക",
+    "noFieldsTitle": "ഇതുവരെ വയലുകളില്ല",
+    "noFieldsSubtitle": "നടീൽ ട്രാക്ക് ചെയ്യാൻ നിങ്ങളുടെ ആദ്യ വയൽ മാപ്പ് ചെയ്യുക.",
+    "activePlantings": "സജീവമായ വിളകൾ",
+    "harvested": "വിളവെടുത്തു"
+  },
+  "addField": {
+    "title": "വയൽ മാപ്പ് ചെയ്യുക",
+    "tapToStart": "നിങ്ങളുടെ അതിർത്തിയുടെ ആദ്യ പോയിന്റ് സ്ഥാപിക്കാൻ മാപ്പിൽ ടാപ്പ് ചെയ്യുക",
+    "tapToAddNext": "അടുത്ത പോയിന്റ് ചേർക്കാൻ ടാപ്പ് ചെയ്യുക ({{count}} സ്ഥാപിച്ചു)",
+    "boundaryClosed": "അതിർത്തി അടച്ചു ({{count}} പോയിന്റുകൾ)",
+    "closeBoundary": "അതിർത്തി അടയ്ക്കുക",
+    "undo": "പഴയപടിയാക്കുക",
+    "reset": "പുനഃസജ്ജമാക്കുക",
+    "redraw": "വീണ്ടും വരയ്ക്കുക",
+    "fieldNameLabel": "വയലിന്റെ പേര്",
+    "fieldNamePlaceholder": "ഉദാ. വടക്കൻ റാഗി വയൽ",
+    "areaSizeLabel": "വിസ്തീർണ്ണം",
+    "confirmSave": "സ്ഥലം സ്ഥിരീകരിച്ച് സേവ് ചെയ്യുക"
+  },
+  "addPlanting": {
+    "title": "നടീൽ ആരംഭിക്കുക",
+    "fieldLabel": "വയൽ",
+    "cropLabel": "വിള",
+    "varietyLabel": "ഇനം",
+    "sowingDateLabel": "വിതയ്ക്കുന്ന തീയതി",
+    "selectCrop": "വിള തിരഞ്ഞെടുക്കുക",
+    "selectVariety": "ഇനം തിരഞ്ഞെടുക്കുക",
+    "startTracking": "ട്രാക്കിംഗ് ആരംഭിക്കുക"
+  },
+  "quickLog": {
+    "title": "പ്രവർത്തനം രേഖപ്പെടുത്തുക",
+    "fieldLabel": "വയൽ",
+    "activityType": "പ്രവർത്തന തരം",
+    "productLabel": "ഉൽപ്പന്നം",
+    "quantityLabel": "അളവ്",
+    "costLabel": "ചെലവ് (₹)",
+    "dateLabel": "തീയതി",
+    "saveActivity": "പ്രവർത്തനം സേവ് ചെയ്യുക",
+    "activityTypes": {
+      "chemical": "രാസവസ്തു / സ്പ്രേ",
+      "irrigation": "ജലസേചനം",
+      "labor": "കൂലിവേല",
+      "harvest": "വിളവെടുപ്പ്"
+    }
+  },
+  "schemes": {
+    "title": "സർക്കാർ പദ്ധതികൾ",
+    "eligibleFor": "നിങ്ങൾ അർഹനാണ്",
+    "noSchemesTitle": "ഇതുവരെ പൊരുത്തങ്ങളില്ല",
+    "noSchemesSubtitle": "അർഹമായ പദ്ധതികൾ കാണാൻ നിങ്ങളുടെ പ്രൊഫൈൽ പൂർത്തിയാക്കുക.",
+    "central": "കേന്ദ്ര പദ്ധതി",
+    "state": "സംസ്ഥാന പദ്ധതി"
+  },
+  "schemeDetail": {
+    "eligibility": "യോഗ്യതാ മാനദണ്ഡങ്ങൾ",
+    "benefits": "ആനുകൂല്യങ്ങൾ",
+    "howToApply": "എങ്ങനെ അപേക്ഷിക്കാം",
+    "contact": "ബന്ധപ്പെടുക",
+    "markApplying": "അപേക്ഷിക്കുന്നു എന്ന് അടയാളപ്പെടുത്തുക",
+    "markedApplying": "അപേക്ഷിക്കുന്നു എന്ന് അടയാളപ്പെടുത്തി"
+  },
+  "alertDetail": {
+    "title": "മുന്നറിയിപ്പ് വിശദാംശങ്ങൾ",
+    "confidence": "വിശ്വാസ്യത: {{pct}}%",
+    "recommendation": "ശുപാർശ",
+    "logAction": "ഈ നടപടി ഇപ്പോൾ രേഖപ്പെടുത്തുക",
+    "nearbyVendors": "സമീപത്തുള്ള വിൽപ്പനക്കാർ",
+    "mapUnavailable": "ഓഫ്‌ലൈനിൽ മാപ്പ് ലഭ്യമല്ല"
+  },
+  "ledger": {
+    "title": "വിള ചക്ര ലെഡ്ജർ",
+    "netProfit": "അറ്റാദായം",
+    "profitMargin": "ലാഭ മാർജിൻ",
+    "currentCostOfCultivation": "നിലവിലെ കൃഷിച്ചെലവ്",
+    "expenseBreakdown": "ചെലവ് വിഭജനം",
+    "recentTransactions": "സമീപകാല ഇടപാടുകൾ",
+    "noTransactions": "ഇതുവരെ പ്രവർത്തനങ്ങളൊന്നും രേഖപ്പെടുത്തിയിട്ടില്ല."
+  },
+  "profile": {
+    "title": "പ്രൊഫൈൽ",
+    "language": "ഭാഷ",
+    "syncStatus": "സിങ്ക് നില",
+    "synced": "സിങ്ക് ചെയ്തു",
+    "pendingSync": "ഓഫ്‌ലൈൻ - സിങ്ക് തീർച്ചപ്പെടുത്താനുണ്ട്",
+    "phoneNumber": "ഫോൺ നമ്പർ",
+    "unitPreference": "യൂണിറ്റ് മുൻഗണന",
+    "demoDataTitle": "ഡെമോ ഡാറ്റ",
+    "loadSampleData": "സാമ്പിൾ ഡാറ്റ ലോഡ് ചെയ്യുക",
+    "resetDemo": "ഡെമോ പുനഃസജ്ജമാക്കുക (പുതിയ ഉപയോക്താവ്)",
+    "logout": "ലോഗ് ഔട്ട്"
+  },
+  "units": {
+    "hectare": "ഹെക്ടർ",
+    "acre": "ഏക്കർ",
+    "guntha": "ഗുണ്ട",
+    "bigha": "ബിഗ",
+    "cent": "സെന്റ്",
+    "killa": "കില്ല"
+  }
+}

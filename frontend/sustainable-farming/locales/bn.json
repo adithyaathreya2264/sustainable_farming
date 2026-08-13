@@ -1,0 +1,164 @@
+{
+  "common": {
+    "save": "সংরক্ষণ করুন",
+    "cancel": "বাতিল করুন",
+    "back": "পিছনে",
+    "continue": "চালিয়ে যান",
+    "loading": "লোড হচ্ছে...",
+    "savedOffline": "অফলাইনে সংরক্ষিত হয়েছে",
+    "syncedToCloud": "ডেটা ক্লাউডে সিঙ্ক হয়েছে।",
+    "retry": "আবার চেষ্টা করুন"
+  },
+  "auth": {
+    "loginTitle": "স্বাগতম",
+    "loginSubtitle": "চালিয়ে যেতে আপনার মোবাইল নম্বর লিখুন",
+    "phoneLabel": "মোবাইল নম্বর",
+    "getOtp": "OTP পান",
+    "otpTitle": "আপনার নম্বর যাচাই করুন",
+    "otpSubtitle": "{{phone}} নম্বরে পাঠানো ৬-সংখ্যার কোড লিখুন",
+    "verify": "যাচাই করুন",
+    "resendIn": "{{seconds}} সেকেন্ডে পুনরায় পাঠান",
+    "resend": "কোড পুনরায় পাঠান",
+    "invalidOtp": "ভুল কোড। আবার চেষ্টা করুন।",
+    "hintOtp": "এই ডেমোর জন্য {{otp}} ব্যবহার করুন"
+  },
+  "onboarding": {
+    "step1Title": "চলুন শুরু করি",
+    "languageLabel": "আপনার ভাষা নির্বাচন করুন",
+    "step2NameTitle": "আপনাকে কী নামে ডাকব?",
+    "nameLabel": "আপনার পুরো নাম",
+    "namePlaceholder": "আপনার নাম লিখুন",
+    "step2Title": "জমির পরিমাণ এবং একক",
+    "unitLabel": "আপনি কীভাবে জমি মাপেন?",
+    "areaLabel": "মোট জমির আয়তন",
+    "step3Title": "অবস্থান ও অবকাঠামো",
+    "irrigationLabel": "প্রধান সেচের উৎস",
+    "stateLabel": "রাজ্য",
+    "districtLabel": "জেলা",
+    "selectState": "রাজ্য নির্বাচন করুন",
+    "selectDistrict": "জেলা নির্বাচন করুন",
+    "completeProfile": "প্রোফাইল সম্পূর্ণ করুন",
+    "irrigation": {
+      "rainfed": "বৃষ্টিনির্ভর / বর্ষা",
+      "borewell": "বোরওয়েল",
+      "canal": "খাল",
+      "drip_sprinkler": "ড্রিপ / স্প্রিংকলার"
+    }
+  },
+  "home": {
+    "welcome": "স্বাগতম, {{name}}!",
+    "emptyStateTitle": "আপনার প্রথম জমি ম্যাপ করুন",
+    "emptyStateSubtitle": "আপনার প্রথম জমি ম্যাপ করতে নিচের '+' চাপুন।",
+    "weatherOffline": "{{hours}} ঘণ্টা আগে আপডেট করা হয়েছে",
+    "seasonFinancials": "মরসুমের আর্থিক অবস্থা",
+    "totalSpent": "মোট খরচ",
+    "totalEarned": "মোট আয়",
+    "viewFullLedger": "সম্পূর্ণ লেজার দেখুন",
+    "alertsTitle": "সতর্কতা",
+    "noAlerts": "এই মুহূর্তে কোনো সক্রিয় সতর্কতা নেই।",
+    "viewTreatment": "সুপারিশ দেখুন"
+  },
+  "fields": {
+    "title": "আমার জমি",
+    "addField": "জমি যোগ করুন",
+    "startPlanting": "রোপণ শুরু করুন",
+    "noFieldsTitle": "এখনও কোনো জমি নেই",
+    "noFieldsSubtitle": "রোপণ ট্র্যাক করতে আপনার প্রথম জমি ম্যাপ করুন।",
+    "activePlantings": "সক্রিয় ফসল",
+    "harvested": "কাটা হয়েছে"
+  },
+  "addField": {
+    "title": "জমি ম্যাপ করুন",
+    "tapToStart": "আপনার সীমানার প্রথম বিন্দু বসাতে মানচিত্রে ট্যাপ করুন",
+    "tapToAddNext": "পরবর্তী বিন্দু যোগ করতে ট্যাপ করুন ({{count}} বসানো হয়েছে)",
+    "boundaryClosed": "সীমানা বন্ধ হয়েছে ({{count}} বিন্দু)",
+    "closeBoundary": "সীমানা বন্ধ করুন",
+    "undo": "পূর্বাবস্থায় ফেরান",
+    "reset": "রিসেট করুন",
+    "redraw": "আবার আঁকুন",
+    "fieldNameLabel": "জমির নাম",
+    "fieldNamePlaceholder": "যেমন: উত্তর রাগি জমি",
+    "areaSizeLabel": "আয়তন",
+    "confirmSave": "অবস্থান নিশ্চিত করে সংরক্ষণ করুন"
+  },
+  "addPlanting": {
+    "title": "রোপণ শুরু করুন",
+    "fieldLabel": "জমি",
+    "cropLabel": "ফসল",
+    "varietyLabel": "জাত",
+    "sowingDateLabel": "বপনের তারিখ",
+    "selectCrop": "ফসল নির্বাচন করুন",
+    "selectVariety": "জাত নির্বাচন করুন",
+    "startTracking": "ট্র্যাকিং শুরু করুন"
+  },
+  "quickLog": {
+    "title": "কার্যকলাপ লগ করুন",
+    "fieldLabel": "জমি",
+    "activityType": "কার্যকলাপের ধরন",
+    "productLabel": "পণ্য",
+    "quantityLabel": "পরিমাণ",
+    "costLabel": "খরচ (₹)",
+    "dateLabel": "তারিখ",
+    "saveActivity": "কার্যকলাপ সংরক্ষণ করুন",
+    "activityTypes": {
+      "chemical": "রাসায়নিক / স্প্রে",
+      "irrigation": "সেচ",
+      "labor": "মজুরি",
+      "harvest": "ফসল কাটা"
+    }
+  },
+  "schemes": {
+    "title": "সরকারি প্রকল্প",
+    "eligibleFor": "আপনি যোগ্য",
+    "noSchemesTitle": "এখনও কোনো মিল নেই",
+    "noSchemesSubtitle": "যোগ্য প্রকল্পগুলি দেখতে আপনার প্রোফাইল সম্পূর্ণ করুন।",
+    "central": "কেন্দ্রীয় প্রকল্প",
+    "state": "রাজ্য প্রকল্প"
+  },
+  "schemeDetail": {
+    "eligibility": "যোগ্যতার মানদণ্ড",
+    "benefits": "সুবিধা",
+    "howToApply": "কীভাবে আবেদন করবেন",
+    "contact": "যোগাযোগ",
+    "markApplying": "আবেদন করছেন হিসেবে চিহ্নিত করুন",
+    "markedApplying": "আবেদন করছেন হিসেবে চিহ্নিত করা হয়েছে"
+  },
+  "alertDetail": {
+    "title": "সতর্কতার বিবরণ",
+    "confidence": "আস্থা: {{pct}}%",
+    "recommendation": "সুপারিশ",
+    "logAction": "এই পদক্ষেপ এখনই লগ করুন",
+    "nearbyVendors": "কাছাকাছি বিক্রেতা",
+    "mapUnavailable": "অফলাইনে মানচিত্র উপলব্ধ নেই"
+  },
+  "ledger": {
+    "title": "ফসল চক্র লেজার",
+    "netProfit": "নিট মুনাফা",
+    "profitMargin": "লাভের মার্জিন",
+    "currentCostOfCultivation": "বর্তমান চাষের খরচ",
+    "expenseBreakdown": "খরচের বিবরণ",
+    "recentTransactions": "সাম্প্রতিক লেনদেন",
+    "noTransactions": "এখনও কোনো কার্যকলাপ লগ করা হয়নি।"
+  },
+  "profile": {
+    "title": "প্রোফাইল",
+    "language": "ভাষা",
+    "syncStatus": "সিঙ্ক অবস্থা",
+    "synced": "সিঙ্ক হয়েছে",
+    "pendingSync": "অফলাইন - সিঙ্ক বাকি আছে",
+    "phoneNumber": "ফোন নম্বর",
+    "unitPreference": "একক পছন্দ",
+    "demoDataTitle": "ডেমো ডেটা",
+    "loadSampleData": "নমুনা ডেটা লোড করুন",
+    "resetDemo": "ডেমো রিসেট করুন (নতুন ব্যবহারকারী)",
+    "logout": "লগ আউট"
+  },
+  "units": {
+    "hectare": "হেক্টর",
+    "acre": "একর",
+    "guntha": "গুন্ঠা",
+    "bigha": "বিঘা",
+    "cent": "সেন্ট",
+    "killa": "কিল্লা"
+  }
+}

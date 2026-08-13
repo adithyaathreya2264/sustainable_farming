@@ -1,0 +1,164 @@
+{
+  "common": {
+    "save": "સાચવો",
+    "cancel": "રદ કરો",
+    "back": "પાછળ",
+    "continue": "ચાલુ રાખો",
+    "loading": "લોડ થઈ રહ્યું છે...",
+    "savedOffline": "ઓફલાઈન સાચવ્યું",
+    "syncedToCloud": "ડેટા ક્લાઉડ પર સિંક થયો.",
+    "retry": "ફરી પ્રયાસ કરો"
+  },
+  "auth": {
+    "loginTitle": "સ્વાગત છે",
+    "loginSubtitle": "ચાલુ રાખવા માટે તમારો મોબાઇલ નંબર દાખલ કરો",
+    "phoneLabel": "મોબાઇલ નંબર",
+    "getOtp": "OTP મેળવો",
+    "otpTitle": "તમારો નંબર ચકાસો",
+    "otpSubtitle": "{{phone}} પર મોકલેલો 6-અંકનો કોડ દાખલ કરો",
+    "verify": "ચકાસો",
+    "resendIn": "{{seconds}} સેકન્ડમાં ફરી મોકલો",
+    "resend": "કોડ ફરી મોકલો",
+    "invalidOtp": "ખોટો કોડ. કૃપા કરી ફરી પ્રયાસ કરો.",
+    "hintOtp": "આ ડેમો માટે {{otp}} વાપરો"
+  },
+  "onboarding": {
+    "step1Title": "ચાલો શરૂ કરીએ",
+    "languageLabel": "તમારી ભાષા પસંદ કરો",
+    "step2NameTitle": "તમને શું કહીને બોલાવીએ?",
+    "nameLabel": "તમારું પૂરું નામ",
+    "namePlaceholder": "તમારું નામ દાખલ કરો",
+    "step2Title": "ખેતરનું કદ અને એકમો",
+    "unitLabel": "તમે જમીન કેવી રીતે માપો છો?",
+    "areaLabel": "કુલ ખેતરનું ક્ષેત્રફળ",
+    "step3Title": "સ્થળ અને માળખાગત સુવિધા",
+    "irrigationLabel": "મુખ્ય સિંચાઈ સ્ત્રોત",
+    "stateLabel": "રાજ્ય",
+    "districtLabel": "જિલ્લો",
+    "selectState": "રાજ્ય પસંદ કરો",
+    "selectDistrict": "જિલ્લો પસંદ કરો",
+    "completeProfile": "પ્રોફાઇલ પૂર્ણ કરો",
+    "irrigation": {
+      "rainfed": "વરસાદ આધારિત / ચોમાસુ",
+      "borewell": "બોરવેલ",
+      "canal": "નહેર",
+      "drip_sprinkler": "ટપક / ફુવારા સિંચાઈ"
+    }
+  },
+  "home": {
+    "welcome": "સ્વાગત છે, {{name}}!",
+    "emptyStateTitle": "તમારું પ્રથમ ખેતર મેપ કરો",
+    "emptyStateSubtitle": "તમારું પ્રથમ ખેતર મેપ કરવા માટે નીચે '+' દબાવો.",
+    "weatherOffline": "{{hours}} કલાક પહેલા અપડેટ થયું",
+    "seasonFinancials": "ઋતુની આર્થિક સ્થિતિ",
+    "totalSpent": "કુલ ખર્ચ",
+    "totalEarned": "કુલ કમાણી",
+    "viewFullLedger": "સંપૂર્ણ ખાતાવહી જુઓ",
+    "alertsTitle": "ચેતવણીઓ",
+    "noAlerts": "હાલમાં કોઈ સક્રિય ચેતવણી નથી.",
+    "viewTreatment": "ભલામણ જુઓ"
+  },
+  "fields": {
+    "title": "મારા ખેતરો",
+    "addField": "ખેતર ઉમેરો",
+    "startPlanting": "વાવેતર શરૂ કરો",
+    "noFieldsTitle": "હજુ સુધી કોઈ ખેતર નથી",
+    "noFieldsSubtitle": "વાવેતર ટ્રેક કરવા માટે તમારું પ્રથમ ખેતર મેપ કરો.",
+    "activePlantings": "સક્રિય પાકો",
+    "harvested": "કાપણી થઈ ગઈ"
+  },
+  "addField": {
+    "title": "ખેતર મેપ કરો",
+    "tapToStart": "તમારી સીમાનું પ્રથમ બિંદુ મૂકવા માટે નકશા પર ટેપ કરો",
+    "tapToAddNext": "આગલું બિંદુ ઉમેરવા માટે ટેપ કરો ({{count}} મૂકાયા)",
+    "boundaryClosed": "સીમા બંધ થઈ ({{count}} બિંદુઓ)",
+    "closeBoundary": "સીમા બંધ કરો",
+    "undo": "પૂર્વવત્ કરો",
+    "reset": "રીસેટ કરો",
+    "redraw": "ફરી દોરો",
+    "fieldNameLabel": "ખેતરનું નામ",
+    "fieldNamePlaceholder": "દા.ત. ઉત્તર રાગી ખેતર",
+    "areaSizeLabel": "ક્ષેત્રફળ",
+    "confirmSave": "સ્થાનની પુષ્ટિ કરો અને સાચવો"
+  },
+  "addPlanting": {
+    "title": "વાવેતર શરૂ કરો",
+    "fieldLabel": "ખેતર",
+    "cropLabel": "પાક",
+    "varietyLabel": "જાત",
+    "sowingDateLabel": "વાવણીની તારીખ",
+    "selectCrop": "પાક પસંદ કરો",
+    "selectVariety": "જાત પસંદ કરો",
+    "startTracking": "ટ્રેકિંગ શરૂ કરો"
+  },
+  "quickLog": {
+    "title": "પ્રવૃત્તિ નોંધો",
+    "fieldLabel": "ખેતર",
+    "activityType": "પ્રવૃત્તિનો પ્રકાર",
+    "productLabel": "ઉત્પાદન",
+    "quantityLabel": "જથ્થો",
+    "costLabel": "ખર્ચ (₹)",
+    "dateLabel": "તારીખ",
+    "saveActivity": "પ્રવૃત્તિ સાચવો",
+    "activityTypes": {
+      "chemical": "રસાયણ / છંટકાવ",
+      "irrigation": "સિંચાઈ",
+      "labor": "મજૂરી",
+      "harvest": "કાપણી"
+    }
+  },
+  "schemes": {
+    "title": "સરકારી યોજનાઓ",
+    "eligibleFor": "તમે પાત્ર છો",
+    "noSchemesTitle": "હજુ સુધી કોઈ મેળ નથી",
+    "noSchemesSubtitle": "પાત્ર યોજનાઓ જોવા માટે તમારી પ્રોફાઇલ પૂર્ણ કરો.",
+    "central": "કેન્દ્ર યોજના",
+    "state": "રાજ્ય યોજના"
+  },
+  "schemeDetail": {
+    "eligibility": "પાત્રતા માપદંડ",
+    "benefits": "લાભો",
+    "howToApply": "કેવી રીતે અરજી કરવી",
+    "contact": "સંપર્ક",
+    "markApplying": "અરજી કરી રહ્યા છીએ તરીકે ચિહ્નિત કરો",
+    "markedApplying": "અરજી કરી રહ્યા છીએ તરીકે ચિહ્નિત કર્યું"
+  },
+  "alertDetail": {
+    "title": "ચેતવણીની વિગતો",
+    "confidence": "વિશ્વસનીયતા: {{pct}}%",
+    "recommendation": "ભલામણ",
+    "logAction": "આ ક્રિયા હમણાં નોંધો",
+    "nearbyVendors": "નજીકના વિક્રેતાઓ",
+    "mapUnavailable": "ઓફલાઈનમાં નકશો ઉપલબ્ધ નથી"
+  },
+  "ledger": {
+    "title": "પાક ચક્ર ખાતાવહી",
+    "netProfit": "ચોખ્ખો નફો",
+    "profitMargin": "નફાનું માર્જિન",
+    "currentCostOfCultivation": "વર્તમાન ખેતી ખર્ચ",
+    "expenseBreakdown": "ખર્ચની વિગત",
+    "recentTransactions": "તાજેતરના વ્યવહારો",
+    "noTransactions": "હજુ સુધી કોઈ પ્રવૃત્તિ નોંધાઈ નથી."
+  },
+  "profile": {
+    "title": "પ્રોફાઇલ",
+    "language": "ભાષા",
+    "syncStatus": "સિંક સ્થિતિ",
+    "synced": "સિંક થયું",
+    "pendingSync": "ઓફલાઈન - સિંક બાકી છે",
+    "phoneNumber": "ફોન નંબર",
+    "unitPreference": "એકમ પસંદગી",
+    "demoDataTitle": "ડેમો ડેટા",
+    "loadSampleData": "નમૂના ડેટા લોડ કરો",
+    "resetDemo": "ડેમો રીસેટ કરો (નવો વપરાશકર્તા)",
+    "logout": "લોગ આઉટ"
+  },
+  "units": {
+    "hectare": "હેક્ટર",
+    "acre": "એકર",
+    "guntha": "ગુંઠા",
+    "bigha": "વીઘા",
+    "cent": "સેન્ટ",
+    "killa": "કિલ્લા"
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "common": {
+    "save": "சேமி",
+    "cancel": "ரத்துசெய்",
+    "back": "பின்",
+    "continue": "தொடரவும்",
+    "loading": "ஏற்றுகிறது...",
+    "savedOffline": "ஆஃப்லைனில் சேமிக்கப்பட்டது",
+    "syncedToCloud": "தரவு கிளவுடுக்கு ஒத்திசைக்கப்பட்டது.",
+    "retry": "மீண்டும் முயற்சிக்கவும்"
+  },
+  "auth": {
+    "loginTitle": "வரவேற்கிறோம்",
+    "loginSubtitle": "தொடர உங்கள் மொபைல் எண்ணை உள்ளிடவும்",
+    "phoneLabel": "மொபைல் எண்",
+    "getOtp": "OTP பெறவும்",
+    "otpTitle": "உங்கள் எண்ணை சரிபார்க்கவும்",
+    "otpSubtitle": "{{phone}} க்கு அனுப்பப்பட்ட 6-இலக்க குறியீட்டை உள்ளிடவும்",
+    "verify": "சரிபார்க்கவும்",
+    "resendIn": "{{seconds}} வினாடிகளில் மீண்டும் அனுப்பு",
+    "resend": "குறியீட்டை மீண்டும் அனுப்பு",
+    "invalidOtp": "தவறான குறியீடு. மீண்டும் முயற்சிக்கவும்.",
+    "hintOtp": "இந்த டெமோவிற்கு {{otp}} ஐப் பயன்படுத்தவும்"
+  },
+  "onboarding": {
+    "step1Title": "தொடங்குவோம்",
+    "languageLabel": "உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்",
+    "step2NameTitle": "உங்களை என்ன அழைக்கலாம்?",
+    "nameLabel": "உங்கள் முழுப்பெயர்",
+    "namePlaceholder": "உங்கள் பெயரை உள்ளிடவும்",
+    "step2Title": "நில அளவு மற்றும் அலகுகள்",
+    "unitLabel": "நிலத்தை எப்படி அளவிடுகிறீர்கள்?",
+    "areaLabel": "மொத்த நில பரப்பளவு",
+    "step3Title": "இடம் மற்றும் உள்கட்டமைப்பு",
+    "irrigationLabel": "முதன்மை நீர்ப்பாசன மூலம்",
+    "stateLabel": "மாநிலம்",
+    "districtLabel": "மாவட்டம்",
+    "selectState": "மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
+    "selectDistrict": "மாவட்டத்தைத் தேர்ந்தெடுக்கவும்",
+    "completeProfile": "சுயவிவரத்தை முடிக்கவும்",
+    "irrigation": {
+      "rainfed": "மழையை நம்பியது / பருவமழை",
+      "borewell": "ஆழ்குழாய் கிணறு",
+      "canal": "கால்வாய்",
+      "drip_sprinkler": "சொட்டு / தூறல் பாசனம்"
+    }
+  },
+  "home": {
+    "welcome": "வரவேற்கிறோம், {{name}}!",
+    "emptyStateTitle": "உங்கள் முதல் வயலை வரைபடமிடுங்கள்",
+    "emptyStateSubtitle": "உங்கள் முதல் வயலை வரைபடமிட கீழே உள்ள '+' ஐ தட்டவும்.",
+    "weatherOffline": "{{hours}} மணி நேரத்திற்கு முன் புதுப்பிக்கப்பட்டது",
+    "seasonFinancials": "பருவகால நிதி நிலை",
+    "totalSpent": "மொத்த செலவு",
+    "totalEarned": "மொத்த வருமானம்",
+    "viewFullLedger": "முழு லெட்ஜரைக் காண்க",
+    "alertsTitle": "எச்சரிக்கைகள்",
+    "noAlerts": "தற்போது எந்த எச்சரிக்கையும் இல்லை.",
+    "viewTreatment": "பரிந்துரையைக் காண்க"
+  },
+  "fields": {
+    "title": "எனது வயல்கள்",
+    "addField": "வயல் சேர்க்கவும்",
+    "startPlanting": "நடவு தொடங்கவும்",
+    "noFieldsTitle": "இன்னும் வயல்கள் இல்லை",
+    "noFieldsSubtitle": "நடவை கண்காணிக்க உங்கள் முதல் வயலை வரைபடமிடுங்கள்.",
+    "activePlantings": "செயலில் உள்ள பயிர்கள்",
+    "harvested": "அறுவடை செய்யப்பட்டது"
+  },
+  "addField": {
+    "title": "வயலை வரைபடமிடுங்கள்",
+    "tapToStart": "உங்கள் எல்லையின் முதல் புள்ளியை வைக்க வரைபடத்தைத் தட்டவும்",
+    "tapToAddNext": "அடுத்த புள்ளியைச் சேர்க்க தட்டவும் ({{count}} வைக்கப்பட்டது)",
+    "boundaryClosed": "எல்லை மூடப்பட்டது ({{count}} புள்ளிகள்)",
+    "closeBoundary": "எல்லையை மூடு",
+    "undo": "செயல்தவிர்",
+    "reset": "மீட்டமை",
+    "redraw": "மீண்டும் வரையவும்",
+    "fieldNameLabel": "வயல் பெயர்",
+    "fieldNamePlaceholder": "எ.கா. வடக்கு கேழ்வரகு வயல்",
+    "areaSizeLabel": "பரப்பளவு",
+    "confirmSave": "இடத்தை உறுதிப்படுத்தி சேமிக்கவும்"
+  },
+  "addPlanting": {
+    "title": "நடவு தொடங்கவும்",
+    "fieldLabel": "வயல்",
+    "cropLabel": "பயிர்",
+    "varietyLabel": "வகை",
+    "sowingDateLabel": "விதைக்கும் தேதி",
+    "selectCrop": "பயிரைத் தேர்ந்தெடுக்கவும்",
+    "selectVariety": "வகையைத் தேர்ந்தெடுக்கவும்",
+    "startTracking": "கண்காணிப்பைத் தொடங்கவும்"
+  },
+  "quickLog": {
+    "title": "செயல்பாட்டைப் பதிவு செய்யவும்",
+    "fieldLabel": "வயல்",
+    "activityType": "செயல்பாட்டு வகை",
+    "productLabel": "பொருள்",
+    "quantityLabel": "அளவு",
+    "costLabel": "செலவு (₹)",
+    "dateLabel": "தேதி",
+    "saveActivity": "செயல்பாட்டைச் சேமிக்கவும்",
+    "activityTypes": {
+      "chemical": "இரசாயனம் / தெளிப்பு",
+      "irrigation": "நீர்ப்பாசனம்",
+      "labor": "கூலி வேலை",
+      "harvest": "அறுவடை"
+    }
+  },
+  "schemes": {
+    "title": "அரசு திட்டங்கள்",
+    "eligibleFor": "நீங்கள் தகுதியுடையவர்",
+    "noSchemesTitle": "இன்னும் பொருத்தங்கள் இல்லை",
+    "noSchemesSubtitle": "தகுதியான திட்டங்களைக் காண உங்கள் சுயவிவரத்தை முடிக்கவும்.",
+    "central": "மத்திய திட்டம்",
+    "state": "மாநில திட்டம்"
+  },
+  "schemeDetail": {
+    "eligibility": "தகுதி அளவுகோல்கள்",
+    "benefits": "நன்மைகள்",
+    "howToApply": "எப்படி விண்ணப்பிப்பது",
+    "contact": "தொடர்பு",
+    "markApplying": "விண்ணப்பிக்கிறேன் என குறிக்கவும்",
+    "markedApplying": "விண்ணப்பிக்கிறேன் என குறிக்கப்பட்டது"
+  },
+  "alertDetail": {
+    "title": "எச்சரிக்கை விவரங்கள்",
+    "confidence": "நம்பகத்தன்மை: {{pct}}%",
+    "recommendation": "பரிந்துரை",
+    "logAction": "இந்த நடவடிக்கையை இப்போது பதிவு செய்யவும்",
+    "nearbyVendors": "அருகிலுள்ள விற்பனையாளர்கள்",
+    "mapUnavailable": "ஆஃப்லைனில் வரைபடம் கிடைக்கவில்லை"
+  },
+  "ledger": {
+    "title": "பயிர் சுழற்சி லெட்ஜர்",
+    "netProfit": "நிகர லாபம்",
+    "profitMargin": "லாப வரம்பு",
+    "currentCostOfCultivation": "தற்போதைய சாகுபடி செலவு",
+    "expenseBreakdown": "செலவு பிரிவு",
+    "recentTransactions": "சமீபத்திய பரிவர்த்தனைகள்",
+    "noTransactions": "இன்னும் செயல்பாடுகள் பதிவு செய்யப்படவில்லை."
+  },
+  "profile": {
+    "title": "சுயவிவரம்",
+    "language": "மொழி",
+    "syncStatus": "ஒத்திசைவு நிலை",
+    "synced": "ஒத்திசைக்கப்பட்டது",
+    "pendingSync": "ஆஃப்லைன் - ஒத்திசைவு நிலுவையில்",
+    "phoneNumber": "தொலைபேசி எண்",
+    "unitPreference": "அலகு விருப்பம்",
+    "demoDataTitle": "டெமோ தரவு",
+    "loadSampleData": "மாதிரி தரவை ஏற்றவும்",
+    "resetDemo": "டெமோவை மீட்டமைக்கவும் (புதிய பயனர்)",
+    "logout": "வெளியேறு"
+  },
+  "units": {
+    "hectare": "ஹெக்டேர்",
+    "acre": "ஏக்கர்",
+    "guntha": "குண்டா",
+    "bigha": "பிகா",
+    "cent": "சென்ட்",
+    "killa": "கில்லா"
+  }
+}

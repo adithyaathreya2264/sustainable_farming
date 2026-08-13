@@ -1,0 +1,164 @@
+{
+  "common": {
+    "save": "থাম্মু",
+    "cancel": "খঙহল্লু",
+    "back": "মথং তানবা",
+    "continue": "মথৌ চত্থবা",
+    "loading": "লোড তৌরি...",
+    "savedOffline": "অফলাইনদা থমখ্রে",
+    "syncedToCloud": "ডেটা ক্লাউদদা সিঙ্ক তৌখ্রে।",
+    "retry": "আমুক হানবা হোৎনবীয়ু"
+  },
+  "auth": {
+    "loginTitle": "তরাম্না লেপচরি",
+    "loginSubtitle": "মথৌ চত্থবগীদমক নহাক্কী মোবাইল নম্বর চাংশিল্লু",
+    "phoneLabel": "মোবাইল নম্বর",
+    "getOtp": "OTP লৌবীয়ু",
+    "otpTitle": "নহাক্কী নম্বর অচুম্বা য়াবা তারুংবীয়ু",
+    "otpSubtitle": "{{phone}} দা থাদোকখিবা শায়েল তরুক্কী কোদ চাংশিল্লু",
+    "verify": "অচুম্বা য়াবা তারুংবীয়ু",
+    "resendIn": "সেকেন্দ {{seconds}} দা আমুক হানবা থাদোকপীয়ু",
+    "resend": "কোদ আমুক হানবা থাদোকপীয়ু",
+    "invalidOtp": "কোদ অশোয়বা। চানবীদুনা আমুক হানবা হোৎনবীয়ু।",
+    "hintOtp": "ডেমো অসিগীদমক {{otp}} শিজিন্নবীয়ু"
+  },
+  "onboarding": {
+    "step1Title": "হৌশিল্লসি",
+    "languageLabel": "নহাক্কী লোন খনবীয়ু",
+    "step2NameTitle": "নহাক্পু করি কৌগদগে?",
+    "nameLabel": "নহাক্কী মিং মপুংফাবা",
+    "namePlaceholder": "নহাক্কী মিং চাংশিল্লু",
+    "step2Title": "লৌবুক্কী মরু অমসুং একেই",
+    "unitLabel": "নহাক্না লৌবুক করমনা পান্দোকই?",
+    "areaLabel": "লৌবুক্কী মপুং ওইবা মরু",
+    "step3Title": "মফম অমসুং মরূপ",
+    "irrigationLabel": "ঈশিং পীবগী অহানবা মখল",
+    "stateLabel": "স্টেট",
+    "districtLabel": "জিলা",
+    "selectState": "স্টেট খনবীয়ু",
+    "selectDistrict": "জিলা খনবীয়ু",
+    "completeProfile": "প্রোফাইল মপুং ফহনবীয়ু",
+    "irrigation": {
+      "rainfed": "নোংথক্তা য়ুম্লিবা / মনসূন",
+      "borewell": "বোরৱেল",
+      "canal": "নদী তুরেল",
+      "drip_sprinkler": "ড্রিপ / স্প্রিংক্লার"
+    }
+  },
+  "home": {
+    "welcome": "তরাম্না লেপচরি, {{name}}!",
+    "emptyStateTitle": "নহাক্কী অহানবা লৌবুক ম্যাপ তৌবীয়ু",
+    "emptyStateSubtitle": "নহাক্কী অহানবা লৌবুক ম্যাপ তৌনবা মখাদা লৈরিবা '+' অসি নমখ্রো।",
+    "weatherOffline": "পুং {{hours}} মমাংদা আনৱ তৌখ্রে",
+    "seasonFinancials": "চহি একোয়দগী সেল থুম",
+    "totalSpent": "মপুং ওইবা চাদন",
+    "totalEarned": "মপুং ওইবা ফংবা",
+    "viewFullLedger": "লেজর মপুং ফাওবা য়েংবীয়ু",
+    "alertsTitle": "চেক্সীন",
+    "noAlerts": "হৌজিক চেক্সীন য়াওদে।",
+    "viewTreatment": "য়াথং য়েংবীয়ু"
+  },
+  "fields": {
+    "title": "ঐগী লৌবুকশিং",
+    "addField": "লৌবুক হাপচিনবীয়ু",
+    "startPlanting": "থাদিং হৌদোকপীয়ু",
+    "noFieldsTitle": "হৌজিক ফাওবা লৌবুক লৈত্রে",
+    "noFieldsSubtitle": "থাদিং য়েংশিন্নবা নহাক্কী অহানবা লৌবুক ম্যাপ তৌবীয়ু।",
+    "activePlantings": "হৌজিক লৈরিবা মহেই",
+    "harvested": "লোকখ্রে"
+  },
+  "addField": {
+    "title": "লৌবুক ম্যাপ তৌবীয়ু",
+    "tapToStart": "নহাক্কী মরীগী অহানবা পইন্ত থাদুনা ম্যাপ অদু নমখ্রো",
+    "tapToAddNext": "মথং পইন্ত হাপচিন্নবা নমখ্রো ({{count}} থাদ্রে)",
+    "boundaryClosed": "মরী মুংফম তৌখ্রে ({{count}} পইন্ত)",
+    "closeBoundary": "মরী মুংফম তৌবীয়ু",
+    "undo": "মথং হানবা লৌথোকপীয়ু",
+    "reset": "রিসেত তৌবীয়ু",
+    "redraw": "আমুক হানবা দ্রো তৌবীয়ু",
+    "fieldNameLabel": "লৌবুক্কী মিং",
+    "fieldNamePlaceholder": "খুদম ওইনা: অওয়াংগী রাগি লৌবুক",
+    "areaSizeLabel": "মরু",
+    "confirmSave": "লৈফম অচুম্বা য়াবা তারুংদুনা থাম্মু"
+  },
+  "addPlanting": {
+    "title": "থাদিং হৌদোকপীয়ু",
+    "fieldLabel": "লৌবুক",
+    "cropLabel": "মহেই",
+    "varietyLabel": "মখল",
+    "sowingDateLabel": "থাদিং তারিখ",
+    "selectCrop": "মহেই খনবীয়ু",
+    "selectVariety": "মখল খনবীয়ু",
+    "startTracking": "য়েংশিনবা হৌদোকপীয়ু"
+  },
+  "quickLog": {
+    "title": "থবক তারিক থীয়ু",
+    "fieldLabel": "লৌবুক",
+    "activityType": "থবক্কী মখল",
+    "productLabel": "পোৎ",
+    "quantityLabel": "মরু",
+    "costLabel": "চাদন (₹)",
+    "dateLabel": "তারিখ",
+    "saveActivity": "থবক থাম্মু",
+    "activityTypes": {
+      "chemical": "রাসায়নিক / স্প্রে",
+      "irrigation": "ঈশিং পীবা",
+      "labor": "লৌমী থবক",
+      "harvest": "লোকপা"
+    }
+  },
+  "schemes": {
+    "title": "সরকারগী থবক",
+    "eligibleFor": "নহাক ফংবা য়াবা ওই",
+    "noSchemesTitle": "হৌজিক চাদা লৈত্রে",
+    "noSchemesSubtitle": "ফংবা য়াবা থবক য়েংনবা নহাক্কী প্রোফাইল মপুং ফহনবীয়ু।",
+    "central": "সেন্ত্রেল থবক",
+    "state": "স্টেটকী থবক"
+  },
+  "schemeDetail": {
+    "eligibility": "ফংবা য়াবগী মরু",
+    "benefits": "ফায়দা",
+    "howToApply": "করমনা এপ্লাই তৌগদগে",
+    "contact": "কনতেক",
+    "markApplying": "এপ্লাই তৌরি হায়না মার্ক তৌবীয়ু",
+    "markedApplying": "এপ্লাই তৌরি হায়না মার্ক তৌখ্রে"
+  },
+  "alertDetail": {
+    "title": "চেক্সীনগী মরু",
+    "confidence": "থাজবা: {{pct}}%",
+    "recommendation": "য়াথং",
+    "logAction": "থবক অসি হৌজিক তারিক থীয়ু",
+    "nearbyVendors": "নকপগী দুকানদার",
+    "mapUnavailable": "অফলাইনদা ম্যাপ ফংদে"
+  },
+  "ledger": {
+    "title": "মহেই একোয়গী লেজর",
+    "netProfit": "মপুং ওইবা কনবা",
+    "profitMargin": "কনবগী মরু",
+    "currentCostOfCultivation": "হৌজিক্কী লৌবগী চাদন",
+    "expenseBreakdown": "চাদন্না মরু",
+    "recentTransactions": "নওগী লান্নবা",
+    "noTransactions": "হৌজিক ফাওবা থবক তারিক থিদ্রি।"
+  },
+  "profile": {
+    "title": "প্রোফাইল",
+    "language": "লোন",
+    "syncStatus": "সিঙ্ক থোক্তবা",
+    "synced": "সিঙ্ক তৌখ্রে",
+    "pendingSync": "অফলাইন - সিঙ্ক নাইরি",
+    "phoneNumber": "ফোন নম্বর",
+    "unitPreference": "একেই খনবা",
+    "demoDataTitle": "ডেমো ডেটা",
+    "loadSampleData": "খুদম ডেটা লোদ তৌবীয়ু",
+    "resetDemo": "ডেমো রিসেত তৌবীয়ু (মিওই অনৌবা)",
+    "logout": "লগ আউত"
+  },
+  "units": {
+    "hectare": "হেক্তার",
+    "acre": "একর",
+    "guntha": "গুণ্ঠা",
+    "bigha": "বিঘা",
+    "cent": "সেন্ত",
+    "killa": "কিল্লা"
+  }
+}
