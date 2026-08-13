@@ -9,35 +9,40 @@ import {
   BottomSheetPicker,
   PickerField,
 } from "../../components/ui/BottomSheetPicker";
-import { MapPinPicker, type Coordinates } from "../../components/MapPinPicker";
+import { FieldBoundaryMap } from "../../components/FieldBoundaryMap";
 import { useToast } from "../../context/ToastContext";
 import { useAppState } from "../../hooks/useAppState";
 import { addField } from "../../services/fields";
 import { LAND_UNITS, toHectares, unitLabel } from "../../utils/unitConversion";
-import type { LandUnit } from "../../types/models";
+import type { Coordinates, LandUnit } from "../../types/models";
 
 export default function AddFieldModal() {
   const { t } = useTranslation();
   const { showToast } = useToast();
   const defaultUnit = useAppState((s) => s.user.defaultUnit);
 
-  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+  const [points, setPoints] = useState<Coordinates[]>([]);
+  const [closed, setClosed] = useState(false);
   const [name, setName] = useState("");
   const [area, setArea] = useState("");
   const [unit, setUnit] = useState<LandUnit>(defaultUnit);
   const [unitPickerOpen, setUnitPickerOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const isValid = Boolean(coordinates && name.trim() && Number(area) > 0);
+  const isValid = Boolean(closed && points.length >= 3 && name.trim() && Number(area) > 0);
+
+  function handleReset() {
+    setPoints([]);
+    setClosed(false);
+  }
 
   async function handleSave() {
-    if (!coordinates) return;
+    if (!closed || points.length < 3) return;
     setSaving(true);
     await addField({
       name: name.trim(),
       areaHectares: toHectares(Number(area), unit),
-      lat: coordinates.lat,
-      long: coordinates.long,
+      boundary: points,
       soilType: "Red Sandy Loam",
     });
     setSaving(false);
@@ -49,7 +54,14 @@ export default function AddFieldModal() {
     <ScreenContainer>
       <ModalHeader title={t("addField.title")} />
 
-      <MapPinPicker coordinates={coordinates} onPinDrop={setCoordinates} />
+      <FieldBoundaryMap
+        points={points}
+        closed={closed}
+        onAddPoint={(coords) => setPoints((prev) => [...prev, coords])}
+        onUndo={() => setPoints((prev) => prev.slice(0, -1))}
+        onReset={handleReset}
+        onClose={() => setClosed(true)}
+      />
 
       <TextField
         label={t("addField.fieldNameLabel")}
