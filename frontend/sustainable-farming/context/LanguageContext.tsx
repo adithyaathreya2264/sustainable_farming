@@ -6,8 +6,15 @@ import type { LanguageCode } from "../types/models";
 
 export const LANGUAGES: { code: LanguageCode; label: string }[] = [
   { code: "en", label: "English" },
-  { code: "kn", label: "ಕನ್ನಡ" },
   { code: "hi", label: "हिन्दी" },
+  { code: "bn", label: "বাংলা" },
+  { code: "gu", label: "ગુજરાતી" },
+  { code: "kn", label: "ಕನ್ನಡ" },
+  { code: "ml", label: "മലയാളം" },
+  { code: "mni", label: "ꯃꯤꯇꯩꯂꯣꯟ" },
+  { code: "pa", label: "ਪੰਜਾਬੀ" },
+  { code: "ta", label: "தமிழ்" },
+  { code: "te", label: "తెలుగు" },
 ];
 
 interface LanguageContextValue {
