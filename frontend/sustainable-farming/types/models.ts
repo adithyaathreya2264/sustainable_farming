@@ -9,7 +9,17 @@ export type LandUnit = "hectare" | "acre" | "guntha" | "bigha" | "cent" | "killa
 
 export type IrrigationType = "rainfed" | "borewell" | "canal" | "drip_sprinkler";
 
-export type LanguageCode = "en" | "kn" | "hi";
+export type LanguageCode =
+  | "en"
+  | "kn"
+  | "hi"
+  | "ta"
+  | "te"
+  | "ml"
+  | "pa"
+  | "bn"
+  | "gu"
+  | "mni";
 
 export interface User {
   id: string;
@@ -24,13 +34,19 @@ export interface User {
   onboardingComplete: boolean;
 }
 
+export interface Coordinates {
+  lat: number;
+  long: number;
+}
+
 export interface Field {
   id: string;
   userId: string;
   name: string;
   areaHectares: number;
-  lat: number;
+  lat: number; // centroid of `boundary`
   long: number;
+  boundary: Coordinates[]; // polygon vertices, >= 3, in the order drawn
   soilType: string;
 }
 
