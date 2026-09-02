@@ -7,6 +7,12 @@
       "areaHectares": 0.8094,
       "lat": 12.3052,
       "long": 76.6552,
+      "boundary": [
+        { "lat": 12.3057, "long": 76.6547 },
+        { "lat": 12.3057, "long": 76.6557 },
+        { "lat": 12.3047, "long": 76.6557 },
+        { "lat": 12.3047, "long": 76.6547 }
+      ],
       "soilType": "Red Sandy Loam"
     }
   ],
