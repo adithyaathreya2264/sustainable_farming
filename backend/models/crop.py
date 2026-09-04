@@ -8,10 +8,15 @@ same precedent as `GovtScheme`: farmers select from it, they don't edit it.
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from backend.models.base import Base, TimestampMixin
+
+if TYPE_CHECKING:
+    from backend.models.crop_growth_stage import CropGrowthStage
 
 
 class Crop(Base, TimestampMixin):
@@ -25,6 +30,15 @@ class Crop(Base, TimestampMixin):
     # under their crop in one response.
     varieties: Mapped[list["CropVariety"]] = relationship(
         back_populates="crop", order_by="CropVariety.name"
+    )
+    # Read-only nesting for GET /api/v1/catalog/crops — the frontend uses these
+    # windows to work out a planting's current growth stage client-side (for
+    # the scouting-observation form). CropGrowthStage stays a plain reference
+    # table with no back-reference of its own.
+    growth_stages: Mapped[list["CropGrowthStage"]] = relationship(
+        "CropGrowthStage",
+        order_by="CropGrowthStage.stage_order",
+        viewonly=True,
     )
 
 
