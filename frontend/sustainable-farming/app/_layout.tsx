@@ -11,6 +11,7 @@ import { LanguageProvider } from "../context/LanguageContext";
 import { ToastProvider } from "../context/ToastContext";
 import { hydrate } from "../store/appStore";
 import { useAppState } from "../hooks/useAppState";
+import { useSyncTriggers } from "../hooks/useSyncTriggers";
 import { colors } from "../theme";
 
 function AppShell() {
@@ -19,6 +20,8 @@ function AppShell() {
   useEffect(() => {
     hydrate();
   }, []);
+
+  useSyncTriggers();
 
   if (!hydrated) {
     return <View style={{ flex: 1, backgroundColor: colors.background }} />;
@@ -42,6 +45,10 @@ function AppShell() {
           />
           <Stack.Screen
             name="modals/quick-log"
+            options={{ presentation: "modal", headerShown: false }}
+          />
+          <Stack.Screen
+            name="modals/log-scouting"
             options={{ presentation: "modal", headerShown: false }}
           />
           <Stack.Screen name="alert/[id]" options={{ headerShown: false }} />

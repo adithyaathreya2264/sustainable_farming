@@ -5,7 +5,7 @@ import { router } from "expo-router";
 import { ScreenContainer } from "../../components/ui/ScreenContainer";
 import { Button } from "../../components/ui/Button";
 import { useAppState } from "../../hooks/useAppState";
-import { MOCK_OTP, requestOtp, verifyOtp } from "../../services/auth";
+import { requestOtp, verifyOtp } from "../../services/auth";
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 59;
@@ -67,11 +67,8 @@ export default function OtpScreen() {
         <Text className="text-ink font-bold" style={{ fontSize: 24 }}>
           {t("auth.otpTitle")}
         </Text>
-        <Text className="text-ink-muted mt-1" style={{ fontSize: 15 }}>
+        <Text className="text-ink-muted mt-1 mb-8" style={{ fontSize: 15 }}>
           {t("auth.otpSubtitle", { phone })}
-        </Text>
-        <Text className="text-info mt-1 mb-8" style={{ fontSize: 13 }}>
-          {t("auth.hintOtp", { otp: MOCK_OTP })}
         </Text>
 
         <View className="flex-row justify-between mb-2">
