@@ -22,6 +22,7 @@ from backend.models.intervention import Intervention
 from backend.models.planting import Planting
 from backend.models.recommendation import Recommendation
 from backend.models.scheme import SchemeMatch
+from backend.models.scouting_observation import ScoutingObservation
 from backend.models.user import User
 from backend.schemas.sync import PullResponse, PushChangesBody, TableChanges
 from backend.services.ownership import field_owner as _field_owner
@@ -90,23 +91,20 @@ def _apply_intervention(row: Intervention, payload: dict[str, Any]) -> None:
     row.notes = payload.get("notes")
 
 
-def _apply_recommendation(row: Recommendation, payload: dict[str, Any]) -> None:
+def _apply_scouting_observation(row: ScoutingObservation, payload: dict[str, Any]) -> None:
     row.planting_id = payload["planting_id"]
-    row.rule_code = payload["rule_code"]
-    row.trigger_snapshot = payload["trigger_snapshot"]
-    row.recommendation_text = payload["recommendation_text"]
-    row.severity = payload["severity"]
-    row.status = payload["status"]
-    row.farmer_feedback_note = payload.get("farmer_feedback_note")
-    row.generated_at = _parse_datetime(payload["generated_at"])
-    responded_at = payload.get("responded_at")
-    row.responded_at = _parse_datetime(responded_at) if responded_at else None
+    row.metric_key = payload["metric_key"]
+    row.metric_value = payload["metric_value"]
+    row.observed_at = _parse_date(payload["observed_at"])
+    row.notes = payload.get("notes")
 
 
-def _apply_scheme_match(row: SchemeMatch, payload: dict[str, Any]) -> None:
-    row.scheme_id = payload["scheme_id"]
-    row.matched_at = _parse_datetime(payload["matched_at"])
-    row.status = payload["status"]
+def _push_not_allowed(row: Any, payload: dict[str, Any]) -> None:
+    # recommendations / scheme_matches are server-generated (rule engine,
+    # scheme matcher) and delivered to the app via GET/PATCH /api/v1/alerts —
+    # never pushed. They stay in TABLES for the *pull* side; the push side is
+    # gated off by `push_allowed=False`, so this is unreachable.
+    raise AssertionError("server-generated record type; never pushed via /sync")
 
 
 class _TableConfig:
@@ -118,6 +116,7 @@ class _TableConfig:
         owner_of_new: Callable[[Session, dict[str, Any]], str | None],
         set_owner: Callable[[Any, str], None] | None = None,
         query_scope: Callable[[Any, str], Any] | None = None,
+        push_allowed: bool = True,
     ):
         self.model = model
         self.apply_writable = apply_writable
@@ -125,6 +124,10 @@ class _TableConfig:
         self.owner_of_new = owner_of_new
         self.set_owner = set_owner
         self.query_scope = query_scope
+        # False for server-generated record types (recommendations,
+        # scheme_matches): they're delivered via GET/PATCH /api/v1/alerts, the
+        # push side ignores them. Pull still serves them.
+        self.push_allowed = push_allowed
 
 
 # Pull needs a base query scoped to the user; push needs owner resolution.
@@ -158,9 +161,20 @@ TABLES: dict[str, _TableConfig] = {
         .join(Field, Planting.field_id == Field.id)
         .where(Field.user_id == uid),
     ),
+    "scouting_observations": _TableConfig(
+        model=ScoutingObservation,
+        apply_writable=_apply_scouting_observation,
+        owner_of_row=lambda db, row: _planting_owner(db, row.planting_id),
+        owner_of_new=lambda db, payload: _planting_owner(db, payload["planting_id"]),
+        query_scope=lambda q, uid: q.join(
+            Planting, ScoutingObservation.planting_id == Planting.id
+        )
+        .join(Field, Planting.field_id == Field.id)
+        .where(Field.user_id == uid),
+    ),
     "recommendations": _TableConfig(
         model=Recommendation,
-        apply_writable=_apply_recommendation,
+        apply_writable=_push_not_allowed,
         owner_of_row=lambda db, row: _planting_owner(db, row.planting_id),
         owner_of_new=lambda db, payload: _planting_owner(db, payload["planting_id"]),
         query_scope=lambda q, uid: q.join(
@@ -168,14 +182,16 @@ TABLES: dict[str, _TableConfig] = {
         )
         .join(Field, Planting.field_id == Field.id)
         .where(Field.user_id == uid),
+        push_allowed=False,
     ),
     "scheme_matches": _TableConfig(
         model=SchemeMatch,
-        apply_writable=_apply_scheme_match,
+        apply_writable=_push_not_allowed,
         owner_of_row=lambda db, row: row.user_id,
         owner_of_new=lambda db, payload: None,
         set_owner=lambda row, uid: setattr(row, "user_id", uid),
         query_scope=lambda q, uid: q.where(SchemeMatch.user_id == uid),
+        push_allowed=False,
     ),
 }
 
@@ -251,7 +267,7 @@ def push_changes(
     _PARENT_FK: dict[str, tuple[str, str]] = {
         "plantings": ("fields", "field_id"),
         "interventions": ("plantings", "planting_id"),
-        "recommendations": ("plantings", "planting_id"),
+        "scouting_observations": ("plantings", "planting_id"),
     }
     created_this_push: dict[str, set[str]] = {t: set() for t in TABLES}
 
@@ -262,6 +278,8 @@ def push_changes(
         if table_changes is None:
             continue
         cfg = TABLES[table_name]
+        if not cfg.push_allowed:
+            continue  # server-generated; delivered via /api/v1/alerts, not synced
 
         for payload in table_changes.created:
             new_id = payload.get("id")
@@ -317,6 +335,8 @@ def push_changes(
     for table_name, cfg in TABLES.items():
         table_changes = changes.get(table_name)
         if table_changes is None:
+            continue
+        if not cfg.push_allowed:
             continue
 
         for payload in table_changes.created:
