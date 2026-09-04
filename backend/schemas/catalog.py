@@ -12,12 +12,27 @@ class CropVarietyOut(BaseModel):
     name: str
 
 
+class GrowthStageOut(BaseModel):
+    """A crop's growth-stage window. The frontend uses this to compute a
+    planting's current stage from its sowing date (for the scouting form) —
+    same day-range data `services/growth_stage.py` uses server-side. Timing is
+    a heuristic default, not ground truth (see the model docstring)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    stage_name: str
+    stage_order: int
+    typical_days_from_sowing_start: int
+    typical_days_from_sowing_end: int
+
+
 class CropOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
     name: str
     varieties: list[CropVarietyOut]
+    growth_stages: list[GrowthStageOut] = []
 
 
 class AgriCatalogOut(BaseModel):

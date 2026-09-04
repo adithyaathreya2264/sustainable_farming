@@ -30,7 +30,9 @@ def list_crops(
     # joinedload avoids an N+1 (one query per crop for its varieties) — small
     # dataset today, still worth not skipping.
     crops = db.scalars(
-        select(Crop).options(joinedload(Crop.varieties)).where(Crop.active.is_(True))
+        select(Crop)
+        .options(joinedload(Crop.varieties), joinedload(Crop.growth_stages))
+        .where(Crop.active.is_(True))
     ).unique().all()
     return CropsListOut(items=list(crops))
 
