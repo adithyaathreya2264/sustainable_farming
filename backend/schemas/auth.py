@@ -6,14 +6,20 @@ import re
 
 from pydantic import BaseModel, Field, field_validator
 
+from backend.core.config import settings
+
 # 10-digit Indian mobile number, optionally prefixed with +91/0.
 _PHONE_RE = re.compile(r"^(?:\+91|0)?[6-9]\d{9}$")
+# Dev-bypass mode: any 10 digits (optionally +91/0-prefixed) — a tester types a
+# random number, not a real one. See core/config.py:dev_auth_bypass.
+_LENIENT_PHONE_RE = re.compile(r"^(?:\+91|0)?\d{10}$")
 
 
 def _normalize_phone(v: str) -> str:
     """Validate and collapse +91/0-prefixed input to a bare 10-digit number,
     so `request-otp` and `verify-otp` always key off the same string."""
-    if not _PHONE_RE.match(v):
+    pattern = _LENIENT_PHONE_RE if settings.dev_auth_bypass else _PHONE_RE
+    if not pattern.match(v):
         raise ValueError("must be a valid 10-digit Indian mobile number")
     return v[-10:]
 

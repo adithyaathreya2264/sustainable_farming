@@ -26,8 +26,33 @@ _RATE_LIMIT_MAX_REQUESTS = 3
 _MAX_VERIFY_ATTEMPTS = 5
 
 
+def _get_or_create_user(db: Session, phone_number: str) -> User:
+    user = db.scalar(select(User).where(User.phone_number == phone_number))
+    if user is None:
+        user = User(
+            id=str(uuid.uuid4()),
+            phone_number=phone_number,
+            # Placeholder onboarding defaults — filled in by the app's
+            # onboarding flow (PATCH /api/v1/users/me), not by this endpoint.
+            name="",
+            language_pref="en",
+            default_unit="hectare",
+            total_area_hectares=0,
+            irrigation_type="rainfed",
+            state="",
+            district="",
+        )
+        db.add(user)
+    return user
+
+
 @router.post("/request-otp", response_model=RequestOtpOut)
 def request_otp(body: RequestOtpIn, db: Session = Depends(get_db)) -> RequestOtpOut:
+    if settings.dev_auth_bypass:
+        # No SMS, no rate limit, no OtpRequest row — verify-otp accepts the
+        # fixed dev OTP directly. See core/config.py:dev_auth_bypass.
+        return RequestOtpOut()
+
     window_start = utcnow() - timedelta(minutes=_RATE_LIMIT_WINDOW_MINUTES)
     recent_count = db.scalar(
         select(func.count())
@@ -64,6 +89,17 @@ def request_otp(body: RequestOtpIn, db: Session = Depends(get_db)) -> RequestOtp
 
 @router.post("/verify-otp", response_model=VerifyOtpOut)
 def verify_otp(body: VerifyOtpIn, db: Session = Depends(get_db)) -> VerifyOtpOut:
+    if settings.dev_auth_bypass:
+        if body.otp != settings.dev_auth_otp:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid or expired OTP.",
+            )
+        user = _get_or_create_user(db, body.phone_number)
+        db.commit()
+        token = create_access_token(user_id=user.id, phone_number=user.phone_number)
+        return VerifyOtpOut(access_token=token)
+
     otp_request = db.scalar(
         select(OtpRequest)
         .where(
@@ -92,22 +128,7 @@ def verify_otp(body: VerifyOtpIn, db: Session = Depends(get_db)) -> VerifyOtpOut
 
     otp_request.consumed_at = utcnow()
 
-    user = db.scalar(select(User).where(User.phone_number == body.phone_number))
-    if user is None:
-        user = User(
-            id=str(uuid.uuid4()),
-            phone_number=body.phone_number,
-            # Placeholder onboarding defaults — filled in by the app's
-            # onboarding flow, not by this endpoint.
-            name="",
-            language_pref="en",
-            default_unit="hectare",
-            total_area_hectares=0,
-            irrigation_type="rainfed",
-            state="",
-            district="",
-        )
-        db.add(user)
+    user = _get_or_create_user(db, body.phone_number)
 
     db.commit()
 
