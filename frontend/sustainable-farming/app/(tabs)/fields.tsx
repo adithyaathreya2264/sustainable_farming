@@ -9,12 +9,9 @@ import { EmptyState } from "../../components/ui/EmptyState";
 import { useAppState } from "../../hooks/useAppState";
 import { formatArea } from "../../utils/unitConversion";
 import { formatDate } from "../../utils/format";
-import cropsData from "../../data/mock/crops.json";
 import type { Crop } from "../../types/models";
 
-const crops = cropsData as Crop[];
-
-function cropLabel(cropId: string, varietyId: string) {
+function cropLabel(crops: Crop[], cropId: string, varietyId: string) {
   const crop = crops.find((c) => c.id === cropId);
   const variety = crop?.varieties.find((v) => v.id === varietyId);
   return crop ? `${crop.name}${variety ? ` (${variety.name})` : ""}` : "Unknown crop";
@@ -24,7 +21,9 @@ export default function FieldsScreen() {
   const { t } = useTranslation();
   const fields = useAppState((s) => s.fields);
   const plantings = useAppState((s) => s.plantings);
+  const crops = useAppState((s) => s.crops);
   const defaultUnit = useAppState((s) => s.user.defaultUnit);
+  const state = useAppState((s) => s.user.state);
 
   return (
     <ScreenContainer>
@@ -57,7 +56,7 @@ export default function FieldsScreen() {
                     {field.name}
                   </Text>
                   <Text className="text-ink-muted" style={{ fontSize: 13 }}>
-                    {formatArea(field.areaHectares, defaultUnit)}
+                    {formatArea(field.areaHectares, defaultUnit, state)}
                   </Text>
                 </View>
                 <Text className="text-ink-muted mb-2" style={{ fontSize: 13 }}>
@@ -84,7 +83,7 @@ export default function FieldsScreen() {
                       className="rounded-xl bg-primary/5 border border-primary/20 px-3 py-2 mb-2"
                     >
                       <Text className="text-ink font-medium" style={{ fontSize: 14 }}>
-                        {cropLabel(planting.cropId, planting.varietyId)}
+                        {cropLabel(crops, planting.cropId, planting.varietyId)}
                       </Text>
                       <Text className="text-ink-muted" style={{ fontSize: 12 }}>
                         {t(

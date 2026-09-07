@@ -12,22 +12,22 @@ import { WeatherWidget } from "../../components/WeatherWidget";
 import { SyncStatusIcon } from "../../components/SyncStatusIcon";
 import { useSession } from "../../context/SessionContext";
 import { useAppState } from "../../hooks/useAppState";
-import { getAlerts } from "../../services/alerts";
+import { getRecommendationAlerts } from "../../services/alerts";
 import { getSeasonFinancials, type SeasonFinancials } from "../../services/ledger";
 import { formatInr } from "../../utils/format";
-import type { Recommendation } from "../../types/models";
+import type { Alert } from "../../types/models";
 
 export default function HomeScreen() {
   const { t } = useTranslation();
   const { user } = useSession();
   const fields = useAppState((s) => s.fields);
   const plantings = useAppState((s) => s.plantings);
-  const [alerts, setAlerts] = useState<Recommendation[]>([]);
+  const [alerts, setAlerts] = useState<Alert[]>([]);
   const [financials, setFinancials] = useState<SeasonFinancials | null>(null);
 
   useFocusEffect(
     useCallback(() => {
-      getAlerts().then(setAlerts);
+      getRecommendationAlerts().then(setAlerts);
       getSeasonFinancials().then(setFinancials);
     }, [])
   );
