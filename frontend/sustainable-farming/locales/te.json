@@ -19,8 +19,7 @@
     "verify": "ధృవీకరించండి",
     "resendIn": "{{seconds}} సెకన్లలో మళ్ళీ పంపండి",
     "resend": "కోడ్‌ను మళ్ళీ పంపండి",
-    "invalidOtp": "తప్పు కోడ్. దయచేసి మళ్ళీ ప్రయత్నించండి.",
-    "hintOtp": "ఈ డెమో కోసం {{otp}} ఉపయోగించండి"
+    "invalidOtp": "తప్పు కోడ్. దయచేసి మళ్ళీ ప్రయత్నించండి."
   },
   "onboarding": {
     "step1Title": "ప్రారంభిద్దాం",
@@ -56,7 +55,14 @@
     "viewFullLedger": "పూర్తి లెడ్జర్‌ను చూడండి",
     "alertsTitle": "హెచ్చరికలు",
     "noAlerts": "ప్రస్తుతం చురుకైన హెచ్చరికలు లేవు.",
-    "viewTreatment": "సిఫార్సును చూడండి"
+    "viewTreatment": "సిఫార్సును చూడండి",
+    "weatherLoading": "వాతావరణం లోడ్ అవుతోంది…",
+    "weatherSetLocation": "స్థానిక వాతావరణం చూడటానికి మీ ప్రొఫైల్‌లో రాష్ట్రం, జిల్లాను జోడించండి",
+    "weatherUnavailable": "ప్రస్తుతం వాతావరణ సమాచారం అందుబాటులో లేదు",
+    "weatherTomorrow": "రేపు",
+    "humidity": "తేమ {{pct}}%",
+    "wind": "గాలి {{kph}} కిమీ/గం",
+    "rain": "{{mm}} మిమీ వర్షం"
   },
   "fields": {
     "title": "నా పొలాలు",
@@ -79,6 +85,10 @@
     "fieldNameLabel": "పొలం పేరు",
     "fieldNamePlaceholder": "ఉదా. ఉత్తర రాగి పొలం",
     "areaSizeLabel": "విస్తీర్ణం",
+    "soilTypeLabel": "నేల రకం",
+    "soilTypeSuggested": "మీ తాలూకా కోసం సూచించబడింది",
+    "soilTypeLikely": "మీ జిల్లా ఆధారంగా, అవకాశం ఉంది",
+    "soilTypeLookupFailed": "సూచన లభించలేదు — దయచేసి మీరే నమోదు చేయండి",
     "confirmSave": "స్థానాన్ని నిర్ధారించి సేవ్ చేయండి"
   },
   "addPlanting": {
@@ -89,7 +99,9 @@
     "sowingDateLabel": "విత్తే తేదీ",
     "selectCrop": "పంటను ఎంచుకోండి",
     "selectVariety": "రకాన్ని ఎంచుకోండి",
-    "startTracking": "ట్రాకింగ్ ప్రారంభించండి"
+    "startTracking": "ట్రాకింగ్ ప్రారంభించండి",
+    "catalogUnavailableTitle": "పంట జాబితా అందుబాటులో లేదు",
+    "catalogUnavailableSubtitle": "పంట డేటాను డౌన్‌లోడ్ చేయడానికి ఒకసారి ఇంటర్నెట్‌కు కనెక్ట్ చేయండి, తర్వాత మళ్ళీ ప్రయత్నించండి."
   },
   "quickLog": {
     "title": "కార్యకలాపాన్ని లాగ్ చేయండి",
@@ -100,6 +112,8 @@
     "costLabel": "ఖర్చు (₹)",
     "dateLabel": "తేదీ",
     "saveActivity": "కార్యకలాపాన్ని సేవ్ చేయండి",
+    "catalogUnavailableTitle": "ఉత్పత్తి జాబితా అందుబాటులో లేదు",
+    "catalogUnavailableSubtitle": "ఈ పంట కోసం ఉత్పత్తి డేటాను డౌన్‌లోడ్ చేయడానికి ఒకసారి ఇంటర్నెట్‌కు కనెక్ట్ చేయండి, తర్వాత మళ్ళీ ప్రయత్నించండి.",
     "activityTypes": {
       "chemical": "రసాయనం / స్ప్రే",
       "irrigation": "నీటిపారుదల",
@@ -111,25 +125,31 @@
     "title": "ప్రభుత్వ పథకాలు",
     "eligibleFor": "మీరు అర్హులు",
     "noSchemesTitle": "ఇంకా సరిపోలికలు లేవు",
-    "noSchemesSubtitle": "అర్హత గల పథకాలను చూడటానికి మీ ప్రొఫైల్‌ను పూర్తి చేయండి.",
-    "central": "కేంద్ర పథకం",
-    "state": "రాష్ట్ర పథకం"
+    "noSchemesSubtitle": "అర్హత గల పథకాలను చూడటానికి మీ ప్రొఫైల్‌ను పూర్తి చేయండి."
   },
   "schemeDetail": {
     "eligibility": "అర్హత ప్రమాణాలు",
     "benefits": "ప్రయోజనాలు",
-    "howToApply": "ఎలా దరఖాస్తు చేయాలి",
-    "contact": "సంప్రదింపు",
+    "visitApplicationUrl": "దరఖాస్తు చేయడానికి అధికారిక పేజీని సందర్శించండి",
     "markApplying": "దరఖాస్తు చేస్తున్నట్లు గుర్తించండి",
     "markedApplying": "దరఖాస్తు చేస్తున్నట్లు గుర్తించబడింది"
   },
   "alertDetail": {
     "title": "హెచ్చరిక వివరాలు",
-    "confidence": "విశ్వసనీయత: {{pct}}%",
-    "recommendation": "సిఫార్సు",
+    "markFollowed": "నేను దీన్ని అనుసరించాను",
+    "markIgnored": "దీన్ని చేయడం లేదు",
+    "status": {
+      "followed": "మీరు దీన్ని అనుసరించినట్లు గుర్తించారు",
+      "ignored": "మీరు దీన్ని విస్మరించినట్లు గుర్తించారు"
+    },
     "logAction": "ఈ చర్యను ఇప్పుడే లాగ్ చేయండి",
     "nearbyVendors": "సమీప విక్రేతలు",
     "mapUnavailable": "ఆఫ్‌లైన్‌లో మ్యాప్ అందుబాటులో లేదు"
+  },
+  "confidence": {
+    "unverified": "ధృవీకరించని మార్గదర్శకత్వం",
+    "provisional": "తాత్కాలిక సరిపోలిక",
+    "verified": "ధృవీకరించబడింది"
   },
   "ledger": {
     "title": "పంట చక్ర లెడ్జర్",
@@ -138,7 +158,8 @@
     "currentCostOfCultivation": "ప్రస్తుత సాగు ఖర్చు",
     "expenseBreakdown": "ఖర్చు వివరణ",
     "recentTransactions": "ఇటీవలి లావాదేవీలు",
-    "noTransactions": "ఇంకా ఎటువంటి కార్యకలాపం నమోదు కాలేదు."
+    "noTransactions": "ఇంకా ఎటువంటి కార్యకలాపం నమోదు కాలేదు.",
+    "logScouting": "పొల పరిశీలనను నమోదు చేయండి"
   },
   "profile": {
     "title": "ప్రొఫైల్",
@@ -160,5 +181,20 @@
     "bigha": "బిఘా",
     "cent": "సెంటు",
     "killa": "కిల్లా"
+  },
+  "scouting": {
+    "title": "పొల పరిశీలనను నమోదు చేయండి",
+    "plantingLabel": "ఏ నాట?",
+    "dateLabel": "గమనించిన తేదీ",
+    "notesLabel": "గమనికలు (ఐచ్ఛికం)",
+    "noMetricTitle": "ఇప్పుడు పరిశీలించడానికి ఏమీ లేదు",
+    "noMetricSubtitle": "ఈ పంట ప్రస్తుత దశలో ఎటువంటి పురుగు తనిఖీ లేదు.",
+    "save": "పరిశీలనను సేవ్ చేయండి",
+    "metrics": {
+      "dead_hearts_percent": "చనిపోయిన మొవ్వు (%)",
+      "pheromone_trap_moths_per_night_3day_avg": "ఫెరోమోన్ ట్రాప్ శలభాలు (3-రోజుల సగటు)",
+      "deadheart_percent": "చనిపోయిన మొవ్వు (%)",
+      "percent_plants_with_whorl_damage": "సుడి దెబ్బతిన్న మొక్కలు (%)"
+    }
   }
 }

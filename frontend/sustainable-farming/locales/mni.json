@@ -19,8 +19,7 @@
     "verify": "অচুম্বা য়াবা তারুংবীয়ু",
     "resendIn": "সেকেন্দ {{seconds}} দা আমুক হানবা থাদোকপীয়ু",
     "resend": "কোদ আমুক হানবা থাদোকপীয়ু",
-    "invalidOtp": "কোদ অশোয়বা। চানবীদুনা আমুক হানবা হোৎনবীয়ু।",
-    "hintOtp": "ডেমো অসিগীদমক {{otp}} শিজিন্নবীয়ু"
+    "invalidOtp": "কোদ অশোয়বা। চানবীদুনা আমুক হানবা হোৎনবীয়ু।"
   },
   "onboarding": {
     "step1Title": "হৌশিল্লসি",
@@ -56,7 +55,14 @@
     "viewFullLedger": "লেজর মপুং ফাওবা য়েংবীয়ু",
     "alertsTitle": "চেক্সীন",
     "noAlerts": "হৌজিক চেক্সীন য়াওদে।",
-    "viewTreatment": "য়াথং য়েংবীয়ু"
+    "viewTreatment": "য়াথং য়েংবীয়ু",
+    "weatherLoading": "নোংজু-নুংশা লোড তৌরি…",
+    "weatherSetLocation": "মপাঙদা লৈবা নোংজু-নুংশা য়েংনবা নহাক্কী প্রোফাইলদা স্টেট অমসুং জিলা হাপচিল্লু",
+    "weatherUnavailable": "হৌজিক নোংজু-নুংশাগী ৱারী ফংদে",
+    "weatherTomorrow": "হয়েং",
+    "humidity": "নুংশিৎ ইশিং {{pct}}%",
+    "wind": "নুংশিৎ {{kph}} কিমী/পুং",
+    "rain": "{{mm}} মিমী নোং"
   },
   "fields": {
     "title": "ঐগী লৌবুকশিং",
@@ -79,7 +85,11 @@
     "fieldNameLabel": "লৌবুক্কী মিং",
     "fieldNamePlaceholder": "খুদম ওইনা: অওয়াংগী রাগি লৌবুক",
     "areaSizeLabel": "মরু",
-    "confirmSave": "লৈফম অচুম্বা য়াবা তারুংদুনা থাম্মু"
+    "confirmSave": "লৈফম অচুম্বা য়াবা তারুংদুনা থাম্মু",
+    "soilTypeLabel": "লৈবাক্কী মখল",
+    "soilTypeSuggested": "নহাক্কী তালুক্কীদমক য়াথংখিবা",
+    "soilTypeLikely": "নহাক্কী জিলাগী মতুংইন্না ওইথোক্কনি",
+    "soilTypeLookupFailed": "য়াথং ফংহনবা ঙমখ্রে - নশানা চাংশিল্লু"
   },
   "addPlanting": {
     "title": "থাদিং হৌদোকপীয়ু",
@@ -89,7 +99,9 @@
     "sowingDateLabel": "থাদিং তারিখ",
     "selectCrop": "মহেই খনবীয়ু",
     "selectVariety": "মখল খনবীয়ু",
-    "startTracking": "য়েংশিনবা হৌদোকপীয়ু"
+    "startTracking": "য়েংশিনবা হৌদোকপীয়ু",
+    "catalogUnavailableTitle": "মহেইগী লিস্ত ফংদে",
+    "catalogUnavailableSubtitle": "মহেইগী ডেটা ডাউনলোদ তৌনবা অমুক ইন্তরনেত কনেক্ত তৌবীয়ু, অদুগা আমুক হানবা হোৎনবীয়ু।"
   },
   "quickLog": {
     "title": "থবক তারিক থীয়ু",
@@ -100,6 +112,8 @@
     "costLabel": "চাদন (₹)",
     "dateLabel": "তারিখ",
     "saveActivity": "থবক থাম্মু",
+    "catalogUnavailableTitle": "পোৎকী লিস্ত ফংদে",
+    "catalogUnavailableSubtitle": "মহেই অসিগীদমক পোৎকী ডেটা ডাউনলোদ তৌনবা অমুক ইন্তরনেত কনেক্ত তৌবীয়ু, অদুগা আমুক হানবা হোৎনবীয়ু।",
     "activityTypes": {
       "chemical": "রাসায়নিক / স্প্রে",
       "irrigation": "ঈশিং পীবা",
@@ -111,25 +125,31 @@
     "title": "সরকারগী থবক",
     "eligibleFor": "নহাক ফংবা য়াবা ওই",
     "noSchemesTitle": "হৌজিক চাদা লৈত্রে",
-    "noSchemesSubtitle": "ফংবা য়াবা থবক য়েংনবা নহাক্কী প্রোফাইল মপুং ফহনবীয়ু।",
-    "central": "সেন্ত্রেল থবক",
-    "state": "স্টেটকী থবক"
+    "noSchemesSubtitle": "ফংবা য়াবা থবক য়েংনবা নহাক্কী প্রোফাইল মপুং ফহনবীয়ু।"
   },
   "schemeDetail": {
     "eligibility": "ফংবা য়াবগী মরু",
     "benefits": "ফায়দা",
-    "howToApply": "করমনা এপ্লাই তৌগদগে",
-    "contact": "কনতেক",
+    "visitApplicationUrl": "এপ্লাই তৌনবা ওফিসিএল পেজ য়েংবীয়ু",
     "markApplying": "এপ্লাই তৌরি হায়না মার্ক তৌবীয়ু",
     "markedApplying": "এপ্লাই তৌরি হায়না মার্ক তৌখ্রে"
   },
   "alertDetail": {
     "title": "চেক্সীনগী মরু",
-    "confidence": "থাজবা: {{pct}}%",
-    "recommendation": "য়াথং",
+    "markFollowed": "ঐহাক্না মসি ফলো তৌরে",
+    "markIgnored": "মসি তৌদ্রি",
+    "status": {
+      "followed": "নহাক্না মসি ফলো তৌখ্রে হায়না মার্ক তৌখ্রে",
+      "ignored": "নহাক্না মসি ইগনোর তৌখ্রে হায়না মার্ক তৌখ্রে"
+    },
     "logAction": "থবক অসি হৌজিক তারিক থীয়ু",
     "nearbyVendors": "নকপগী দুকানদার",
     "mapUnavailable": "অফলাইনদা ম্যাপ ফংদে"
+  },
+  "confidence": {
+    "unverified": "চেক তৌদ্রিবা য়াথং",
+    "provisional": "তেম্পোরারী মিল",
+    "verified": "চেক তৌখ্রে"
   },
   "ledger": {
     "title": "মহেই একোয়গী লেজর",
@@ -138,7 +158,8 @@
     "currentCostOfCultivation": "হৌজিক্কী লৌবগী চাদন",
     "expenseBreakdown": "চাদন্না মরু",
     "recentTransactions": "নওগী লান্নবা",
-    "noTransactions": "হৌজিক ফাওবা থবক তারিক থিদ্রি।"
+    "noTransactions": "হৌজিক ফাওবা থবক তারিক থিদ্রি।",
+    "logScouting": "লৌবুক য়েংশিনবা রেকর্ড তৌরো"
   },
   "profile": {
     "title": "প্রোফাইল",
@@ -160,5 +181,20 @@
     "bigha": "বিঘা",
     "cent": "সেন্ত",
     "killa": "কিল্লা"
+  },
+  "scouting": {
+    "title": "লৌবুক য়েংশিনবা রেকর্ড তৌরো",
+    "plantingLabel": "করম্বা থাবা?",
+    "dateLabel": "য়েংখিবা তাং",
+    "notesLabel": "ৱারোল (ঐচ্ছিক)",
+    "noMetricTitle": "হৌজিক য়েংশিনবা করিসু লৈতে",
+    "noMetricSubtitle": "মরু অসিগী হৌজিক্কী চাউখৎপগী তাংদা কীট চেক লৈতে।",
+    "save": "য়েংশিনবা সেভ তৌরো",
+    "metrics": {
+      "dead_hearts_percent": "সিখ্রবা মকোক (%)",
+      "pheromone_trap_moths_per_night_3day_avg": "ফেরোমোন ট্রেপ মথ (৩-নুমিৎ চাংচৎ)",
+      "deadheart_percent": "সিখ্রবা মকোক (%)",
+      "percent_plants_with_whorl_damage": "ৱার্ল সোকহনবা পাম্বী (%)"
+    }
   }
 }

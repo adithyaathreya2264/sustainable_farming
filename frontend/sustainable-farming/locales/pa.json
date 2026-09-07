@@ -19,8 +19,7 @@
     "verify": "ਤਸਦੀਕ ਕਰੋ",
     "resendIn": "{{seconds}} ਸਕਿੰਟਾਂ ਵਿੱਚ ਦੁਬਾਰਾ ਭੇਜੋ",
     "resend": "ਕੋਡ ਦੁਬਾਰਾ ਭੇਜੋ",
-    "invalidOtp": "ਗਲਤ ਕੋਡ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
-    "hintOtp": "ਇਸ ਡੈਮੋ ਲਈ {{otp}} ਵਰਤੋ"
+    "invalidOtp": "ਗਲਤ ਕੋਡ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
   },
   "onboarding": {
     "step1Title": "ਆਓ ਸ਼ੁਰੂ ਕਰੀਏ",
@@ -56,7 +55,14 @@
     "viewFullLedger": "ਪੂਰਾ ਲੈਜ਼ਰ ਵੇਖੋ",
     "alertsTitle": "ਚੇਤਾਵਨੀਆਂ",
     "noAlerts": "ਇਸ ਵੇਲੇ ਕੋਈ ਸਰਗਰਮ ਚੇਤਾਵਨੀ ਨਹੀਂ ਹੈ।",
-    "viewTreatment": "ਸਿਫ਼ਾਰਸ਼ ਵੇਖੋ"
+    "viewTreatment": "ਸਿਫ਼ਾਰਸ਼ ਵੇਖੋ",
+    "weatherLoading": "ਮੌਸਮ ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
+    "weatherSetLocation": "ਸਥਾਨਕ ਮੌਸਮ ਵੇਖਣ ਲਈ ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ ਵਿੱਚ ਰਾਜ ਅਤੇ ਜ਼ਿਲ੍ਹਾ ਸ਼ਾਮਲ ਕਰੋ",
+    "weatherUnavailable": "ਇਸ ਸਮੇਂ ਮੌਸਮ ਜਾਣਕਾਰੀ ਉਪਲਬਧ ਨਹੀਂ",
+    "weatherTomorrow": "ਕੱਲ੍ਹ",
+    "humidity": "ਨਮੀ {{pct}}%",
+    "wind": "ਹਵਾ {{kph}} ਕਿਮੀ/ਘੰਟਾ",
+    "rain": "{{mm}} ਮਿਮੀ ਮੀਂਹ"
   },
   "fields": {
     "title": "ਮੇਰੇ ਖੇਤ",
@@ -79,6 +85,10 @@
     "fieldNameLabel": "ਖੇਤ ਦਾ ਨਾਮ",
     "fieldNamePlaceholder": "ਜਿਵੇਂ: ਉੱਤਰੀ ਰਾਗੀ ਖੇਤ",
     "areaSizeLabel": "ਰਕਬਾ",
+    "soilTypeLabel": "ਮਿੱਟੀ ਦੀ ਕਿਸਮ",
+    "soilTypeSuggested": "ਤੁਹਾਡੇ ਤਾਲੁਕਾ ਲਈ ਸੁਝਾਇਆ ਗਿਆ",
+    "soilTypeLikely": "ਤੁਹਾਡੇ ਜ਼ਿਲ੍ਹੇ ਦੇ ਆਧਾਰ 'ਤੇ, ਸੰਭਾਵਿਤ",
+    "soilTypeLookupFailed": "ਸੁਝਾਅ ਨਹੀਂ ਮਿਲ ਸਕਿਆ — ਕਿਰਪਾ ਕਰਕੇ ਖੁਦ ਦਰਜ ਕਰੋ",
     "confirmSave": "ਸਥਾਨ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ ਅਤੇ ਸੰਭਾਲੋ"
   },
   "addPlanting": {
@@ -89,7 +99,9 @@
     "sowingDateLabel": "ਬਿਜਾਈ ਦੀ ਮਿਤੀ",
     "selectCrop": "ਫ਼ਸਲ ਚੁਣੋ",
     "selectVariety": "ਕਿਸਮ ਚੁਣੋ",
-    "startTracking": "ਟਰੈਕਿੰਗ ਸ਼ੁਰੂ ਕਰੋ"
+    "startTracking": "ਟਰੈਕਿੰਗ ਸ਼ੁਰੂ ਕਰੋ",
+    "catalogUnavailableTitle": "ਫ਼ਸਲ ਸੂਚੀ ਉਪਲਬਧ ਨਹੀਂ ਹੈ",
+    "catalogUnavailableSubtitle": "ਫ਼ਸਲ ਡਾਟਾ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਇੱਕ ਵਾਰ ਇੰਟਰਨੈੱਟ ਨਾਲ ਜੁੜੋ, ਫਿਰ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।"
   },
   "quickLog": {
     "title": "ਸਰਗਰਮੀ ਦਰਜ ਕਰੋ",
@@ -100,6 +112,8 @@
     "costLabel": "ਲਾਗਤ (₹)",
     "dateLabel": "ਮਿਤੀ",
     "saveActivity": "ਸਰਗਰਮੀ ਸੰਭਾਲੋ",
+    "catalogUnavailableTitle": "ਉਤਪਾਦ ਸੂਚੀ ਉਪਲਬਧ ਨਹੀਂ ਹੈ",
+    "catalogUnavailableSubtitle": "ਇਸ ਫ਼ਸਲ ਲਈ ਉਤਪਾਦ ਡਾਟਾ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਇੱਕ ਵਾਰ ਇੰਟਰਨੈੱਟ ਨਾਲ ਜੁੜੋ, ਫਿਰ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
     "activityTypes": {
       "chemical": "ਰਸਾਇਣ / ਛਿੜਕਾਅ",
       "irrigation": "ਸਿੰਚਾਈ",
@@ -111,25 +125,31 @@
     "title": "ਸਰਕਾਰੀ ਯੋਜਨਾਵਾਂ",
     "eligibleFor": "ਤੁਸੀਂ ਯੋਗ ਹੋ",
     "noSchemesTitle": "ਅਜੇ ਤੱਕ ਕੋਈ ਮੇਲ ਨਹੀਂ",
-    "noSchemesSubtitle": "ਯੋਗ ਯੋਜਨਾਵਾਂ ਵੇਖਣ ਲਈ ਆਪਣਾ ਪ੍ਰੋਫਾਈਲ ਪੂਰਾ ਕਰੋ।",
-    "central": "ਕੇਂਦਰੀ ਯੋਜਨਾ",
-    "state": "ਰਾਜ ਯੋਜਨਾ"
+    "noSchemesSubtitle": "ਯੋਗ ਯੋਜਨਾਵਾਂ ਵੇਖਣ ਲਈ ਆਪਣਾ ਪ੍ਰੋਫਾਈਲ ਪੂਰਾ ਕਰੋ।"
   },
   "schemeDetail": {
     "eligibility": "ਯੋਗਤਾ ਮਾਪਦੰਡ",
     "benefits": "ਲਾਭ",
-    "howToApply": "ਅਰਜ਼ੀ ਕਿਵੇਂ ਦੇਣੀ ਹੈ",
-    "contact": "ਸੰਪਰਕ",
+    "visitApplicationUrl": "ਅਰਜ਼ੀ ਲਈ ਅਧਿਕਾਰਤ ਪੰਨੇ 'ਤੇ ਜਾਓ",
     "markApplying": "ਅਰਜ਼ੀ ਦੇ ਰਹੇ ਹੋ ਵਜੋਂ ਨਿਸ਼ਾਨਬੱਧ ਕਰੋ",
     "markedApplying": "ਅਰਜ਼ੀ ਦੇ ਰਹੇ ਹੋ ਵਜੋਂ ਨਿਸ਼ਾਨਬੱਧ ਕੀਤਾ ਗਿਆ"
   },
   "alertDetail": {
     "title": "ਚੇਤਾਵਨੀ ਵੇਰਵੇ",
-    "confidence": "ਭਰੋਸਾ: {{pct}}%",
-    "recommendation": "ਸਿਫ਼ਾਰਸ਼",
+    "markFollowed": "ਮੈਂ ਇਹ ਕੀਤਾ",
+    "markIgnored": "ਇਹ ਨਹੀਂ ਕਰ ਰਿਹਾ",
+    "status": {
+      "followed": "ਤੁਸੀਂ ਇਸਨੂੰ ਅਪਣਾਇਆ ਵਜੋਂ ਨਿਸ਼ਾਨਬੱਧ ਕੀਤਾ",
+      "ignored": "ਤੁਸੀਂ ਇਸਨੂੰ ਅਣਡਿੱਠ ਕੀਤਾ ਵਜੋਂ ਨਿਸ਼ਾਨਬੱਧ ਕੀਤਾ"
+    },
     "logAction": "ਇਹ ਕਾਰਵਾਈ ਹੁਣੇ ਦਰਜ ਕਰੋ",
     "nearbyVendors": "ਨੇੜਲੇ ਵਿਕਰੇਤਾ",
     "mapUnavailable": "ਆਫ਼ਲਾਈਨ ਵਿੱਚ ਨਕਸ਼ਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ"
+  },
+  "confidence": {
+    "unverified": "ਅਪ੍ਰਮਾਣਿਤ ਸਲਾਹ",
+    "provisional": "ਆਰਜ਼ੀ ਮੇਲ",
+    "verified": "ਪ੍ਰਮਾਣਿਤ"
   },
   "ledger": {
     "title": "ਫ਼ਸਲ ਚੱਕਰ ਲੈਜ਼ਰ",
@@ -138,7 +158,8 @@
     "currentCostOfCultivation": "ਮੌਜੂਦਾ ਖੇਤੀ ਲਾਗਤ",
     "expenseBreakdown": "ਖਰਚ ਵੇਰਵਾ",
     "recentTransactions": "ਹਾਲੀਆ ਲੈਣ-ਦੇਣ",
-    "noTransactions": "ਅਜੇ ਤੱਕ ਕੋਈ ਸਰਗਰਮੀ ਦਰਜ ਨਹੀਂ ਹੋਈ।"
+    "noTransactions": "ਅਜੇ ਤੱਕ ਕੋਈ ਸਰਗਰਮੀ ਦਰਜ ਨਹੀਂ ਹੋਈ।",
+    "logScouting": "ਖੇਤ ਨਿਰੀਖਣ ਦਰਜ ਕਰੋ"
   },
   "profile": {
     "title": "ਪ੍ਰੋਫਾਈਲ",
@@ -160,5 +181,20 @@
     "bigha": "ਵਿੱਘਾ",
     "cent": "ਸੈਂਟ",
     "killa": "ਕਿੱਲਾ"
+  },
+  "scouting": {
+    "title": "ਖੇਤ ਨਿਰੀਖਣ ਦਰਜ ਕਰੋ",
+    "plantingLabel": "ਕਿਹੜੀ ਬਿਜਾਈ?",
+    "dateLabel": "ਵੇਖਣ ਦੀ ਮਿਤੀ",
+    "notesLabel": "ਟਿੱਪਣੀਆਂ (ਚੋਣਵਾਂ)",
+    "noMetricTitle": "ਹੁਣ ਨਿਰੀਖਣ ਲਈ ਕੁਝ ਨਹੀਂ",
+    "noMetricSubtitle": "ਇਸ ਫ਼ਸਲ ਦੀ ਮੌਜੂਦਾ ਅਵਸਥਾ ਵਿੱਚ ਕੋਈ ਕੀੜੇ ਦੀ ਜਾਂਚ ਨਹੀਂ ਹੈ।",
+    "save": "ਨਿਰੀਖਣ ਸੰਭਾਲੋ",
+    "metrics": {
+      "dead_hearts_percent": "ਮਰੇ ਗੋਭ (%)",
+      "pheromone_trap_moths_per_night_3day_avg": "ਫੇਰੋਮੋਨ ਟ੍ਰੈਪ ਪਤੰਗੇ (3-ਦਿਨ ਔਸਤ)",
+      "deadheart_percent": "ਮਰੇ ਗੋਭ (%)",
+      "percent_plants_with_whorl_damage": "ਵ੍ਹੋਰਲ ਨੁਕਸਾਨ ਵਾਲੇ ਬੂਟੇ (%)"
+    }
   }
 }
