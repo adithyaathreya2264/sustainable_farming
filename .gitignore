@@ -1,0 +1,8 @@
+# Raw third-party datasets (~140 MB) stay out of git, but their provenance
+# note must not — it records the data-integrity findings that constrain how
+# every derived feature may present its numbers. Ignore the contents, not the
+# directory, so the negation below can take effect.
+datasets/*
+!datasets/README.md
+
+docs/
