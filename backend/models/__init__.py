@@ -24,6 +24,13 @@ from backend.models.scheme import (
 )
 from backend.models.otp import OtpRequest
 
+# Dataset-derived reference tables (see datasets/README.md for provenance).
+from backend.models.state_baseline import SoilBaseline, StateClimateNormal
+from backend.models.yield_benchmark import YieldBenchmark
+from backend.models.crop_nutrient_target import CropNutrientTarget
+from backend.models.market_price import MarketPrice
+from backend.models.crop_disease import CropDisease, CropDiseaseSymptom
+
 __all__ = [
     "Base",
     "SyncCounter",
@@ -53,4 +60,11 @@ __all__ = [
     "SchemeMatchStatus",
     "MatchConfidence",
     "OtpRequest",
+    "SoilBaseline",
+    "StateClimateNormal",
+    "YieldBenchmark",
+    "CropNutrientTarget",
+    "MarketPrice",
+    "CropDisease",
+    "CropDiseaseSymptom",
 ]

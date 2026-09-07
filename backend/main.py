@@ -8,9 +8,12 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.api.v1.advisory import router as advisory_router
+from backend.api.v1.agronomy import router as agronomy_router
 from backend.api.v1.alerts import router as alerts_router
 from backend.api.v1.auth import router as auth_router
 from backend.api.v1.catalog import router as catalog_router
+from backend.api.v1.market import router as market_router
 from backend.api.v1.internal import router as internal_router
 from backend.api.v1.locations import router as locations_router
 from backend.api.v1.soil import router as soil_router
@@ -40,6 +43,10 @@ app.include_router(locations_router)
 app.include_router(internal_router)
 app.include_router(alerts_router)
 app.include_router(weather_router)
+# Dataset-derived features (see datasets/README.md).
+app.include_router(agronomy_router)
+app.include_router(market_router)
+app.include_router(advisory_router)
 
 
 @app.get("/health")
