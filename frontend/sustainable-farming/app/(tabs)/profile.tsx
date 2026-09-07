@@ -16,7 +16,7 @@ import { useLanguage, LANGUAGES } from "../../context/LanguageContext";
 import { useToast } from "../../context/ToastContext";
 import { loadDemoData, resetDemo } from "../../store/appStore";
 import { updateUnitPreference } from "../../services/profile";
-import { LAND_UNITS, unitLabel } from "../../utils/unitConversion";
+import { availableLandUnits, unitLabel } from "../../utils/unitConversion";
 import type { LandUnit } from "../../types/models";
 
 export default function ProfileScreen() {
@@ -65,7 +65,10 @@ export default function ProfileScreen() {
       <BottomSheetPicker
         visible={unitPickerOpen}
         title={t("profile.unitPreference")}
-        options={LAND_UNITS.map((u) => ({ label: unitLabel(u), value: u }))}
+        options={availableLandUnits(user.state).map((u) => ({
+          label: unitLabel(u),
+          value: u,
+        }))}
         selectedValue={user.defaultUnit}
         onSelect={(v) => updateUnitPreference(v as LandUnit)}
         onClose={() => setUnitPickerOpen(false)}

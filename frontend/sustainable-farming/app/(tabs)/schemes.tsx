@@ -6,16 +6,16 @@ import { ScreenContainer } from "../../components/ui/ScreenContainer";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { SkeletonCard } from "../../components/ui/SkeletonLoader";
 import { SchemeCard } from "../../components/SchemeCard";
-import { getMatchedSchemes } from "../../services/schemes";
-import type { Scheme } from "../../types/models";
+import { getSchemeAlerts } from "../../services/alerts";
+import type { Alert } from "../../types/models";
 
 export default function SchemesScreen() {
   const { t } = useTranslation();
-  const [schemes, setSchemes] = useState<Scheme[] | null>(null);
+  const [schemes, setSchemes] = useState<Alert[] | null>(null);
 
   useFocusEffect(
     useCallback(() => {
-      getMatchedSchemes().then(setSchemes);
+      getSchemeAlerts().then(setSchemes);
     }, [])
   );
 
