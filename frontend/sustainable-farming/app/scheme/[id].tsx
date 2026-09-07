@@ -7,19 +7,25 @@ import { ModalHeader } from "../../components/ModalHeader";
 import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { SkeletonCard } from "../../components/ui/SkeletonLoader";
-import { useToast } from "../../context/ToastContext";
-import { getSchemeById } from "../../services/schemes";
-import type { Scheme } from "../../types/models";
+import { getAlertById, respondToAlert } from "../../services/alerts";
+import type { Alert } from "../../types/models";
 
 export default function SchemeDetailScreen() {
   const { t } = useTranslation();
-  const { showToast } = useToast();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const [scheme, setScheme] = useState<Scheme | null>(null);
-  const [applying, setApplying] = useState(false);
+  const [scheme, setScheme] = useState<Alert | null>(null);
+  const [claiming, setClaiming] = useState(false);
 
   useEffect(() => {
-    getSchemeById(id).then((s) => setScheme(s ?? null));
+    getAlertById(id).then((s) => {
+      const found = s ?? null;
+      setScheme(found);
+      // Opening the detail screen IS "viewed" — no separate tap needed.
+      // Best-effort: a failed PATCH here shouldn't block reading the scheme.
+      if (found && found.status === "matched") {
+        respondToAlert("scheme_match", id, "viewed").catch(() => {});
+      }
+    });
   }, [id]);
 
   if (!scheme) {
@@ -31,73 +37,78 @@ export default function SchemeDetailScreen() {
     );
   }
 
+  const claimed = scheme.status === "claimed";
+
   return (
     <ScreenContainer>
-      <ModalHeader title={scheme.name} />
+      <ModalHeader title={scheme.headline} />
 
-      <Card className="mb-4 bg-primary/5 border-primary/30">
-        <Text className="text-ink" style={{ fontSize: 15, lineHeight: 21 }}>
-          {scheme.summary}
+      <View className="flex-row mb-3">
+        <View className="bg-info rounded-full px-3 py-1">
+          <Text className="text-white" style={{ fontSize: 12 }}>
+            {t(`confidence.${scheme.confidenceLabel}`)}
+          </Text>
+        </View>
+      </View>
+
+      {scheme.authority ? (
+        <Text className="text-ink-muted mb-4" style={{ fontSize: 13 }}>
+          {scheme.authority}
         </Text>
-      </Card>
-
-      <Text className="text-ink font-semibold mb-2" style={{ fontSize: 15 }}>
-        {t("schemeDetail.eligibility")}
-      </Text>
-      <Card className="mb-4">
-        {scheme.eligibilityCriteria.map((c, i) => (
-          <View key={i} className="flex-row mb-1.5">
-            <Text className="text-primary mr-2">•</Text>
-            <Text className="text-ink flex-1" style={{ fontSize: 14 }}>
-              {c}
-            </Text>
-          </View>
-        ))}
-      </Card>
+      ) : null}
 
       <Text className="text-ink font-semibold mb-2" style={{ fontSize: 15 }}>
         {t("schemeDetail.benefits")}
       </Text>
       <Card className="mb-4">
         <Text className="text-ink" style={{ fontSize: 14, lineHeight: 20 }}>
-          {scheme.benefits}
+          {scheme.detail}
         </Text>
       </Card>
 
-      <Text className="text-ink font-semibold mb-2" style={{ fontSize: 15 }}>
-        {t("schemeDetail.howToApply")}
-      </Text>
-      <Card className="mb-4">
-        <Text className="text-ink mb-3" style={{ fontSize: 14, lineHeight: 20 }}>
-          {scheme.howToApply}
-        </Text>
-        <Text className="text-ink-muted mb-0.5" style={{ fontSize: 13 }}>
-          {t("schemeDetail.contact")}
-        </Text>
-        <Text className="text-ink font-medium mb-0.5" style={{ fontSize: 14 }}>
-          {scheme.contactOffice}
-        </Text>
-        <Text
-          accessibilityRole="link"
-          onPress={() => Linking.openURL(`tel:${scheme.contactPhone}`)}
-          className="text-info font-medium"
-          style={{ fontSize: 14 }}
-        >
-          {scheme.contactPhone}
-        </Text>
-      </Card>
+      {scheme.eligibilitySummary && scheme.eligibilitySummary.length > 0 ? (
+        <>
+          <Text className="text-ink font-semibold mb-2" style={{ fontSize: 15 }}>
+            {t("schemeDetail.eligibility")}
+          </Text>
+          <Card className="mb-4">
+            {scheme.eligibilitySummary.map((line, i) => (
+              <View key={i} className="flex-row mb-1.5">
+                <Text className="text-primary mr-2">•</Text>
+                <Text className="text-ink flex-1" style={{ fontSize: 14 }}>
+                  {line}
+                </Text>
+              </View>
+            ))}
+          </Card>
+        </>
+      ) : null}
 
-      <Button
-        label={
-          applying ? t("schemeDetail.markedApplying") : t("schemeDetail.markApplying")
-        }
-        variant={applying ? "outline" : "primary"}
-        disabled={applying}
-        onPress={() => {
-          setApplying(true);
-          showToast(t("schemeDetail.markedApplying"));
-        }}
-      />
+      {scheme.applicationUrl ? (
+        <Button
+          label={t("schemeDetail.visitApplicationUrl")}
+          variant="outline"
+          onPress={() => Linking.openURL(scheme.applicationUrl!)}
+        />
+      ) : null}
+
+      <View className="mt-3">
+        <Button
+          label={claimed ? t("schemeDetail.markedApplying") : t("schemeDetail.markApplying")}
+          variant={claimed ? "outline" : "primary"}
+          disabled={claimed}
+          loading={claiming}
+          onPress={async () => {
+            setClaiming(true);
+            try {
+              await respondToAlert("scheme_match", id, "claimed");
+              setScheme((prev) => (prev ? { ...prev, status: "claimed" } : prev));
+            } finally {
+              setClaiming(false);
+            }
+          }}
+        />
+      </View>
     </ScreenContainer>
   );
 }

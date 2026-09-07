@@ -1,28 +1,22 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
-import type { Recommendation } from "../types/models";
+import type { Alert } from "../types/models";
 
 const SEVERITY_STYLE = {
-  high: { border: "border-danger", bg: "bg-danger/10", badge: "bg-danger" },
-  medium: { border: "border-danger/60", bg: "bg-danger/5", badge: "bg-danger/70" },
-  low: { border: "border-border", bg: "bg-surface", badge: "bg-ink-muted" },
+  critical: { border: "border-danger", bg: "bg-danger/10", badge: "bg-danger" },
+  advisory: { border: "border-danger/60", bg: "bg-danger/5", badge: "bg-danger/70" },
+  info: { border: "border-border", bg: "bg-surface", badge: "bg-ink-muted" },
 } as const;
 
-export function AlertCard({
-  alert,
-  onPress,
-}: {
-  alert: Recommendation;
-  onPress: () => void;
-}) {
+export function AlertCard({ alert, onPress }: { alert: Alert; onPress: () => void }) {
   const { t } = useTranslation();
-  const style = SEVERITY_STYLE[alert.severity];
+  const style = SEVERITY_STYLE[alert.severity ?? "info"];
 
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={alert.title}
+      accessibilityLabel={alert.headline}
       onPress={onPress}
       className={`rounded-2xl border-2 ${style.border} ${style.bg} p-4 mb-3`}
     >
@@ -30,15 +24,12 @@ export function AlertCard({
         <Text style={{ fontSize: 20 }}>⚠️</Text>
         <View className={`${style.badge} rounded-full px-2.5 py-0.5`}>
           <Text className="text-white" style={{ fontSize: 12 }}>
-            {t("alertDetail.confidence", { pct: alert.confidencePct })}
+            {t(`confidence.${alert.confidenceLabel}`)}
           </Text>
         </View>
       </View>
-      <Text className="text-ink font-semibold" style={{ fontSize: 16 }}>
-        {alert.title}
-      </Text>
-      <Text className="text-ink-muted mt-1" numberOfLines={2} style={{ fontSize: 14 }}>
-        {alert.description}
+      <Text className="text-ink font-semibold" numberOfLines={3} style={{ fontSize: 16 }}>
+        {alert.headline}
       </Text>
     </Pressable>
   );
