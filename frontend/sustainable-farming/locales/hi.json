@@ -19,8 +19,7 @@
     "verify": "सत्यापित करें",
     "resendIn": "{{seconds}} सेकंड में पुनः भेजें",
     "resend": "कोड पुनः भेजें",
-    "invalidOtp": "गलत कोड। कृपया पुनः प्रयास करें।",
-    "hintOtp": "इस डेमो के लिए {{otp}} का उपयोग करें"
+    "invalidOtp": "गलत कोड। कृपया पुनः प्रयास करें।"
   },
   "onboarding": {
     "step1Title": "चलिए शुरू करते हैं",
@@ -56,7 +55,14 @@
     "viewFullLedger": "पूरा लेजर देखें",
     "alertsTitle": "अलर्ट",
     "noAlerts": "अभी कोई सक्रिय अलर्ट नहीं है।",
-    "viewTreatment": "सिफ़ारिश देखें"
+    "viewTreatment": "सिफ़ारिश देखें",
+    "weatherLoading": "मौसम लोड हो रहा है…",
+    "weatherSetLocation": "स्थानीय मौसम देखने के लिए अपनी प्रोफ़ाइल में राज्य और ज़िला जोड़ें",
+    "weatherUnavailable": "अभी मौसम जानकारी उपलब्ध नहीं है",
+    "weatherTomorrow": "कल",
+    "humidity": "नमी {{pct}}%",
+    "wind": "हवा {{kph}} किमी/घंटा",
+    "rain": "{{mm}} मिमी बारिश"
   },
   "fields": {
     "title": "मेरे खेत",
@@ -79,6 +85,10 @@
     "fieldNameLabel": "खेत का नाम",
     "fieldNamePlaceholder": "जैसे: उत्तर रागी खेत",
     "areaSizeLabel": "क्षेत्रफल",
+    "soilTypeLabel": "मिट्टी का प्रकार",
+    "soilTypeSuggested": "आपके तालुका के लिए सुझाया गया",
+    "soilTypeLikely": "आपके जिले के आधार पर, संभावित",
+    "soilTypeLookupFailed": "सुझाव नहीं मिल सका — कृपया स्वयं दर्ज करें",
     "confirmSave": "स्थान की पुष्टि करें और सहेजें"
   },
   "addPlanting": {
@@ -89,7 +99,9 @@
     "sowingDateLabel": "बुवाई की तारीख",
     "selectCrop": "फ़सल चुनें",
     "selectVariety": "किस्म चुनें",
-    "startTracking": "ट्रैकिंग शुरू करें"
+    "startTracking": "ट्रैकिंग शुरू करें",
+    "catalogUnavailableTitle": "फसल सूची उपलब्ध नहीं है",
+    "catalogUnavailableSubtitle": "फसल डेटा डाउनलोड करने के लिए एक बार इंटरनेट से जुड़ें, फिर पुनः प्रयास करें."
   },
   "quickLog": {
     "title": "गतिविधि दर्ज करें",
@@ -100,6 +112,8 @@
     "costLabel": "लागत (₹)",
     "dateLabel": "तारीख",
     "saveActivity": "गतिविधि सहेजें",
+    "catalogUnavailableTitle": "उत्पाद सूची उपलब्ध नहीं है",
+    "catalogUnavailableSubtitle": "इस फसल के लिए उत्पाद डेटा डाउनलोड करने के लिए एक बार इंटरनेट से जुड़ें, फिर पुनः प्रयास करें.",
     "activityTypes": {
       "chemical": "रसायन / छिड़काव",
       "irrigation": "सिंचाई",
@@ -111,25 +125,31 @@
     "title": "सरकारी योजनाएँ",
     "eligibleFor": "आप इसके लिए पात्र हैं",
     "noSchemesTitle": "अभी तक कोई मेल नहीं",
-    "noSchemesSubtitle": "पात्र योजनाएँ देखने के लिए अपनी प्रोफ़ाइल पूर्ण करें।",
-    "central": "केंद्रीय योजना",
-    "state": "राज्य योजना"
+    "noSchemesSubtitle": "पात्र योजनाएँ देखने के लिए अपनी प्रोफ़ाइल पूर्ण करें।"
   },
   "schemeDetail": {
     "eligibility": "पात्रता मानदंड",
     "benefits": "लाभ",
-    "howToApply": "आवेदन कैसे करें",
-    "contact": "संपर्क",
+    "visitApplicationUrl": "आवेदन के लिए आधिकारिक पेज पर जाएँ",
     "markApplying": "आवेदन कर रहे हैं के रूप में चिह्नित करें",
     "markedApplying": "आवेदन कर रहे हैं के रूप में चिह्नित किया गया"
   },
   "alertDetail": {
     "title": "अलर्ट विवरण",
-    "confidence": "विश्वास स्तर: {{pct}}%",
-    "recommendation": "सिफ़ारिश",
+    "markFollowed": "मैंने यह किया",
+    "markIgnored": "यह नहीं करूँगा",
+    "status": {
+      "followed": "आपने इसे अनुसरण किया हुआ चिह्नित किया",
+      "ignored": "आपने इसे नज़रअंदाज़ किया हुआ चिह्नित किया"
+    },
     "logAction": "अभी यह कार्रवाई दर्ज करें",
     "nearbyVendors": "आस-पास के विक्रेता",
     "mapUnavailable": "ऑफ़लाइन में नक्शा उपलब्ध नहीं है"
+  },
+  "confidence": {
+    "unverified": "असत्यापित मार्गदर्शन",
+    "provisional": "अस्थायी मेल",
+    "verified": "सत्यापित"
   },
   "ledger": {
     "title": "फ़सल चक्र लेजर",
@@ -138,7 +158,8 @@
     "currentCostOfCultivation": "वर्तमान खेती लागत",
     "expenseBreakdown": "खर्च का विवरण",
     "recentTransactions": "हाल के लेन-देन",
-    "noTransactions": "अभी तक कोई गतिविधि दर्ज नहीं हुई।"
+    "noTransactions": "अभी तक कोई गतिविधि दर्ज नहीं हुई।",
+    "logScouting": "खेत निरीक्षण दर्ज करें"
   },
   "profile": {
     "title": "प्रोफ़ाइल",
@@ -160,5 +181,20 @@
     "bigha": "बीघा",
     "cent": "सेंट",
     "killa": "किल्ला"
+  },
+  "scouting": {
+    "title": "खेत निरीक्षण दर्ज करें",
+    "plantingLabel": "कौन-सी बुवाई?",
+    "dateLabel": "देखने की तारीख",
+    "notesLabel": "टिप्पणी (वैकल्पिक)",
+    "noMetricTitle": "अभी निरीक्षण के लिए कुछ नहीं",
+    "noMetricSubtitle": "इस फसल की मौजूदा अवस्था में कोई कीट जाँच नहीं है।",
+    "save": "अवलोकन सहेजें",
+    "metrics": {
+      "dead_hearts_percent": "मृत गोभ (%)",
+      "pheromone_trap_moths_per_night_3day_avg": "फेरोमोन ट्रैप पतंगे (3-दिन औसत)",
+      "deadheart_percent": "मृत गोभ (%)",
+      "percent_plants_with_whorl_damage": "व्होरल क्षति वाले पौधे (%)"
+    }
   }
 }

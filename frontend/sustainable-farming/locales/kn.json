@@ -19,8 +19,7 @@
     "verify": "ಪರಿಶೀಲಿಸಿ",
     "resendIn": "{{seconds}} ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಮರುಕಳುಹಿಸಿ",
     "resend": "ಕೋಡ್ ಮರುಕಳುಹಿಸಿ",
-    "invalidOtp": "ತಪ್ಪಾದ ಕೋಡ್. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
-    "hintOtp": "ಈ ಡೆಮೊಗಾಗಿ {{otp}} ಬಳಸಿ"
+    "invalidOtp": "ತಪ್ಪಾದ ಕೋಡ್. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
   },
   "onboarding": {
     "step1Title": "ಪ್ರಾರಂಭಿಸೋಣ",
@@ -56,7 +55,14 @@
     "viewFullLedger": "ಪೂರ್ಣ ಲೆಡ್ಜರ್ ವೀಕ್ಷಿಸಿ",
     "alertsTitle": "ಎಚ್ಚರಿಕೆಗಳು",
     "noAlerts": "ಸದ್ಯಕ್ಕೆ ಯಾವುದೇ ಎಚ್ಚರಿಕೆಗಳಿಲ್ಲ.",
-    "viewTreatment": "ಶಿಫಾರಸು ವೀಕ್ಷಿಸಿ"
+    "viewTreatment": "ಶಿಫಾರಸು ವೀಕ್ಷಿಸಿ",
+    "weatherLoading": "ಹವಾಮಾನ ಲೋಡ್ ಆಗುತ್ತಿದೆ…",
+    "weatherSetLocation": "ಸ್ಥಳೀಯ ಹವಾಮಾನ ನೋಡಲು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್‌ನಲ್ಲಿ ರಾಜ್ಯ ಮತ್ತು ಜಿಲ್ಲೆಯನ್ನು ಸೇರಿಸಿ",
+    "weatherUnavailable": "ಸದ್ಯ ಹವಾಮಾನ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ",
+    "weatherTomorrow": "ನಾಳೆ",
+    "humidity": "ಆರ್ದ್ರತೆ {{pct}}%",
+    "wind": "ಗಾಳಿ {{kph}} ಕಿಮೀ/ಗಂ",
+    "rain": "{{mm}} ಮಿಮೀ ಮಳೆ"
   },
   "fields": {
     "title": "ನನ್ನ ಹೊಲಗಳು",
@@ -79,6 +85,10 @@
     "fieldNameLabel": "ಹೊಲದ ಹೆಸರು",
     "fieldNamePlaceholder": "ಉದಾ. ಉತ್ತರ ರಾಗಿ ಹೊಲ",
     "areaSizeLabel": "ಜಮೀನಿನ ಗಾತ್ರ",
+    "soilTypeLabel": "ಮಣ್ಣಿನ ಪ್ರಕಾರ",
+    "soilTypeSuggested": "ನಿಮ್ಮ ತಾಲೂಕಿಗೆ ಸೂಚಿಸಲಾಗಿದೆ",
+    "soilTypeLikely": "ನಿಮ್ಮ ಜಿಲ್ಲೆಯ ಆಧಾರದ ಮೇಲೆ, ಸಂಭವನೀಯ",
+    "soilTypeLookupFailed": "ಸಲಹೆ ಸಿಗಲಿಲ್ಲ — ದಯವಿಟ್ಟು ನೀವೇ ನಮೂದಿಸಿ",
     "confirmSave": "ಸ್ಥಳವನ್ನು ದೃಢೀಕರಿಸಿ ಮತ್ತು ಉಳಿಸಿ"
   },
   "addPlanting": {
@@ -89,7 +99,9 @@
     "sowingDateLabel": "ಬಿತ್ತನೆ ದಿನಾಂಕ",
     "selectCrop": "ಬೆಳೆ ಆಯ್ಕೆಮಾಡಿ",
     "selectVariety": "ತಳಿ ಆಯ್ಕೆಮಾಡಿ",
-    "startTracking": "ಟ್ರ್ಯಾಕಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ"
+    "startTracking": "ಟ್ರ್ಯಾಕಿಂಗ್ ಪ್ರಾರಂಭಿಸಿ",
+    "catalogUnavailableTitle": "ಬೆಳೆ ಪಟ್ಟಿ ಲಭ್ಯವಿಲ್ಲ",
+    "catalogUnavailableSubtitle": "ಬೆಳೆ ಡೇಟಾವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಒಮ್ಮೆ ಇಂಟರ್ನೆಟ್‌ಗೆ ಸಂಪರ್ಕಿಸಿ, ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
   },
   "quickLog": {
     "title": "ಚಟುವಟಿಕೆ ದಾಖಲಿಸಿ",
@@ -100,6 +112,8 @@
     "costLabel": "ವೆಚ್ಚ (₹)",
     "dateLabel": "ದಿನಾಂಕ",
     "saveActivity": "ಚಟುವಟಿಕೆ ಉಳಿಸಿ",
+    "catalogUnavailableTitle": "ಉತ್ಪನ್ನ ಪಟ್ಟಿ ಲಭ್ಯವಿಲ್ಲ",
+    "catalogUnavailableSubtitle": "ಈ ಬೆಳೆಗೆ ಉತ್ಪನ್ನ ಡೇಟಾವನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಒಮ್ಮೆ ಇಂಟರ್ನೆಟ್‌ಗೆ ಸಂಪರ್ಕಿಸಿ, ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
     "activityTypes": {
       "chemical": "ರಾಸಾಯನಿಕ / ಸಿಂಪಡಣೆ",
       "irrigation": "ನೀರಾವರಿ",
@@ -111,25 +125,31 @@
     "title": "ಸರ್ಕಾರಿ ಯೋಜನೆಗಳು",
     "eligibleFor": "ನೀವು ಅರ್ಹರಾಗಿದ್ದೀರಿ",
     "noSchemesTitle": "ಇನ್ನೂ ಯಾವುದೇ ಹೊಂದಾಣಿಕೆಗಳಿಲ್ಲ",
-    "noSchemesSubtitle": "ಅರ್ಹ ಯೋಜನೆಗಳನ್ನು ನೋಡಲು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ.",
-    "central": "ಕೇಂದ್ರ ಯೋಜನೆ",
-    "state": "ರಾಜ್ಯ ಯೋಜನೆ"
+    "noSchemesSubtitle": "ಅರ್ಹ ಯೋಜನೆಗಳನ್ನು ನೋಡಲು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಪೂರ್ಣಗೊಳಿಸಿ."
   },
   "schemeDetail": {
     "eligibility": "ಅರ್ಹತಾ ಮಾನದಂಡಗಳು",
     "benefits": "ಪ್ರಯೋಜನಗಳು",
-    "howToApply": "ಅರ್ಜಿ ಸಲ್ಲಿಸುವುದು ಹೇಗೆ",
-    "contact": "ಸಂಪರ್ಕ",
+    "visitApplicationUrl": "ಅರ್ಜಿ ಸಲ್ಲಿಸಲು ಅಧಿಕೃತ ಪುಟಕ್ಕೆ ಭೇಟಿ ನೀಡಿ",
     "markApplying": "ಅರ್ಜಿ ಸಲ್ಲಿಸುತ್ತಿರುವುದಾಗಿ ಗುರುತಿಸಿ",
     "markedApplying": "ಅರ್ಜಿ ಸಲ್ಲಿಸುತ್ತಿರುವುದಾಗಿ ಗುರುತಿಸಲಾಗಿದೆ"
   },
   "alertDetail": {
     "title": "ಎಚ್ಚರಿಕೆಯ ವಿವರಗಳು",
-    "confidence": "ವಿಶ್ವಾಸಾರ್ಹತೆ: {{pct}}%",
-    "recommendation": "ಶಿಫಾರಸು",
+    "markFollowed": "ನಾನು ಇದನ್ನು ಅನುಸರಿಸಿದೆ",
+    "markIgnored": "ಇದನ್ನು ಮಾಡುತ್ತಿಲ್ಲ",
+    "status": {
+      "followed": "ನೀವು ಇದನ್ನು ಅನುಸರಿಸಲಾಗಿದೆ ಎಂದು ಗುರುತಿಸಿದ್ದೀರಿ",
+      "ignored": "ನೀವು ಇದನ್ನು ನಿರ್ಲಕ್ಷಿಸಲಾಗಿದೆ ಎಂದು ಗುರುತಿಸಿದ್ದೀರಿ"
+    },
     "logAction": "ಈಗಲೇ ಈ ಕ್ರಮವನ್ನು ದಾಖಲಿಸಿ",
     "nearbyVendors": "ಹತ್ತಿರದ ಮಾರಾಟಗಾರರು",
     "mapUnavailable": "ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ನಕ್ಷೆ ಲಭ್ಯವಿಲ್ಲ"
+  },
+  "confidence": {
+    "unverified": "ಪರಿಶೀಲಿಸದ ಸಲಹೆ",
+    "provisional": "ತಾತ್ಕಾಲಿಕ ಹೊಂದಾಣಿಕೆ",
+    "verified": "ಪರಿಶೀಲಿಸಲಾಗಿದೆ"
   },
   "ledger": {
     "title": "ಬೆಳೆ ಚಕ್ರ ಲೆಡ್ಜರ್",
@@ -138,7 +158,8 @@
     "currentCostOfCultivation": "ಪ್ರಸ್ತುತ ಬೇಸಾಯದ ವೆಚ್ಚ",
     "expenseBreakdown": "ವೆಚ್ಚದ ವಿವರ",
     "recentTransactions": "ಇತ್ತೀಚಿನ ವಹಿವಾಟುಗಳು",
-    "noTransactions": "ಇನ್ನೂ ಯಾವುದೇ ಚಟುವಟಿಕೆ ದಾಖಲಾಗಿಲ್ಲ."
+    "noTransactions": "ಇನ್ನೂ ಯಾವುದೇ ಚಟುವಟಿಕೆ ದಾಖಲಾಗಿಲ್ಲ.",
+    "logScouting": "ಹೊಲ ಪರಿಶೀಲನೆ ದಾಖಲಿಸಿ"
   },
   "profile": {
     "title": "ಪ್ರೊಫೈಲ್",
@@ -160,5 +181,20 @@
     "bigha": "ಬಿಘಾ",
     "cent": "ಸೆಂಟ್",
     "killa": "ಕಿಲ್ಲಾ"
+  },
+  "scouting": {
+    "title": "ಹೊಲ ಪರಿಶೀಲನೆ ದಾಖಲಿಸಿ",
+    "plantingLabel": "ಯಾವ ಬಿತ್ತನೆ?",
+    "dateLabel": "ಗಮನಿಸಿದ ದಿನಾಂಕ",
+    "notesLabel": "ಟಿಪ್ಪಣಿ (ಐಚ್ಛಿಕ)",
+    "noMetricTitle": "ಈಗ ಪರಿಶೀಲಿಸಲು ಏನೂ ಇಲ್ಲ",
+    "noMetricSubtitle": "ಈ ಬೆಳೆಯ ಪ್ರಸ್ತುತ ಬೆಳವಣಿಗೆ ಹಂತದಲ್ಲಿ ಯಾವುದೇ ಕೀಟ ಪರಿಶೀಲನೆ ಇಲ್ಲ.",
+    "save": "ವೀಕ್ಷಣೆ ಉಳಿಸಿ",
+    "metrics": {
+      "dead_hearts_percent": "ಸತ್ತ ಚಿಗುರು (%)",
+      "pheromone_trap_moths_per_night_3day_avg": "ಫೆರೊಮೋನ್ ಬಲೆ ಪತಂಗಗಳು (3-ದಿನ ಸರಾಸರಿ)",
+      "deadheart_percent": "ಸತ್ತ ಚಿಗುರು (%)",
+      "percent_plants_with_whorl_damage": "ಸುರುಳಿ ಹಾನಿಯ ಗಿಡಗಳು (%)"
+    }
   }
 }

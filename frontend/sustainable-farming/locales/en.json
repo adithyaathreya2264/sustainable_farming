@@ -19,8 +19,7 @@
     "verify": "VERIFY",
     "resendIn": "Resend code in {{seconds}}s",
     "resend": "Resend Code",
-    "invalidOtp": "Incorrect code. Please try again.",
-    "hintOtp": "Use {{otp}} for this demo"
+    "invalidOtp": "Incorrect code. Please try again."
   },
   "onboarding": {
     "step1Title": "Let's get started",
@@ -56,7 +55,14 @@
     "viewFullLedger": "View Full Ledger",
     "alertsTitle": "Alerts",
     "noAlerts": "No active alerts right now.",
-    "viewTreatment": "View Recommendation"
+    "viewTreatment": "View Recommendation",
+    "weatherLoading": "Loading weather…",
+    "weatherSetLocation": "Add your state and district in your profile to see local weather",
+    "weatherUnavailable": "Weather unavailable right now",
+    "weatherTomorrow": "Tomorrow",
+    "humidity": "Humidity {{pct}}%",
+    "wind": "Wind {{kph}} km/h",
+    "rain": "{{mm}} mm rain"
   },
   "fields": {
     "title": "My Fields",
@@ -79,6 +85,10 @@
     "fieldNameLabel": "Field Name",
     "fieldNamePlaceholder": "e.g. North Ragi Field",
     "areaSizeLabel": "Area Size",
+    "soilTypeLabel": "Soil Type",
+    "soilTypeSuggested": "suggested for your taluk",
+    "soilTypeLikely": "likely, based on your district",
+    "soilTypeLookupFailed": "Couldn't fetch a suggestion — enter manually",
     "confirmSave": "Confirm Location & Save"
   },
   "addPlanting": {
@@ -89,7 +99,9 @@
     "sowingDateLabel": "Sowing Date",
     "selectCrop": "Select Crop",
     "selectVariety": "Select Variety",
-    "startTracking": "Start Tracking"
+    "startTracking": "Start Tracking",
+    "catalogUnavailableTitle": "Crop catalog unavailable",
+    "catalogUnavailableSubtitle": "Connect to the internet once to download crop data, then try again."
   },
   "quickLog": {
     "title": "Log Activity",
@@ -100,6 +112,8 @@
     "costLabel": "Cost (₹)",
     "dateLabel": "Date",
     "saveActivity": "Save Activity",
+    "catalogUnavailableTitle": "Product catalog unavailable",
+    "catalogUnavailableSubtitle": "Connect to the internet once to download product data for this crop, then try again.",
     "activityTypes": {
       "chemical": "Chemical / Spray",
       "irrigation": "Irrigation",
@@ -111,25 +125,31 @@
     "title": "Government Schemes",
     "eligibleFor": "You are eligible for",
     "noSchemesTitle": "No matches yet",
-    "noSchemesSubtitle": "Complete your profile to see eligible schemes.",
-    "central": "Central Scheme",
-    "state": "State Scheme"
+    "noSchemesSubtitle": "Complete your profile to see eligible schemes."
   },
   "schemeDetail": {
     "eligibility": "Eligibility Criteria",
     "benefits": "Benefits",
-    "howToApply": "How to Apply",
-    "contact": "Contact",
+    "visitApplicationUrl": "Visit Official Page to Apply",
     "markApplying": "Mark as Applying",
     "markedApplying": "Marked as Applying"
   },
   "alertDetail": {
     "title": "Alert Details",
-    "confidence": "Confidence: {{pct}}%",
-    "recommendation": "Recommendation",
+    "markFollowed": "I Followed This",
+    "markIgnored": "Not Doing This",
+    "status": {
+      "followed": "You marked this as followed",
+      "ignored": "You marked this as ignored"
+    },
     "logAction": "Log this Action Now",
     "nearbyVendors": "Nearby Vendors",
     "mapUnavailable": "Map unavailable offline"
+  },
+  "confidence": {
+    "unverified": "Unverified guidance",
+    "provisional": "Provisional match",
+    "verified": "Verified"
   },
   "ledger": {
     "title": "Crop Cycle Ledger",
@@ -138,7 +158,8 @@
     "currentCostOfCultivation": "Current Cost of Cultivation",
     "expenseBreakdown": "Expense Breakdown",
     "recentTransactions": "Recent Transactions",
-    "noTransactions": "No activity logged yet."
+    "noTransactions": "No activity logged yet.",
+    "logScouting": "Log Field Scouting"
   },
   "profile": {
     "title": "Profile",
@@ -160,5 +181,20 @@
     "bigha": "Bigha",
     "cent": "Cent",
     "killa": "Killa"
+  },
+  "scouting": {
+    "title": "Log Field Scouting",
+    "plantingLabel": "Which planting?",
+    "dateLabel": "Date observed",
+    "notesLabel": "Notes (optional)",
+    "noMetricTitle": "Nothing to scout right now",
+    "noMetricSubtitle": "This crop has no pest check due at its current growth stage.",
+    "save": "Save Observation",
+    "metrics": {
+      "dead_hearts_percent": "Dead hearts",
+      "pheromone_trap_moths_per_night_3day_avg": "Pheromone trap moths (3-day avg)",
+      "deadheart_percent": "Dead hearts",
+      "percent_plants_with_whorl_damage": "Plants with whorl damage"
+    }
   }
 }
