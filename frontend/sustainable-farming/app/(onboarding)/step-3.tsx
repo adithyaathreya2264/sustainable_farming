@@ -11,7 +11,10 @@ import {
 } from "../../components/ui/BottomSheetPicker";
 import { StepProgress } from "../../components/StepProgress";
 import { useOnboardingDraft } from "../../context/OnboardingDraftContext";
-import { LAND_UNITS, unitLabel } from "../../utils/unitConversion";
+import { STANDARDIZED_LAND_UNITS, unitLabel } from "../../utils/unitConversion";
+// State (and thus any non-standardized unit's conversion factor — Bigha,
+// Katha, Biswa, Kanal, Marla) isn't collected until a later onboarding step,
+// so only standardized units are offered here. See docs/unit-conversions.md.
 
 export default function OnboardingStep3() {
   const { t } = useTranslation();
@@ -36,7 +39,7 @@ export default function OnboardingStep3() {
       <BottomSheetPicker
         visible={pickerOpen}
         title={t("onboarding.unitLabel")}
-        options={LAND_UNITS.map((u) => ({ label: unitLabel(u), value: u }))}
+        options={STANDARDIZED_LAND_UNITS.map((u) => ({ label: unitLabel(u), value: u }))}
         selectedValue={draft.defaultUnit}
         onSelect={(v) => update({ defaultUnit: v as typeof draft.defaultUnit })}
         onClose={() => setPickerOpen(false)}
