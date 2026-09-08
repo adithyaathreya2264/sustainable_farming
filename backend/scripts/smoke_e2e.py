@@ -204,9 +204,107 @@ if scheme_alerts:
     r = client.patch(f"/api/v1/alerts/scheme_match/{aid}", headers=H, json={"status": "bogus"})
     check("PATCH alert invalid status -> 422", r.status_code == 422, str(r.status_code))
 
-# --- 12. auth required ---
+# --- 12. dataset-derived features (see datasets/README.md) ---
+# These read seeded reference tables, so they need `python -m ml.prep.run_all`
+# and `python -m backend.scripts.seed_datasets` to have been run.
+r = client.get(
+    "/api/v1/yield-benchmark?crop_key=rice&state=Karnataka&season=Kharif", headers=H
+)
+body = r.json() if r.status_code == 200 else {}
+check("yield-benchmark 200", r.status_code == 200, str(r.status_code))
+check(
+    "yield-benchmark narrowed to state_season scope",
+    body.get("scope") == "state_season",
+    str(body.get("scope")),
+)
+# The unit caveat is load-bearing, not decorative: the source yield column has
+# no usable unit, so a client must never render `median` bare.
+check("yield-benchmark carries unit_note", bool(body.get("unit_note")))
+
+r = client.get("/api/v1/yield-benchmark?crop_key=definitely-not-a-crop", headers=H)
+check("yield-benchmark unknown crop -> 404", r.status_code == 404, str(r.status_code))
+
+r = client.get(
+    "/api/v1/yield-position?crop_key=rice&observed_yield=1.5"
+    "&state=Karnataka&season=Kharif",
+    headers=H,
+)
+check(
+    "yield-position places a low yield below the band",
+    r.status_code == 200 and r.json().get("band") == "below_typical",
+    str(r.status_code),
+)
+
+r = client.get("/api/v1/soil-nutrients?state=Karnataka", headers=H)
+check(
+    "soil-nutrients 200 with state confidence",
+    r.status_code == 200 and r.json().get("confidence") == "state",
+    str(r.status_code),
+)
+
+r = client.get("/api/v1/fertilizer-advice?crop_key=rice&state=Karnataka", headers=H)
+body = r.json() if r.status_code == 200 else {}
+check("fertilizer-advice 200", r.status_code == 200, str(r.status_code))
+check(
+    "fertilizer-advice returns N/P/K/pH gaps",
+    {gap["nutrient"] for gap in body.get("gaps", [])} == {"N", "P", "K", "pH"},
+)
+check(
+    "fertilizer-advice carries the unverified caveat",
+    body.get("caveat", "").startswith("[Unverified guidance]"),
+)
+# Half a reading is worse than none: a measured N against an averaged P and K
+# would be part measurement, part estimate, with no way to tell which.
+r = client.get(
+    "/api/v1/fertilizer-advice?crop_key=rice&state=Karnataka&n=50", headers=H
+)
+check("fertilizer-advice partial N/P/K -> 422", r.status_code == 422, str(r.status_code))
+
+r = client.get("/api/v1/market/prices?commodity_key=okra&state=Karnataka", headers=H)
+body = r.json() if r.status_code == 200 else {}
+check("market/prices 200", r.status_code == 200, str(r.status_code))
+check(
+    "market/prices flags itself as a non-live snapshot",
+    body.get("is_live") is False and bool(body.get("snapshot_date")),
+    str(body.get("snapshot_date")),
+)
+
+r = client.post(
+    "/api/v1/advisory/diagnose",
+    headers=H,
+    json={
+        "symptom_text": "yellow lesion at the leaf margin after strong wind and rain",
+        "crop_key": "rice",
+    },
+)
+matches = r.json().get("matches", []) if r.status_code == 200 else []
+check("advisory/diagnose 200 with matches", r.status_code == 200 and bool(matches))
+check(
+    "advisory remedy is prefixed unverified",
+    bool(matches) and matches[0]["remedy"].startswith("[Unverified guidance]"),
+)
+# Offering an unrelated disease because it shared a word is worse than
+# admitting no match.
+r = client.post(
+    "/api/v1/advisory/diagnose", headers=H, json={"symptom_text": "zzzz qqqq wwww"}
+)
+check(
+    "advisory/diagnose returns nothing for gibberish rather than a bad guess",
+    r.status_code == 200 and r.json().get("matches") == [],
+)
+
+r = client.get("/api/v1/advisory/diseases?crop_key=cotton&season=Kharif", headers=H)
+check(
+    "advisory/diseases lists diseases for a crop",
+    r.status_code == 200 and len(r.json().get("matches", [])) > 0,
+    str(r.status_code),
+)
+
+# --- 13. auth required ---
 r = client.get("/api/v1/users/me")
 check("GET /users/me without token -> 401/403", r.status_code in (401, 403), str(r.status_code))
+r = client.get("/api/v1/market/prices?commodity_key=okra")
+check("GET /market/prices without token -> 401/403", r.status_code in (401, 403), str(r.status_code))
 
 # --- cleanup ---
 with SessionLocal() as db:
