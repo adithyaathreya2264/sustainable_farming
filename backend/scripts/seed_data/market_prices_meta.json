@@ -1,0 +1,9 @@
+{
+  "price_unit": "INR per quintal",
+  "source": "datasets/market datasets(1)/csv",
+  "snapshot_dates": [
+    "2019-03-04"
+  ],
+  "is_live": false,
+  "note": "Static snapshot from the dates listed above, not a live feed. Always display the snapshot date alongside any price. No trend or average may be derived: the dump covers a single day."
+}
