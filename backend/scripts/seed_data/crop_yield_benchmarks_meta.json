@@ -1,0 +1,8 @@
+{
+  "unit": null,
+  "unit_note": "Unit is undocumented in the source dataset and differs per crop; these values are comparable only against other rows for the same crop. Present as a relative position, never as an absolute yield figure.",
+  "source": "datasets/farm datasets/crop_yield.csv",
+  "year_from": 1997,
+  "year_to": 2020,
+  "min_samples_per_band": 5
+}
