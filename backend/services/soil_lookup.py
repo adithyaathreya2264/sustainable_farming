@@ -14,13 +14,32 @@ design here and should carry over unchanged; only the data source swaps.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import Literal
+
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from backend.models.state_baseline import SoilBaseline
 
 
 @dataclass(frozen=True)
 class SoilLookupResult:
     soil_type: str
     confidence: Literal["taluk", "district"]
+    source: str
+
+
+@dataclass(frozen=True)
+class SoilNutrients:
+    n: int
+    p: int
+    k: int
+    ph: Decimal
+    # Only "state" today. Named rather than hardcoded so that when a real
+    # soil-survey source arrives, a caller can tell a district-level reading
+    # from a state average without inspecting where it came from.
+    confidence: Literal["state"]
     source: str
 
 
@@ -79,3 +98,30 @@ def get_soil_type(
     representative = next((r for r in district_rows if r.taluk is None), None)
     row = representative or district_rows[0]
     return SoilLookupResult(row.soil_type, "district", "placeholder")
+
+
+def get_soil_nutrients(db: Session, state: str) -> SoilNutrients | None:
+    """Average N/P/K/pH for a state, or None if the state isn't covered.
+
+    Separate from `get_soil_type` on purpose. Soil *type* is a categorical
+    property that varies by taluk and comes from the placeholder table above;
+    soil *nutrients* are a numeric state average from a seeded dataset
+    (`soil_baselines`). They have different sources, different granularity and
+    different failure modes, so folding them into one call would misrepresent
+    the nutrient figure as being as local as the type.
+
+    This is emphatically not a soil test — 30 rows covering all of India. It
+    exists so a form can be pre-filled and so `fertilizer_advice` has an input
+    when the farmer has no soil report, and callers must label it an estimate.
+    """
+    row = db.scalar(select(SoilBaseline).where(SoilBaseline.state == state))
+    if row is None:
+        return None
+    return SoilNutrients(
+        n=row.n,
+        p=row.p,
+        k=row.k,
+        ph=row.ph,
+        confidence="state",
+        source="state-average dataset",
+    )
