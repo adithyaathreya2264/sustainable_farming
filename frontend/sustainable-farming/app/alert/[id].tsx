@@ -7,27 +7,39 @@ import { ModalHeader } from "../../components/ModalHeader";
 import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { SkeletonCard } from "../../components/ui/SkeletonLoader";
-import { getAlertById, getNearbyVendors } from "../../services/alerts";
-import { getAgriProductById } from "../../services/catalog";
+import { getAlertById, getNearbyVendors, respondToAlert } from "../../services/alerts";
 import { formatDate } from "../../utils/format";
-import type { AgriCatalogItem, Recommendation, Vendor } from "../../types/models";
+import type { Alert, Vendor } from "../../types/models";
 
 export default function AlertDetailScreen() {
   const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const [alert, setAlert] = useState<Recommendation | null>(null);
-  const [product, setProduct] = useState<AgriCatalogItem | null>(null);
+  const [alert, setAlert] = useState<Alert | null>(null);
   const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [responding, setResponding] = useState(false);
 
   useEffect(() => {
     getAlertById(id).then((a) => {
       setAlert(a ?? null);
-      if (a?.recommendedProductId) {
-        getAgriProductById(a.recommendedProductId).then((p) => setProduct(p ?? null));
+      // Opening the detail screen IS the acknowledgment — no separate tap
+      // needed for that specific transition. Best-effort: a failed PATCH
+      // here shouldn't block reading the alert.
+      if (a && a.status === "pending") {
+        respondToAlert("recommendation", id, "acknowledged").catch(() => {});
       }
     });
     getNearbyVendors().then(setVendors);
   }, [id]);
+
+  async function respond(status: "followed" | "ignored") {
+    setResponding(true);
+    try {
+      await respondToAlert("recommendation", id, status);
+      setAlert((prev) => (prev ? { ...prev, status } : prev));
+    } finally {
+      setResponding(false);
+    }
+  }
 
   if (!alert) {
     return (
@@ -38,6 +50,8 @@ export default function AlertDetailScreen() {
     );
   }
 
+  const responded = alert.status === "followed" || alert.status === "ignored";
+
   return (
     <ScreenContainer>
       <ModalHeader title={t("alertDetail.title")} />
@@ -47,31 +61,43 @@ export default function AlertDetailScreen() {
           <Text style={{ fontSize: 22 }}>⚠️</Text>
           <View className="bg-danger rounded-full px-3 py-1">
             <Text className="text-white" style={{ fontSize: 12 }}>
-              {t("alertDetail.confidence", { pct: alert.confidencePct })}
+              {t(`confidence.${alert.confidenceLabel}`)}
             </Text>
           </View>
         </View>
-        <Text className="text-ink font-bold mb-1" style={{ fontSize: 18 }}>
-          {alert.title}
-        </Text>
         <Text className="text-ink-muted mb-2" style={{ fontSize: 13 }}>
-          {formatDate(alert.createdAt)}
+          {formatDate(alert.generatedAt)}
         </Text>
         <Text className="text-ink" style={{ fontSize: 15, lineHeight: 21 }}>
-          {alert.description}
+          {alert.headline}
         </Text>
       </Card>
 
-      {product ? (
+      {responded ? (
         <Card className="mb-4">
-          <Text className="text-ink-muted mb-1" style={{ fontSize: 13 }}>
-            {t("alertDetail.recommendation")}
-          </Text>
-          <Text className="text-ink font-semibold" style={{ fontSize: 16 }}>
-            {product.name}
+          <Text className="text-ink-muted" style={{ fontSize: 13 }}>
+            {t(`alertDetail.status.${alert.status}`)}
           </Text>
         </Card>
-      ) : null}
+      ) : (
+        <View className="flex-row mb-4" style={{ gap: 8 }}>
+          <View className="flex-1">
+            <Button
+              label={t("alertDetail.markFollowed")}
+              loading={responding}
+              onPress={() => respond("followed")}
+            />
+          </View>
+          <View className="flex-1">
+            <Button
+              label={t("alertDetail.markIgnored")}
+              variant="outline"
+              loading={responding}
+              onPress={() => respond("ignored")}
+            />
+          </View>
+        </View>
+      )}
 
       <Button
         label={t("alertDetail.logAction")}
@@ -79,9 +105,8 @@ export default function AlertDetailScreen() {
           router.push({
             pathname: "/modals/quick-log",
             params: {
-              plantingId: alert.plantingId,
+              plantingId: alert.plantingId ?? "",
               activityType: "chemical",
-              productId: alert.recommendedProductId ?? "",
             },
           })
         }
