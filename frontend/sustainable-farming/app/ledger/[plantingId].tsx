@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScreenContainer } from "../../components/ui/ScreenContainer";
 import { ModalHeader } from "../../components/ModalHeader";
 import { Card } from "../../components/ui/Card";
+import { Button } from "../../components/ui/Button";
 import { SkeletonCard } from "../../components/ui/SkeletonLoader";
 import { getPlantingLedger, type Ledger } from "../../services/ledger";
 import { getAgriProductById } from "../../services/catalog";
+import { useAppState } from "../../hooks/useAppState";
+import { metricForPlanting } from "../../lib/scoutingMetrics";
 import { formatInr, formatDate } from "../../utils/format";
 import { roundDisplay } from "../../utils/unitConversion";
 
@@ -22,6 +25,14 @@ export default function LedgerScreen() {
   const { plantingId } = useLocalSearchParams<{ plantingId: string }>();
   const [ledger, setLedger] = useState<Ledger | null>(null);
   const [productNames, setProductNames] = useState<Record<string, string>>({});
+
+  const planting = useAppState((s) => s.plantings.find((p) => p.id === plantingId));
+  const crop = useAppState((s) =>
+    s.crops.find((c) => c.id === planting?.cropId)
+  );
+  const scoutingMetric = planting
+    ? metricForPlanting(crop, planting.sowingDate)
+    : undefined;
 
   useEffect(() => {
     getPlantingLedger(plantingId).then(async (l) => {
@@ -52,6 +63,21 @@ export default function LedgerScreen() {
   return (
     <ScreenContainer>
       <ModalHeader title={t("ledger.title")} />
+
+      {scoutingMetric ? (
+        <View className="mb-4">
+          <Button
+            label={t("ledger.logScouting")}
+            variant="outline"
+            onPress={() =>
+              router.push({
+                pathname: "/modals/log-scouting",
+                params: { plantingId },
+              })
+            }
+          />
+        </View>
+      ) : null}
 
       <Card className="mb-4 items-center py-6">
         <Text className="text-ink-muted" style={{ fontSize: 13 }}>
