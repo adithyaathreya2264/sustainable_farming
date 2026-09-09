@@ -30,15 +30,8 @@ export async function addIntervention(
   };
   setState({ interventions: [...getState().interventions, intervention] });
 
-  // Simulate the offline-first sync: after a short delay, mark as synced
-  // ("Data synced to cloud." toast per the wireframe spec's optimistic UI).
-  setTimeout(() => {
-    setState({
-      interventions: getState().interventions.map((i) =>
-        i.id === intervention.id ? { ...i, isSynced: true } : i
-      ),
-    });
-  }, 1500);
+  // Real sync now flips isSynced — see services/sync-manager.ts, triggered
+  // by hooks/useSyncTriggers.ts (connectivity, foreground, periodic fallback).
 
   return intervention;
 }

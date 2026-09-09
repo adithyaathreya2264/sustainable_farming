@@ -36,6 +36,7 @@ export async function addField(input: AddFieldInput): Promise<Field> {
     long,
     boundary: input.boundary,
     soilType: input.soilType,
+    isSynced: false,
   };
   setState({ fields: [...getState().fields, field] });
   return field;
