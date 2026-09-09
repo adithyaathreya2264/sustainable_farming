@@ -24,6 +24,7 @@ export async function addPlanting(input: AddPlantingInput): Promise<Planting> {
   const planting: Planting = {
     id: `pl${Date.now()}`,
     status: "active",
+    isSynced: false,
     ...input,
   };
   setState({ plantings: [...getState().plantings, planting] });
