@@ -19,8 +19,7 @@
     "verify": "যাচাই করুন",
     "resendIn": "{{seconds}} সেকেন্ডে পুনরায় পাঠান",
     "resend": "কোড পুনরায় পাঠান",
-    "invalidOtp": "ভুল কোড। আবার চেষ্টা করুন।",
-    "hintOtp": "এই ডেমোর জন্য {{otp}} ব্যবহার করুন"
+    "invalidOtp": "ভুল কোড। আবার চেষ্টা করুন।"
   },
   "onboarding": {
     "step1Title": "চলুন শুরু করি",
@@ -56,7 +55,14 @@
     "viewFullLedger": "সম্পূর্ণ লেজার দেখুন",
     "alertsTitle": "সতর্কতা",
     "noAlerts": "এই মুহূর্তে কোনো সক্রিয় সতর্কতা নেই।",
-    "viewTreatment": "সুপারিশ দেখুন"
+    "viewTreatment": "সুপারিশ দেখুন",
+    "weatherLoading": "আবহাওয়া লোড হচ্ছে…",
+    "weatherSetLocation": "স্থানীয় আবহাওয়া দেখতে আপনার প্রোফাইলে রাজ্য ও জেলা যোগ করুন",
+    "weatherUnavailable": "এই মুহূর্তে আবহাওয়ার তথ্য পাওয়া যাচ্ছে না",
+    "weatherTomorrow": "আগামীকাল",
+    "humidity": "আর্দ্রতা {{pct}}%",
+    "wind": "বাতাস {{kph}} কিমি/ঘণ্টা",
+    "rain": "{{mm}} মিমি বৃষ্টি"
   },
   "fields": {
     "title": "আমার জমি",
@@ -79,6 +85,10 @@
     "fieldNameLabel": "জমির নাম",
     "fieldNamePlaceholder": "যেমন: উত্তর রাগি জমি",
     "areaSizeLabel": "আয়তন",
+    "soilTypeLabel": "মাটির ধরন",
+    "soilTypeSuggested": "আপনার তালুকের জন্য প্রস্তাবিত",
+    "soilTypeLikely": "আপনার জেলার ভিত্তিতে, সম্ভাব্য",
+    "soilTypeLookupFailed": "পরামর্শ পাওয়া যায়নি — অনুগ্রহ করে নিজে লিখুন",
     "confirmSave": "অবস্থান নিশ্চিত করে সংরক্ষণ করুন"
   },
   "addPlanting": {
@@ -89,7 +99,9 @@
     "sowingDateLabel": "বপনের তারিখ",
     "selectCrop": "ফসল নির্বাচন করুন",
     "selectVariety": "জাত নির্বাচন করুন",
-    "startTracking": "ট্র্যাকিং শুরু করুন"
+    "startTracking": "ট্র্যাকিং শুরু করুন",
+    "catalogUnavailableTitle": "ফসলের তালিকা অনুপলব্ধ",
+    "catalogUnavailableSubtitle": "ফসলের ডেটা ডাউনলোড করতে একবার ইন্টারনেটে সংযুক্ত হন, তারপর আবার চেষ্টা করুন।"
   },
   "quickLog": {
     "title": "কার্যকলাপ লগ করুন",
@@ -100,6 +112,8 @@
     "costLabel": "খরচ (₹)",
     "dateLabel": "তারিখ",
     "saveActivity": "কার্যকলাপ সংরক্ষণ করুন",
+    "catalogUnavailableTitle": "পণ্যের তালিকা অনুপলব্ধ",
+    "catalogUnavailableSubtitle": "এই ফসলের জন্য পণ্যের ডেটা ডাউনলোড করতে একবার ইন্টারনেটে সংযুক্ত হন, তারপর আবার চেষ্টা করুন।",
     "activityTypes": {
       "chemical": "রাসায়নিক / স্প্রে",
       "irrigation": "সেচ",
@@ -111,25 +125,31 @@
     "title": "সরকারি প্রকল্প",
     "eligibleFor": "আপনি যোগ্য",
     "noSchemesTitle": "এখনও কোনো মিল নেই",
-    "noSchemesSubtitle": "যোগ্য প্রকল্পগুলি দেখতে আপনার প্রোফাইল সম্পূর্ণ করুন।",
-    "central": "কেন্দ্রীয় প্রকল্প",
-    "state": "রাজ্য প্রকল্প"
+    "noSchemesSubtitle": "যোগ্য প্রকল্পগুলি দেখতে আপনার প্রোফাইল সম্পূর্ণ করুন।"
   },
   "schemeDetail": {
     "eligibility": "যোগ্যতার মানদণ্ড",
     "benefits": "সুবিধা",
-    "howToApply": "কীভাবে আবেদন করবেন",
-    "contact": "যোগাযোগ",
+    "visitApplicationUrl": "আবেদনের জন্য সরকারি পেজ দেখুন",
     "markApplying": "আবেদন করছেন হিসেবে চিহ্নিত করুন",
     "markedApplying": "আবেদন করছেন হিসেবে চিহ্নিত করা হয়েছে"
   },
   "alertDetail": {
     "title": "সতর্কতার বিবরণ",
-    "confidence": "আস্থা: {{pct}}%",
-    "recommendation": "সুপারিশ",
+    "markFollowed": "আমি এটি অনুসরণ করেছি",
+    "markIgnored": "এটি করছি না",
+    "status": {
+      "followed": "আপনি এটি অনুসরণ করেছেন হিসেবে চিহ্নিত করেছেন",
+      "ignored": "আপনি এটি উপেক্ষা করেছেন হিসেবে চিহ্নিত করেছেন"
+    },
     "logAction": "এই পদক্ষেপ এখনই লগ করুন",
     "nearbyVendors": "কাছাকাছি বিক্রেতা",
     "mapUnavailable": "অফলাইনে মানচিত্র উপলব্ধ নেই"
+  },
+  "confidence": {
+    "unverified": "অযাচাইকৃত পরামর্শ",
+    "provisional": "সাময়িক মিল",
+    "verified": "যাচাইকৃত"
   },
   "ledger": {
     "title": "ফসল চক্র লেজার",
@@ -138,7 +158,8 @@
     "currentCostOfCultivation": "বর্তমান চাষের খরচ",
     "expenseBreakdown": "খরচের বিবরণ",
     "recentTransactions": "সাম্প্রতিক লেনদেন",
-    "noTransactions": "এখনও কোনো কার্যকলাপ লগ করা হয়নি।"
+    "noTransactions": "এখনও কোনো কার্যকলাপ লগ করা হয়নি।",
+    "logScouting": "মাঠ পর্যবেক্ষণ নথিভুক্ত করুন"
   },
   "profile": {
     "title": "প্রোফাইল",
@@ -160,5 +181,20 @@
     "bigha": "বিঘা",
     "cent": "সেন্ট",
     "killa": "কিল্লা"
+  },
+  "scouting": {
+    "title": "মাঠ পর্যবেক্ষণ নথিভুক্ত করুন",
+    "plantingLabel": "কোন রোপণ?",
+    "dateLabel": "পর্যবেক্ষণের তারিখ",
+    "notesLabel": "মন্তব্য (ঐচ্ছিক)",
+    "noMetricTitle": "এখন পর্যবেক্ষণের কিছু নেই",
+    "noMetricSubtitle": "এই ফসলের বর্তমান বৃদ্ধির পর্যায়ে কোনও পোকা পরীক্ষা নেই।",
+    "save": "পর্যবেক্ষণ সংরক্ষণ করুন",
+    "metrics": {
+      "dead_hearts_percent": "মরা ডগা (%)",
+      "pheromone_trap_moths_per_night_3day_avg": "ফেরোমোন ফাঁদের মথ (৩-দিনের গড়)",
+      "deadheart_percent": "মরা ডগা (%)",
+      "percent_plants_with_whorl_damage": "চক্র ক্ষতিগ্রস্ত গাছ (%)"
+    }
   }
 }

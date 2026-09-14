@@ -19,8 +19,7 @@
     "verify": "ચકાસો",
     "resendIn": "{{seconds}} સેકન્ડમાં ફરી મોકલો",
     "resend": "કોડ ફરી મોકલો",
-    "invalidOtp": "ખોટો કોડ. કૃપા કરી ફરી પ્રયાસ કરો.",
-    "hintOtp": "આ ડેમો માટે {{otp}} વાપરો"
+    "invalidOtp": "ખોટો કોડ. કૃપા કરી ફરી પ્રયાસ કરો."
   },
   "onboarding": {
     "step1Title": "ચાલો શરૂ કરીએ",
@@ -56,7 +55,14 @@
     "viewFullLedger": "સંપૂર્ણ ખાતાવહી જુઓ",
     "alertsTitle": "ચેતવણીઓ",
     "noAlerts": "હાલમાં કોઈ સક્રિય ચેતવણી નથી.",
-    "viewTreatment": "ભલામણ જુઓ"
+    "viewTreatment": "ભલામણ જુઓ",
+    "weatherLoading": "હવામાન લોડ થઈ રહ્યું છે…",
+    "weatherSetLocation": "સ્થાનિક હવામાન જોવા માટે તમારી પ્રોફાઇલમાં રાજ્ય અને જિલ્લો ઉમેરો",
+    "weatherUnavailable": "હાલમાં હવામાનની માહિતી ઉપલબ્ધ નથી",
+    "weatherTomorrow": "આવતીકાલે",
+    "humidity": "ભેજ {{pct}}%",
+    "wind": "પવન {{kph}} કિમી/કલાક",
+    "rain": "{{mm}} મિમી વરસાદ"
   },
   "fields": {
     "title": "મારા ખેતરો",
@@ -79,6 +85,10 @@
     "fieldNameLabel": "ખેતરનું નામ",
     "fieldNamePlaceholder": "દા.ત. ઉત્તર રાગી ખેતર",
     "areaSizeLabel": "ક્ષેત્રફળ",
+    "soilTypeLabel": "માટીનો પ્રકાર",
+    "soilTypeSuggested": "તમારા તાલુકા માટે સૂચવેલ",
+    "soilTypeLikely": "તમારા જિલ્લાના આધારે, સંભવિત",
+    "soilTypeLookupFailed": "સૂચન મળી શક્યું નથી — કૃપા કરી જાતે દાખલ કરો",
     "confirmSave": "સ્થાનની પુષ્ટિ કરો અને સાચવો"
   },
   "addPlanting": {
@@ -89,7 +99,9 @@
     "sowingDateLabel": "વાવણીની તારીખ",
     "selectCrop": "પાક પસંદ કરો",
     "selectVariety": "જાત પસંદ કરો",
-    "startTracking": "ટ્રેકિંગ શરૂ કરો"
+    "startTracking": "ટ્રેકિંગ શરૂ કરો",
+    "catalogUnavailableTitle": "પાક સૂચિ ઉપલબ્ધ નથી",
+    "catalogUnavailableSubtitle": "પાક ડેટા ડાઉનલોડ કરવા માટે એકવાર ઇન્ટરનેટ સાથે જોડાઓ, પછી ફરી પ્રયાસ કરો."
   },
   "quickLog": {
     "title": "પ્રવૃત્તિ નોંધો",
@@ -100,6 +112,8 @@
     "costLabel": "ખર્ચ (₹)",
     "dateLabel": "તારીખ",
     "saveActivity": "પ્રવૃત્તિ સાચવો",
+    "catalogUnavailableTitle": "ઉત્પાદન સૂચિ ઉપલબ્ધ નથી",
+    "catalogUnavailableSubtitle": "આ પાક માટે ઉત્પાદન ડેટા ડાઉનલોડ કરવા માટે એકવાર ઇન્ટરનેટ સાથે જોડાઓ, પછી ફરી પ્રયાસ કરો.",
     "activityTypes": {
       "chemical": "રસાયણ / છંટકાવ",
       "irrigation": "સિંચાઈ",
@@ -111,25 +125,31 @@
     "title": "સરકારી યોજનાઓ",
     "eligibleFor": "તમે પાત્ર છો",
     "noSchemesTitle": "હજુ સુધી કોઈ મેળ નથી",
-    "noSchemesSubtitle": "પાત્ર યોજનાઓ જોવા માટે તમારી પ્રોફાઇલ પૂર્ણ કરો.",
-    "central": "કેન્દ્ર યોજના",
-    "state": "રાજ્ય યોજના"
+    "noSchemesSubtitle": "પાત્ર યોજનાઓ જોવા માટે તમારી પ્રોફાઇલ પૂર્ણ કરો."
   },
   "schemeDetail": {
     "eligibility": "પાત્રતા માપદંડ",
     "benefits": "લાભો",
-    "howToApply": "કેવી રીતે અરજી કરવી",
-    "contact": "સંપર્ક",
+    "visitApplicationUrl": "અરજી કરવા માટે સત્તાવાર પેજની મુલાકાત લો",
     "markApplying": "અરજી કરી રહ્યા છીએ તરીકે ચિહ્નિત કરો",
     "markedApplying": "અરજી કરી રહ્યા છીએ તરીકે ચિહ્નિત કર્યું"
   },
   "alertDetail": {
     "title": "ચેતવણીની વિગતો",
-    "confidence": "વિશ્વસનીયતા: {{pct}}%",
-    "recommendation": "ભલામણ",
+    "markFollowed": "મેં આ અનુસર્યું",
+    "markIgnored": "આ કરી રહ્યા નથી",
+    "status": {
+      "followed": "તમે આને અનુસર્યું તરીકે ચિહ્નિત કર્યું",
+      "ignored": "તમે આને અવગણ્યું તરીકે ચિહ્નિત કર્યું"
+    },
     "logAction": "આ ક્રિયા હમણાં નોંધો",
     "nearbyVendors": "નજીકના વિક્રેતાઓ",
     "mapUnavailable": "ઓફલાઈનમાં નકશો ઉપલબ્ધ નથી"
+  },
+  "confidence": {
+    "unverified": "અચકાસાયેલ માર્ગદર્શન",
+    "provisional": "કામચલાઉ મેળ",
+    "verified": "ચકાસાયેલ"
   },
   "ledger": {
     "title": "પાક ચક્ર ખાતાવહી",
@@ -138,7 +158,8 @@
     "currentCostOfCultivation": "વર્તમાન ખેતી ખર્ચ",
     "expenseBreakdown": "ખર્ચની વિગત",
     "recentTransactions": "તાજેતરના વ્યવહારો",
-    "noTransactions": "હજુ સુધી કોઈ પ્રવૃત્તિ નોંધાઈ નથી."
+    "noTransactions": "હજુ સુધી કોઈ પ્રવૃત્તિ નોંધાઈ નથી.",
+    "logScouting": "ખેતર નિરીક્ષણ નોંધો"
   },
   "profile": {
     "title": "પ્રોફાઇલ",
@@ -160,5 +181,20 @@
     "bigha": "વીઘા",
     "cent": "સેન્ટ",
     "killa": "કિલ્લા"
+  },
+  "scouting": {
+    "title": "ખેતર નિરીક્ષણ નોંધો",
+    "plantingLabel": "કઈ વાવણી?",
+    "dateLabel": "નિરીક્ષણ તારીખ",
+    "notesLabel": "નોંધ (વૈકલ્પિક)",
+    "noMetricTitle": "અત્યારે નિરીક્ષણ માટે કંઈ નથી",
+    "noMetricSubtitle": "આ પાકની હાલની વૃદ્ધિ અવસ્થામાં કોઈ જીવાત તપાસ નથી.",
+    "save": "નિરીક્ષણ સાચવો",
+    "metrics": {
+      "dead_hearts_percent": "મૃત ગાભા (%)",
+      "pheromone_trap_moths_per_night_3day_avg": "ફેરોમોન ટ્રેપ ફૂદાં (3-દિવસ સરેરાશ)",
+      "deadheart_percent": "મૃત ગાભા (%)",
+      "percent_plants_with_whorl_damage": "વમળ નુકસાનવાળા છોડ (%)"
+    }
   }
 }
