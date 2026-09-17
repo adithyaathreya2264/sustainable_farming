@@ -5,6 +5,7 @@ import { ScreenContainer } from "../../components/ui/ScreenContainer";
 import { ModalHeader } from "../../components/ModalHeader";
 import { Button } from "../../components/ui/Button";
 import { DateField } from "../../components/ui/DateField";
+import { EmptyState } from "../../components/ui/EmptyState";
 import {
   BottomSheetPicker,
   PickerField,
@@ -12,10 +13,7 @@ import {
 import { useToast } from "../../context/ToastContext";
 import { useAppState } from "../../hooks/useAppState";
 import { addPlanting } from "../../services/plantings";
-import cropsData from "../../data/mock/crops.json";
-import type { Crop } from "../../types/models";
 
-const crops = cropsData as Crop[];
 const today = new Date().toISOString().slice(0, 10);
 
 export default function AddPlantingModal() {
@@ -23,6 +21,11 @@ export default function AddPlantingModal() {
   const { showToast } = useToast();
   const params = useLocalSearchParams<{ fieldId?: string }>();
   const fields = useAppState((s) => s.fields);
+  // Server-owned reference data (backend/api/v1/catalog.py), cached by
+  // fetchAndCacheCatalog() — see hooks/useSyncTriggers.ts. Reading it
+  // reactively here (rather than the old direct mock-JSON import) means the
+  // picker always reflects real crop_id/variety_id FKs the backend accepts.
+  const crops = useAppState((s) => s.crops);
 
   const [fieldId, setFieldId] = useState(params.fieldId ?? "");
   const [cropId, setCropId] = useState("");
@@ -33,7 +36,7 @@ export default function AddPlantingModal() {
   const [varietyPickerOpen, setVarietyPickerOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const selectedCrop = useMemo(() => crops.find((c) => c.id === cropId), [cropId]);
+  const selectedCrop = useMemo(() => crops.find((c) => c.id === cropId), [crops, cropId]);
   const selectedField = fields.find((f) => f.id === fieldId);
 
   const isValid = Boolean(fieldId && cropId && varietyId && sowingDate);
@@ -44,6 +47,19 @@ export default function AddPlantingModal() {
     setSaving(false);
     showToast(t("common.savedOffline"));
     router.back();
+  }
+
+  if (crops.length === 0) {
+    return (
+      <ScreenContainer>
+        <ModalHeader title={t("addPlanting.title")} />
+        <EmptyState
+          icon="🌱"
+          title={t("addPlanting.catalogUnavailableTitle")}
+          subtitle={t("addPlanting.catalogUnavailableSubtitle")}
+        />
+      </ScreenContainer>
+    );
   }
 
   return (
