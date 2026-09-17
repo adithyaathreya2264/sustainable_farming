@@ -13,7 +13,8 @@
         { "lat": 12.3047, "long": 76.6557 },
         { "lat": 12.3047, "long": 76.6547 }
       ],
-      "soilType": "Red Sandy Loam"
+      "soilType": "Red Sandy Loam",
+      "isSynced": true
     }
   ],
   "plantings": [
@@ -22,6 +23,7 @@
       "fieldId": "f1",
       "cropId": "c1",
       "varietyId": "c1v1",
+      "isSynced": true,
       "sowingDate": "2026-06-15",
       "status": "active"
     }
@@ -77,23 +79,47 @@
   "alerts": [
     {
       "id": "a1",
-      "plantingId": "pl1",
-      "title": "Blast Disease Risk Rising",
-      "description": "High humidity and recent rainfall in Mysuru district have created favorable conditions for Ragi Blast. Apply a preventive fungicide spray within the next 3 days to protect your crop.",
-      "severity": "high",
-      "confidencePct": 82,
-      "recommendedProductId": "p3",
-      "createdAt": "2026-07-10T06:00:00.000Z"
+      "kind": "recommendation",
+      "severity": "advisory",
+      "status": "pending",
+      "headline": "[Unverified guidance] High humidity and recent rainfall in Mysuru district favor Ragi Blast — apply a preventive fungicide spray within the next 3 days to protect your crop.",
+      "detail": null,
+      "confidenceLabel": "unverified",
+      "applicationUrl": null,
+      "authority": null,
+      "eligibilitySummary": null,
+      "generatedAt": "2026-07-10T06:00:00.000Z",
+      "plantingId": "pl1"
     },
     {
       "id": "a2",
-      "plantingId": "pl1",
-      "title": "Irrigation Due Soon",
-      "description": "Soil moisture near North Ragi Field is trending low based on regional weather data. Plan an irrigation cycle in the next 2 days.",
-      "severity": "medium",
-      "confidencePct": 68,
-      "recommendedProductId": "p5",
-      "createdAt": "2026-07-18T06:00:00.000Z"
+      "kind": "recommendation",
+      "severity": "advisory",
+      "status": "pending",
+      "headline": "[Unverified guidance] Soil moisture near North Ragi Field is trending low — plan an irrigation cycle in the next 2 days.",
+      "detail": null,
+      "confidenceLabel": "unverified",
+      "applicationUrl": null,
+      "authority": null,
+      "eligibilitySummary": null,
+      "generatedAt": "2026-07-18T06:00:00.000Z",
+      "plantingId": "pl1"
+    },
+    {
+      "id": "a3",
+      "kind": "scheme_match",
+      "severity": null,
+      "status": "matched",
+      "headline": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
+      "detail": "₹6,000/year, paid in three equal ₹2,000 installments via Direct Benefit Transfer to Aadhaar-seeded bank accounts.",
+      "confidenceLabel": "provisional",
+      "applicationUrl": "https://pmkisan.gov.in/",
+      "authority": "Department of Agriculture and Farmers Welfare, Government of India",
+      "eligibilitySummary": [
+        "Land holding: Cultivable land-holding farmer family (self/spouse/minor children), land registered in the farmer's name"
+      ],
+      "generatedAt": "2026-07-05T06:00:00.000Z",
+      "plantingId": null
     }
   ],
   "vendors": [
