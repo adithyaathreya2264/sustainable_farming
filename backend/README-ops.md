@@ -1,11 +1,14 @@
 # Backend operations
 
+The backend is Node.js (Express + mysql2). All commands run from `backend/`
+after a one-time `npm install`. Configuration comes from `backend/.env`
+(see `.env.example`).
+
 ## Running the API
 
-From the repo root, venv active:
-
 ```
-PYTHONPATH=. backend/venv/Scripts/python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000
+npm start          # listens on 0.0.0.0:8000
+npm run dev        # same, restarting on file changes
 ```
 
 ## Batch jobs (recommendations + scheme matching)
@@ -15,9 +18,9 @@ request. Until a job runs, a farmer sees no *new* recommendation or scheme
 match. Run them with:
 
 ```
-PYTHONPATH=. backend/venv/Scripts/python -m backend.scripts.run_batch recommendations
-PYTHONPATH=. backend/venv/Scripts/python -m backend.scripts.run_batch scheme-matching
-PYTHONPATH=. backend/venv/Scripts/python -m backend.scripts.run_batch all
+npm run batch -- recommendations
+npm run batch -- scheme-matching
+npm run batch -- all
 ```
 
 Both are **idempotent** — safe to run as often as you like; they only create
@@ -26,12 +29,12 @@ rows that don't already exist.
 ### Demo / dev: self-running loop
 
 ```
-PYTHONPATH=. backend/venv/Scripts/python -m backend.scripts.run_batch all --loop --interval 900
+npm run batch -- all --loop --interval 900
 ```
 
 Runs every 15 minutes until Ctrl-C. Start it in a second terminal alongside
-`uvicorn` and recommendations/scheme matches just appear. A bad run is logged
-and the loop continues.
+`npm start` and recommendations/scheme matches just appear. A bad run is
+logged and the loop continues.
 
 ### Production: OS scheduler
 
@@ -40,44 +43,63 @@ Prefer the one-shot form on a scheduler over a long-lived `--loop` process.
 **Windows Task Scheduler** — one task, trigger "every 30 minutes":
 
 ```
-Program:   e:\major-project\sustainable_farming\backend\venv\Scripts\python.exe
-Arguments: -m backend.scripts.run_batch all
-Start in:  e:\major-project\sustainable_farming
+Program:   C:\Program Files\nodejs\node.exe
+Arguments: scripts/run-batch.js all
+Start in:  e:\major-project\sustainable_farming\backend
 ```
-(set the `PYTHONPATH=.` env via the task's environment, or a one-line `.bat`
-wrapper that `cd`s to the repo root and `set PYTHONPATH=.`)
 
 **cron** (Linux):
 
 ```
-*/30 * * * * cd /srv/sustainable_farming && PYTHONPATH=. venv/bin/python -m backend.scripts.run_batch all >> /var/log/sf-batch.log 2>&1
+*/30 * * * * cd /srv/sustainable_farming/backend && node scripts/run-batch.js all >> /var/log/sf-batch.log 2>&1
 ```
 
 The `/api/v1/internal/run-recommendations` and `/run-scheme-matching` HTTP
 routes still exist (behind the `X-Internal-Key` header) for an external HTTP
 cron or manual triggering — they call the same service functions.
 
-### Counter-lock note
+### Ordering note
 
-`run_batch recommendations` fetches every planting's weather snapshot from
-Open-Meteo *before* it opens the sync-counter write transaction, so a farmer's
-concurrent sync push never blocks on weather-API latency. Keep that ordering if
-you edit `backend/services/recommendation_run.py`.
+`run-recommendations` fetches every planting's weather snapshot from
+Open-Meteo *before* it opens its write transaction, so the transaction only
+spans fast DB work, never weather-API latency. Keep that ordering if you edit
+`backend/src/services/recommendationRun.js`.
 
 ## Migrations
 
 ```
-PYTHONPATH=. backend/venv/Scripts/python -m alembic -c backend/alembic.ini upgrade head
+npm run migrate
 ```
+
+Migrations are plain SQL files in `backend/migrations/`, tracked in the
+`schema_migrations` table.
+
+- **Empty database:** every migration runs, creating the full schema.
+- **Existing database built by the old Alembic tooling** (at revision
+  `e1f2a3b4c5d6`): the baseline (`0001_baseline`) is *stamped* as applied
+  without running any DDL, so nothing is recreated or altered. Later
+  migrations then apply normally. The old `alembic_version` table is left
+  alone.
+- Any other state (tables present, revision unknown or older) is refused with
+  a clear message rather than guessed at.
+
+Schema changes from here on are new numbered `.sql` files in `migrations/`.
 
 ## Seeding reference data (idempotent)
 
 ```
-PYTHONPATH=. backend/venv/Scripts/python -m backend.scripts.seed_reference_data
+npm run seed
 ```
 
-## Smoke test (end-to-end, against the dev DB)
+Insert-only, keyed on natural keys (crop name, rule code, scheme name,
+state+district, ...): re-running never modifies existing rows. Source data is
+`scripts/reference-data.json` and `scripts/seed_data/locations.json`.
+(`ml/prep` also reads `locations.json` from that path — keep it there.)
+
+## Tests
 
 ```
-PYTHONPATH=. backend/venv/Scripts/python backend/scripts/smoke_e2e.py
+npm test           # pure-logic unit tests (no DB / network)
+npm run smoke      # end-to-end against the dev MySQL (starts the app in-process)
+SMOKE_BASE_URL=http://localhost:8000 npm run smoke   # against a running server
 ```
