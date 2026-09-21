@@ -1,0 +1,425 @@
+{
+  "crops": [
+    {
+      "name": "Rice",
+      "varieties": [
+        "IR-64",
+        "Jyothi"
+      ]
+    },
+    {
+      "name": "Ragi (Finger Millet)",
+      "varieties": [
+        "GPU-28",
+        "Indaf-9"
+      ]
+    },
+    {
+      "name": "Maize",
+      "varieties": [
+        "NK-6240",
+        "DHM-117"
+      ]
+    },
+    {
+      "name": "Cotton",
+      "varieties": [
+        "Bunny Bt",
+        "RCH-2"
+      ]
+    },
+    {
+      "name": "Sugarcane",
+      "varieties": [
+        "Co 86032",
+        "CoM 0265"
+      ]
+    }
+  ],
+  "agri_catalog": [
+    {
+      "category": "fertilizer",
+      "name": "Urea",
+      "crops": [
+        "Rice",
+        "Ragi (Finger Millet)",
+        "Cotton",
+        "Sugarcane",
+        "Maize"
+      ],
+      "unit": "kg"
+    },
+    {
+      "category": "fertilizer",
+      "name": "DAP",
+      "crops": [
+        "Rice",
+        "Ragi (Finger Millet)",
+        "Cotton",
+        "Sugarcane",
+        "Maize"
+      ],
+      "unit": "kg"
+    },
+    {
+      "category": "fertilizer",
+      "name": "MOP (Muriate of Potash)",
+      "crops": [
+        "Rice",
+        "Ragi (Finger Millet)",
+        "Cotton",
+        "Sugarcane",
+        "Maize"
+      ],
+      "unit": "kg"
+    },
+    {
+      "category": "fertilizer",
+      "name": "Zinc Sulphate (ZnSO4)",
+      "crops": [
+        "Rice",
+        "Maize"
+      ],
+      "unit": "kg"
+    },
+    {
+      "category": "herbicide",
+      "name": "Atrazine",
+      "crops": [
+        "Maize"
+      ],
+      "unit": "litre"
+    },
+    {
+      "category": "herbicide",
+      "name": "Pendimethalin",
+      "crops": [
+        "Cotton"
+      ],
+      "unit": "litre"
+    },
+    {
+      "category": "herbicide",
+      "name": "Quizalofop-p-ethyl",
+      "crops": [
+        "Cotton"
+      ],
+      "unit": "ml"
+    },
+    {
+      "category": "pesticide",
+      "name": "Emamectin Benzoate 5SG",
+      "crops": [
+        "Maize"
+      ],
+      "unit": "g"
+    },
+    {
+      "category": "fungicide",
+      "name": "Carbendazim",
+      "crops": [
+        "Maize"
+      ],
+      "unit": "g"
+    },
+    {
+      "category": "biocontrol",
+      "name": "Trichoderma viride",
+      "crops": [
+        "Cotton",
+        "Sugarcane"
+      ],
+      "unit": "g"
+    }
+  ],
+  "growth_stage_source": "General agronomy sources (LSU AgCenter, MAS Seeds, Bayer CropScience, Farmonaut, TNAU, ICAR-AICRP Small Millets summaries) — not a single ICAR/KVK document pulled per row this session, hence confidence=low throughout. See Phase 4 plan notes.",
+  "growth_stages": [
+    [
+      "Rice",
+      "Seedling",
+      1,
+      0,
+      20
+    ],
+    [
+      "Rice",
+      "Vegetative (Tillering)",
+      2,
+      20,
+      45
+    ],
+    [
+      "Rice",
+      "Panicle Initiation",
+      3,
+      45,
+      65
+    ],
+    [
+      "Rice",
+      "Flowering (Heading)",
+      4,
+      65,
+      95
+    ],
+    [
+      "Rice",
+      "Maturity (Ripening)",
+      5,
+      95,
+      130
+    ],
+    [
+      "Ragi (Finger Millet)",
+      "Seedling Establishment (0-30 DAS)",
+      1,
+      0,
+      30
+    ],
+    [
+      "Ragi (Finger Millet)",
+      "Vegetative/Tillering",
+      2,
+      30,
+      55
+    ],
+    [
+      "Ragi (Finger Millet)",
+      "Flowering",
+      3,
+      55,
+      85
+    ],
+    [
+      "Ragi (Finger Millet)",
+      "Maturity",
+      4,
+      85,
+      120
+    ],
+    [
+      "Maize",
+      "Early Whorl (V2-V6)",
+      1,
+      10,
+      30
+    ],
+    [
+      "Maize",
+      "Vegetative (V7+)",
+      2,
+      30,
+      55
+    ],
+    [
+      "Maize",
+      "Tasseling-Silking",
+      3,
+      55,
+      70
+    ],
+    [
+      "Maize",
+      "Grain Fill/Maturity",
+      4,
+      70,
+      115
+    ],
+    [
+      "Cotton",
+      "Seedling/Vegetative",
+      1,
+      0,
+      35
+    ],
+    [
+      "Cotton",
+      "Squaring to Boll Development",
+      2,
+      35,
+      70
+    ],
+    [
+      "Cotton",
+      "Boll Development",
+      3,
+      70,
+      160
+    ],
+    [
+      "Sugarcane",
+      "Germination-Tillering (0-120 DAS)",
+      1,
+      0,
+      120
+    ],
+    [
+      "Sugarcane",
+      "Grand Growth Phase (~4th-8th month)",
+      2,
+      120,
+      240
+    ],
+    [
+      "Sugarcane",
+      "Maturity/Ripening",
+      3,
+      240,
+      360
+    ]
+  ],
+  "agronomic_rules": [
+    {
+      "rule_code": "RICE_IRRIGATION_CRITICAL_PANICLE",
+      "crop": "Rice",
+      "stage": "Panicle Initiation",
+      "condition_field": null,
+      "operator": null,
+      "threshold": null,
+      "severity": "critical",
+      "text": "Rice is highly sensitive to water stress at panicle initiation — ensure standing water/irrigation within 1-2 days of reaching this stage to avoid yield loss.",
+      "confidence": "low",
+      "source": "General ICAR rice Package of Practices guidance — not pulled from a specific document this session."
+    },
+    {
+      "rule_code": "RICE_STEM_BORER_SCOUT",
+      "crop": "Rice",
+      "stage": "Vegetative (Tillering)",
+      "condition_field": "dead_hearts_percent",
+      "operator": ">=",
+      "threshold": 5,
+      "severity": "advisory",
+      "text": "Dead-heart incidence has crossed 5% — scout for yellow stem borer and consider need-based control per local KVK advisory.",
+      "confidence": "low",
+      "source": "Commonly cited Indian rice IPM ETL (5% dead hearts vegetative / 2% white ears reproductive) — not pulled from a specific ICAR/KVK document this session."
+    },
+    {
+      "rule_code": "RAGI_IRRIGATION_ESTABLISHMENT",
+      "crop": "Ragi (Finger Millet)",
+      "stage": "Seedling Establishment (0-30 DAS)",
+      "condition_field": null,
+      "operator": null,
+      "threshold": null,
+      "severity": "advisory",
+      "text": "Finger millet is most vulnerable to moisture stress during seedling establishment — provide life-saving irrigation if available and no rainfall in the past 7 days.",
+      "confidence": "low",
+      "source": "General ICAR-AICRP Small Millets dryland guidance — not pulled from a specific document this session."
+    },
+    {
+      "rule_code": "RAGI_BLAST_DISEASE_WATCH",
+      "crop": "Ragi (Finger Millet)",
+      "stage": "Flowering",
+      "condition_field": null,
+      "operator": null,
+      "threshold": null,
+      "severity": "advisory",
+      "text": "Warm humid conditions during flowering favor finger millet blast (neck blast) — scout earheads and consider prophylactic fungicide per local KVK advisory.",
+      "confidence": "low",
+      "source": "General ICAR-AICRP Small Millets blast-risk guidance — not a hard numeric threshold; genuinely needs local KVK sign-off before use."
+    },
+    {
+      "rule_code": "COTTON_PBW_ETL",
+      "crop": "Cotton",
+      "stage": "Boll Development",
+      "condition_field": "pheromone_trap_moths_per_night_3day_avg",
+      "operator": ">=",
+      "threshold": 8,
+      "severity": "critical",
+      "text": "Pink bollworm trap catch has crossed the ICAR-CICR economic threshold (8 moths/trap/night for 3 consecutive nights) — initiate control measures immediately.",
+      "confidence": "medium",
+      "source": "ICAR-CICR (Central Institute for Cotton Research) published ETL — confirmed via web search against multiple corroborating sources."
+    },
+    {
+      "rule_code": "COTTON_IRRIGATION_SQUARE_BOLL",
+      "crop": "Cotton",
+      "stage": "Squaring to Boll Development",
+      "condition_field": null,
+      "operator": null,
+      "threshold": null,
+      "severity": "advisory",
+      "text": "Cotton water demand peaks from squaring through boll development — avoid moisture stress in this window.",
+      "confidence": "low",
+      "source": "General ICAR cotton Package of Practices guidance — not pulled from a specific document this session."
+    },
+    {
+      "rule_code": "SUGARCANE_IRRIGATION_GRAND_GROWTH",
+      "crop": "Sugarcane",
+      "stage": "Grand Growth Phase (~4th-8th month)",
+      "condition_field": null,
+      "operator": null,
+      "threshold": null,
+      "severity": "critical",
+      "text": "Grand growth phase is sugarcane's most water-sensitive period — irrigation deficit here has the largest yield impact of any stage.",
+      "confidence": "low",
+      "source": "General ICAR sugarcane Package of Practices guidance — not pulled from a specific document this session."
+    },
+    {
+      "rule_code": "SUGARCANE_EARLY_SHOOT_BORER",
+      "crop": "Sugarcane",
+      "stage": "Germination-Tillering (0-120 DAS)",
+      "condition_field": "deadheart_percent",
+      "operator": ">=",
+      "threshold": 10,
+      "severity": "advisory",
+      "text": "Early shoot borer dead-heart incidence has crossed 10% — scout and consider need-based control per local KVK advisory.",
+      "confidence": "low",
+      "source": "Commonly cited Indian sugarcane IPM ETL — sources disagree in the 5-10% range; not pulled from a specific document this session."
+    },
+    {
+      "rule_code": "MAIZE_FAW_ETL",
+      "crop": "Maize",
+      "stage": "Early Whorl (V2-V6)",
+      "condition_field": "percent_plants_with_whorl_damage",
+      "operator": ">=",
+      "threshold": 5,
+      "severity": "advisory",
+      "text": "Fall armyworm whorl damage has crossed 5% of plants (ICAR-IIMR action threshold) — scout closely and consider need-based control.",
+      "confidence": "low",
+      "source": "ICAR-IIMR (2019)-cited action threshold — confirmed via web search; NOTE published literature ranges 5-30% across different sources/regions. Least settled number in this batch."
+    },
+    {
+      "rule_code": "MAIZE_IRRIGATION_TASSELING",
+      "crop": "Maize",
+      "stage": "Tasseling-Silking",
+      "condition_field": null,
+      "operator": null,
+      "threshold": null,
+      "severity": "critical",
+      "text": "Maize is most drought-sensitive from tasseling through silking — a moisture deficit here causes the largest yield penalty of any growth stage.",
+      "confidence": "low",
+      "source": "General ICAR maize Package of Practices guidance (broadly and consistently published) — not pulled from a specific document this session."
+    }
+  ],
+  "govt_schemes": [
+    {
+      "scheme_name": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
+      "authority": "Department of Agriculture and Farmers Welfare, Government of India",
+      "eligibility_criteria": {
+        "land_holding": "Cultivable land-holding farmer family (self/spouse/minor children), land registered in the farmer's name",
+        "exclusions": [
+          "Institutional landholders",
+          "Constitutional office holders (current/former)",
+          "Government employees and pensioners (except Group D / Multi-Tasking Staff)",
+          "Pensioners with monthly pension ≥ ₹10,000",
+          "Income tax payers",
+          "Licensed professionals (doctors, engineers, lawyers, chartered accountants, architects)"
+        ]
+      },
+      "benefit_description": "₹6,000/year, paid in three equal ₹2,000 installments via Direct Benefit Transfer to Aadhaar-seeded bank accounts.",
+      "application_url": "https://pmkisan.gov.in/",
+      "active": true
+    },
+    {
+      "scheme_name": "Krishi Bhagya Yojana",
+      "authority": "Department of Agriculture (KSDA), Government of Karnataka",
+      "eligibility_criteria": {
+        "target": "Dryland/rainfed farmers, primarily in low-and-medium-rainfall (450-850mm) taluks",
+        "land_holding": "Minimum 1 acre",
+        "category_note": "Subsidy tier depends on SC/ST vs. general category"
+      },
+      "benefit_description": "Subsidy (80–90% depending on category — exact current-year percentage is set by an annual circular; confirm at application_url before advising a farmer) for dryland water-conservation infrastructure: farm ponds (Krishi Honda), polyhouses, shade nets, lift irrigation, diesel pump sets.",
+      "application_url": "https://raitamitra.karnataka.gov.in/info-2/Krishi+Bhagya+Scheme/en",
+      "active": true
+    }
+  ]
+}
