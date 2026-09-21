@@ -5,9 +5,10 @@
     "back": "Back",
     "continue": "Continue",
     "loading": "Loading...",
-    "savedOffline": "Saved Offline",
-    "syncedToCloud": "Data synced to cloud.",
-    "retry": "Retry"
+    "saved": "Saved",
+    "sampleDataLoaded": "Sample data loaded.",
+    "retry": "Retry",
+    "saveFailed": "Couldn't save. Check your connection and try again."
   },
   "auth": {
     "loginTitle": "Welcome",
@@ -22,6 +23,9 @@
     "invalidOtp": "Incorrect code. Please try again."
   },
   "onboarding": {
+    "uniqueIdTitle": "Choose your Unique ID",
+    "uniqueIdSubtitle": "Pick a 4-digit number that identifies you in the app. No one else can use the same number.",
+    "uniqueIdTaken": "This unique number already exists.",
     "step1Title": "Let's get started",
     "languageLabel": "Select your language",
     "step2NameTitle": "What should we call you?",
@@ -164,9 +168,6 @@
   "profile": {
     "title": "Profile",
     "language": "Language",
-    "syncStatus": "Sync Status",
-    "synced": "Synced",
-    "pendingSync": "Offline - pending sync",
     "phoneNumber": "Phone Number",
     "unitPreference": "Unit Preference",
     "demoDataTitle": "Demo Data",
