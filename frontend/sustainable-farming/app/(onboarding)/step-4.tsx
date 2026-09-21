@@ -1,125 +1,61 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Text } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import { ScreenContainer } from "../../components/ui/ScreenContainer";
 import { Button } from "../../components/ui/Button";
-import { RadioCardGroup } from "../../components/ui/RadioCardGroup";
+import { NumericField } from "../../components/ui/TextField";
 import {
   BottomSheetPicker,
   PickerField,
 } from "../../components/ui/BottomSheetPicker";
 import { StepProgress } from "../../components/StepProgress";
 import { useOnboardingDraft } from "../../context/OnboardingDraftContext";
-import { getDistricts, getStates } from "../../services/locations";
-import { completeOnboarding } from "../../services/onboarding";
-import type { IrrigationType } from "../../types/models";
+import { STANDARDIZED_LAND_UNITS, unitLabel } from "../../utils/unitConversion";
+// State (and thus any non-standardized unit's conversion factor — Bigha,
+// Katha, Biswa, Kanal, Marla) isn't collected until a later onboarding step,
+// so only standardized units are offered here. See docs/unit-conversions.md.
 
-const IRRIGATION_ICONS: Record<IrrigationType, string> = {
-  rainfed: "🌧️",
-  borewell: "🕳️",
-  canal: "🚰",
-  drip_sprinkler: "💧",
-};
-
-export default function OnboardingStep4() {
+export default function OnboardingStep3() {
   const { t } = useTranslation();
   const { draft, update } = useOnboardingDraft();
-  const [states, setStates] = useState<string[]>([]);
-  const [districts, setDistricts] = useState<string[]>([]);
-  const [statePickerOpen, setStatePickerOpen] = useState(false);
-  const [districtPickerOpen, setDistrictPickerOpen] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
-  useEffect(() => {
-    getStates().then(setStates);
-  }, []);
-
-  useEffect(() => {
-    if (!draft.state) {
-      setDistricts([]);
-      return;
-    }
-    getDistricts(draft.state).then(setDistricts);
-  }, [draft.state]);
-
-  const irrigationOptions = (
-    ["rainfed", "borewell", "canal", "drip_sprinkler"] as IrrigationType[]
-  ).map((type) => ({
-    value: type,
-    label: t(`onboarding.irrigation.${type}`),
-    icon: IRRIGATION_ICONS[type],
-  }));
-
-  const isValid = Boolean(draft.state && draft.district);
-
-  async function handleComplete() {
-    setSubmitting(true);
-    await completeOnboarding({
-      languagePref: draft.languagePref,
-      name: draft.name,
-      defaultUnit: draft.defaultUnit,
-      totalArea: Number(draft.totalArea),
-      irrigationType: draft.irrigationType,
-      state: draft.state,
-      district: draft.district,
-    });
-    setSubmitting(false);
-    router.replace("/(tabs)/home");
-  }
+  const isValid = Number(draft.totalArea) > 0;
 
   return (
     <ScreenContainer>
-      <StepProgress step={4} total={4} />
+      <StepProgress step={3} total={4} />
       <Text className="text-ink font-bold mb-6" style={{ fontSize: 22 }}>
-        {t("onboarding.step3Title")}
+        {t("onboarding.step2Title")}
       </Text>
 
-      <Text className="text-ink-muted mb-2" style={{ fontSize: 14 }}>
-        {t("onboarding.irrigationLabel")}
-      </Text>
-      <RadioCardGroup
-        options={irrigationOptions}
-        value={draft.irrigationType}
-        onChange={(v) => update({ irrigationType: v })}
-      />
-
       <PickerField
-        label={t("onboarding.stateLabel")}
-        placeholder={t("onboarding.selectState")}
-        displayValue={draft.state || undefined}
-        onPress={() => setStatePickerOpen(true)}
+        label={t("onboarding.unitLabel")}
+        placeholder={t("onboarding.unitLabel")}
+        displayValue={unitLabel(draft.defaultUnit)}
+        onPress={() => setPickerOpen(true)}
       />
       <BottomSheetPicker
-        visible={statePickerOpen}
-        title={t("onboarding.selectState")}
-        options={states.map((s) => ({ label: s, value: s }))}
-        selectedValue={draft.state}
-        onSelect={(v) => update({ state: v, district: "" })}
-        onClose={() => setStatePickerOpen(false)}
+        visible={pickerOpen}
+        title={t("onboarding.unitLabel")}
+        options={STANDARDIZED_LAND_UNITS.map((u) => ({ label: unitLabel(u), value: u }))}
+        selectedValue={draft.defaultUnit}
+        onSelect={(v) => update({ defaultUnit: v as typeof draft.defaultUnit })}
+        onClose={() => setPickerOpen(false)}
       />
 
-      <PickerField
-        label={t("onboarding.districtLabel")}
-        placeholder={t("onboarding.selectDistrict")}
-        displayValue={draft.district || undefined}
-        disabled={!draft.state}
-        onPress={() => setDistrictPickerOpen(true)}
-      />
-      <BottomSheetPicker
-        visible={districtPickerOpen}
-        title={t("onboarding.selectDistrict")}
-        options={districts.map((d) => ({ label: d, value: d }))}
-        selectedValue={draft.district}
-        onSelect={(v) => update({ district: v })}
-        onClose={() => setDistrictPickerOpen(false)}
+      <NumericField
+        label={`${t("onboarding.areaLabel")} (${unitLabel(draft.defaultUnit)})`}
+        value={draft.totalArea}
+        onChangeText={(v) => update({ totalArea: v.replace(/[^0-9.]/g, "") })}
+        placeholder="0"
       />
 
       <Button
-        label={t("onboarding.completeProfile")}
+        label={t("common.continue")}
         disabled={!isValid}
-        loading={submitting}
-        onPress={handleComplete}
+        onPress={() => router.push("/(onboarding)/step-4")}
       />
     </ScreenContainer>
   );
