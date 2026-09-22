@@ -1,0 +1,33 @@
+# Pinned exactly, not with >= lower bounds.
+#
+# The inherited requirements.txt pinned `scikit-learn>=1.3.0` while its shipped
+# pickles had actually been written under 1.8.0. Tree-ensemble pickles are
+# brittle across minor versions, so a fresh install following that file could
+# produce artifacts that fail to unpickle or silently warn. Every model here is
+# retrained from source rather than loaded from an inherited pickle, which
+# removes that hazard — but the pins stay exact so a rebuild months from now
+# reproduces the numbers recorded in MODEL_RESULTS.md rather than new ones.
+#
+# Install into a --system-site-packages venv at the repo root, so torch and
+# pandas come from the global install rather than being duplicated:
+#
+#   python -m venv .venv --system-site-packages
+#   ./.venv/Scripts/python.exe -m pip install -r ml/requirements.txt
+#   ./.venv/Scripts/python.exe -m pip install torchvision --index-url https://download.pytorch.org/whl/cpu
+
+scikit-learn==1.9.1
+xgboost==3.4.1
+joblib==1.6.0
+scipy==1.18.1
+pillow==12.2.0
+
+# Inherited from the global environment, recorded here because the metrics in
+# MODEL_RESULTS.md depend on them:
+#   pandas      2.3.2
+#   numpy       2.3.3
+#   torch       2.14.0+cpu
+#   torchvision 0.29.0+cpu   (CPU wheel; must match torch — install from the
+#                             pytorch index, not PyPI, or pip may replace torch)
+#
+# ml/prep/*.py deliberately depends on none of this. Those cleaners are
+# stdlib-only and must stay that way.

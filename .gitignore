@@ -6,3 +6,16 @@ datasets/*
 !datasets/README.md
 
 docs/
+
+# Python virtualenv for the ML training phase. The backend is Node; this venv
+# exists only for ml/ and is created with --system-site-packages so torch and
+# pandas come from the global install rather than being duplicated.
+.venv/
+__pycache__/
+*.pyc
+
+# Trained model artifacts. These are build outputs of `ml/training/*`, are
+# large binaries, and are reproducible from the pinned versions in
+# ml/requirements.txt plus the raw CSVs. Their measured metrics live in
+# ml/MODEL_RESULTS.md, which IS tracked — that is the reviewable artifact.
+ml/artifacts/
