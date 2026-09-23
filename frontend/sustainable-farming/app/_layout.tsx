@@ -11,7 +11,7 @@ import { LanguageProvider } from "../context/LanguageContext";
 import { ToastProvider } from "../context/ToastContext";
 import { hydrate } from "../store/appStore";
 import { useAppState } from "../hooks/useAppState";
-import { useSyncTriggers } from "../hooks/useSyncTriggers";
+import { useRefreshTriggers } from "../hooks/useRefreshTriggers";
 import { colors } from "../theme";
 
 function AppShell() {
@@ -21,7 +21,7 @@ function AppShell() {
     hydrate();
   }, []);
 
-  useSyncTriggers();
+  useRefreshTriggers();
 
   if (!hydrated) {
     return <View style={{ flex: 1, backgroundColor: colors.background }} />;
