@@ -9,7 +9,6 @@ import { EmptyState } from "../../components/ui/EmptyState";
 import { SkeletonCard } from "../../components/ui/SkeletonLoader";
 import { AlertCard } from "../../components/AlertCard";
 import { WeatherWidget } from "../../components/WeatherWidget";
-import { SyncStatusIcon } from "../../components/SyncStatusIcon";
 import { useSession } from "../../context/SessionContext";
 import { useAppState } from "../../hooks/useAppState";
 import { getRecommendationAlerts } from "../../services/alerts";
@@ -40,9 +39,6 @@ export default function HomeScreen() {
         <Text className="text-ink font-bold" style={{ fontSize: 22 }}>
           {t("home.welcome", { name: user.name })}
         </Text>
-      </View>
-      <View className="mb-4">
-        <SyncStatusIcon />
       </View>
 
       {!hasFields ? (
