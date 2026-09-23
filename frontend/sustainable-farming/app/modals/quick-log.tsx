@@ -98,18 +98,23 @@ export default function QuickLogModal() {
 
   async function handleSave() {
     setSaving(true);
-    await addIntervention({
-      plantingId,
-      type: activityType,
-      date,
-      productId: isChemical ? productId : undefined,
-      quantityMetric: Number(quantity),
-      quantityUnit,
-      costInInr: Number(cost),
-    });
-    setSaving(false);
-    showToast(t("common.savedOffline"));
-    router.back();
+    try {
+      await addIntervention({
+        plantingId,
+        type: activityType,
+        date,
+        productId: isChemical ? productId : undefined,
+        quantityMetric: Number(quantity),
+        quantityUnit,
+        costInInr: Number(cost),
+      });
+      showToast(t("common.saved"));
+      router.back();
+    } catch {
+      showToast(t("common.saveFailed"));
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (plantings.length === 0) {
