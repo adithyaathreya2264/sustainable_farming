@@ -10,7 +10,7 @@ import type { WeatherConditionGroup } from "../types/models";
  * Live conditions for the farmer's location. The backend
  * (GET /api/v1/weather) geocodes their profile state/district and returns
  * current weather from Open-Meteo; this just renders the cached snapshot
- * (store `weather`, refreshed by hooks/useSyncTriggers.ts). Falls back to a
+ * (store `weather`, refreshed by hooks/useRefreshTriggers.ts). Falls back to a
  * mount-time fetch so opening the dashboard first thing still populates it.
  */
 
