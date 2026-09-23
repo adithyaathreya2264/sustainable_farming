@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 import type { IrrigationType, LandUnit, LanguageCode } from "../types/models";
 
 export interface OnboardingDraft {
+  uniqueId: string;
   languagePref: LanguageCode;
   name: string;
   defaultUnit: LandUnit;
@@ -12,6 +13,7 @@ export interface OnboardingDraft {
 }
 
 const initialDraft: OnboardingDraft = {
+  uniqueId: "",
   languagePref: "en",
   name: "",
   defaultUnit: "acre",
