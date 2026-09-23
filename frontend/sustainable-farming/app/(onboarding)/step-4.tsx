@@ -16,7 +16,7 @@ import { STANDARDIZED_LAND_UNITS, unitLabel } from "../../utils/unitConversion";
 // Katha, Biswa, Kanal, Marla) isn't collected until a later onboarding step,
 // so only standardized units are offered here. See docs/unit-conversions.md.
 
-export default function OnboardingStep3() {
+export default function OnboardingStep4() {
   const { t } = useTranslation();
   const { draft, update } = useOnboardingDraft();
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -25,7 +25,7 @@ export default function OnboardingStep3() {
 
   return (
     <ScreenContainer>
-      <StepProgress step={3} total={4} />
+      <StepProgress step={4} total={5} />
       <Text className="text-ink font-bold mb-6" style={{ fontSize: 22 }}>
         {t("onboarding.step2Title")}
       </Text>
@@ -55,7 +55,7 @@ export default function OnboardingStep3() {
       <Button
         label={t("common.continue")}
         disabled={!isValid}
-        onPress={() => router.push("/(onboarding)/step-4")}
+        onPress={() => router.push("/(onboarding)/step-5")}
       />
     </ScreenContainer>
   );
