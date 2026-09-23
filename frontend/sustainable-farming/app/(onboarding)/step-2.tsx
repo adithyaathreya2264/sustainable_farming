@@ -10,7 +10,7 @@ import { useOnboardingDraft } from "../../context/OnboardingDraftContext";
 import { LANGUAGES } from "../../context/LanguageContext";
 import type { LanguageCode } from "../../types/models";
 
-export default function OnboardingStep1() {
+export default function OnboardingStep2() {
   const { t, i18n } = useTranslation();
   const { draft, update } = useOnboardingDraft();
 
@@ -21,7 +21,7 @@ export default function OnboardingStep1() {
 
   return (
     <ScreenContainer>
-      <StepProgress step={1} total={4} />
+      <StepProgress step={2} total={5} />
       <Text className="text-ink font-bold mb-6" style={{ fontSize: 22 }}>
         {t("onboarding.step1Title")}
       </Text>
@@ -39,7 +39,7 @@ export default function OnboardingStep1() {
       <View className="mt-4">
         <Button
           label={t("common.continue")}
-          onPress={() => router.push("/(onboarding)/step-2")}
+          onPress={() => router.push("/(onboarding)/step-3")}
         />
       </View>
     </ScreenContainer>
