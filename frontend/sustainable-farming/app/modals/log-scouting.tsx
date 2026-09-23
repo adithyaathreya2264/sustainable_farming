@@ -55,16 +55,21 @@ export default function LogScoutingModal() {
   async function handleSave() {
     if (!metric) return;
     setSaving(true);
-    await addScoutingObservation({
-      plantingId,
-      metricKey: metric.metricKey,
-      metricValue: Number(value),
-      observedAt,
-      notes: notes.trim() || undefined,
-    });
-    setSaving(false);
-    showToast(t("common.savedOffline"));
-    router.back();
+    try {
+      await addScoutingObservation({
+        plantingId,
+        metricKey: metric.metricKey,
+        metricValue: Number(value),
+        observedAt,
+        notes: notes.trim() || undefined,
+      });
+      showToast(t("common.saved"));
+      router.back();
+    } catch {
+      showToast(t("common.saveFailed"));
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (plantings.length === 0) {
