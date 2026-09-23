@@ -10,11 +10,8 @@ import {
   BottomSheetPicker,
   PickerField,
 } from "../../components/ui/BottomSheetPicker";
-import { SyncStatusIcon } from "../../components/SyncStatusIcon";
 import { useSession } from "../../context/SessionContext";
 import { useLanguage, LANGUAGES } from "../../context/LanguageContext";
-import { useToast } from "../../context/ToastContext";
-import { loadDemoData, resetDemo } from "../../store/appStore";
 import { updateUnitPreference } from "../../services/profile";
 import { availableLandUnits, unitLabel } from "../../utils/unitConversion";
 import type { LandUnit } from "../../types/models";
@@ -23,7 +20,6 @@ export default function ProfileScreen() {
   const { t } = useTranslation();
   const { user, logout } = useSession();
   const { language, setLanguage } = useLanguage();
-  const { showToast } = useToast();
   const [unitPickerOpen, setUnitPickerOpen] = useState(false);
 
   return (
@@ -36,13 +32,9 @@ export default function ProfileScreen() {
         <Text className="text-ink-muted mb-0.5" style={{ fontSize: 13 }}>
           {t("profile.phoneNumber")}
         </Text>
-        <Text className="text-ink font-medium mb-3" style={{ fontSize: 16 }}>
+        <Text className="text-ink font-medium" style={{ fontSize: 16 }}>
           {user.phoneNumber}
         </Text>
-        <Text className="text-ink-muted mb-1" style={{ fontSize: 13 }}>
-          {t("profile.syncStatus")}
-        </Text>
-        <SyncStatusIcon />
       </Card>
 
       <Text className="text-ink font-semibold mb-2" style={{ fontSize: 15 }}>
@@ -73,30 +65,6 @@ export default function ProfileScreen() {
         onSelect={(v) => updateUnitPreference(v as LandUnit)}
         onClose={() => setUnitPickerOpen(false)}
       />
-
-      <Text className="text-ink font-semibold mt-4 mb-2" style={{ fontSize: 15 }}>
-        {t("profile.demoDataTitle")}
-      </Text>
-      <Card className="mb-4">
-        <View className="mb-3">
-          <Button
-            label={t("profile.loadSampleData")}
-            variant="outline"
-            onPress={() => {
-              loadDemoData();
-              showToast(t("common.syncedToCloud"));
-            }}
-          />
-        </View>
-        <Button
-          label={t("profile.resetDemo")}
-          variant="outline"
-          onPress={() => {
-            resetDemo();
-            router.replace("/(onboarding)/step-1");
-          }}
-        />
-      </Card>
 
       <Button
         label={t("profile.logout")}
