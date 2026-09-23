@@ -130,7 +130,6 @@ export default function LedgerScreen() {
               </Text>
               <Text className="text-ink-muted" style={{ fontSize: 12 }}>
                 {formatDate(tx.date)}
-                {!tx.isSynced ? ` · ${t("profile.pendingSync")}` : ""}
               </Text>
             </View>
             <Text
