@@ -22,7 +22,7 @@ const IRRIGATION_ICONS: Record<IrrigationType, string> = {
   drip_sprinkler: "💧",
 };
 
-export default function OnboardingStep4() {
+export default function OnboardingStep5() {
   const { t } = useTranslation();
   const { draft, update } = useOnboardingDraft();
   const [states, setStates] = useState<string[]>([]);
@@ -70,7 +70,7 @@ export default function OnboardingStep4() {
 
   return (
     <ScreenContainer>
-      <StepProgress step={4} total={4} />
+      <StepProgress step={5} total={5} />
       <Text className="text-ink font-bold mb-6" style={{ fontSize: 22 }}>
         {t("onboarding.step3Title")}
       </Text>
