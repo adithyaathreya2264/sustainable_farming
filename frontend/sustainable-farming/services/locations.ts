@@ -22,7 +22,7 @@ interface BackendLocations {
 }
 
 /**
- * Best-effort refresh from the backend. Fired from hooks/useSyncTriggers.ts on
+ * Best-effort refresh from the backend. Fired from hooks/useRefreshTriggers.ts on
  * the same triggers as sync/catalog/weather, so by the time a freshly-logged-in
  * user taps through to the location step it's already server data.
  */
