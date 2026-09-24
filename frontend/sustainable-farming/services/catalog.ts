@@ -20,7 +20,7 @@ export const CATALOG_DATASET_TAG = "seed-uuid-v1";
  * Crops/varieties and agri-input reference data (backend/api/v1/catalog.py)
  * are server-owned and outside the sync protocol — plain authenticated
  * reads, cached into the store so they survive restarts and work offline
- * after the first successful fetch (see hooks/useSyncTriggers.ts, which
+ * after the first successful fetch (see hooks/useRefreshTriggers.ts, which
  * calls fetchAndCacheCatalog() on the same triggers as synchronize()).
  */
 
@@ -39,6 +39,7 @@ interface BackendGrowthStage {
 interface BackendCrop {
   id: string;
   name: string;
+  ml_key?: string | null;
   varieties: BackendCropVariety[];
   growth_stages?: BackendGrowthStage[];
 }
@@ -56,6 +57,7 @@ function cropFromBackend(row: BackendCrop): Crop {
   return {
     id: row.id,
     name: row.name,
+    mlKey: row.ml_key ?? null,
     varieties: row.varieties,
     growthStages: (row.growth_stages ?? [])
       .slice()
