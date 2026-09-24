@@ -58,6 +58,16 @@ export default function HomeScreen() {
           <WeatherWidget />
 
           <Card className="mb-4">
+            <Text className="text-ink font-semibold mb-1" style={{ fontSize: 15 }}>
+              🏷️ {t("market.homeCardTitle")}
+            </Text>
+            <Text className="text-ink-muted mb-3" style={{ fontSize: 13 }}>
+              {t("market.homeCardSubtitle")}
+            </Text>
+            <Button label={t("market.open")} variant="outline" onPress={() => router.push("/market")} />
+          </Card>
+
+          <Card className="mb-4">
             <Text className="text-ink font-semibold mb-2" style={{ fontSize: 15 }}>
               📈 {t("home.seasonFinancials")}
             </Text>
