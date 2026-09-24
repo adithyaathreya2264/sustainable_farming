@@ -1,5 +1,5 @@
-import React from "react";
-import { Pressable, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Pressable, Text, View } from "react-native";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import { ScreenContainer } from "../../components/ui/ScreenContainer";
@@ -7,8 +7,11 @@ import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { useAppState } from "../../hooks/useAppState";
+import { useToast } from "../../context/ToastContext";
+import { deleteField } from "../../services/fields";
 import { formatArea } from "../../utils/unitConversion";
 import { formatDate } from "../../utils/format";
+import { soilTypeDisplay } from "../../utils/soilTypes";
 import type { Crop } from "../../types/models";
 
 function cropLabel(crops: Crop[], cropId: string, varietyId: string) {
@@ -19,11 +22,42 @@ function cropLabel(crops: Crop[], cropId: string, varietyId: string) {
 
 export default function FieldsScreen() {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const fields = useAppState((s) => s.fields);
   const plantings = useAppState((s) => s.plantings);
   const crops = useAppState((s) => s.crops);
   const defaultUnit = useAppState((s) => s.user.defaultUnit);
   const state = useAppState((s) => s.user.state);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  function handleRemove(fieldId: string, fieldName: string, hasPlantings: boolean) {
+    if (hasPlantings) {
+      Alert.alert(t("fields.removeBlockedTitle"), t("fields.removeBlockedSubtitle"));
+      return;
+    }
+    Alert.alert(
+      t("fields.removeConfirmTitle"),
+      t("fields.removeConfirmSubtitle", { name: fieldName }),
+      [
+        { text: t("common.cancel"), style: "cancel" },
+        {
+          text: t("fields.remove"),
+          style: "destructive",
+          onPress: async () => {
+            setDeletingId(fieldId);
+            try {
+              await deleteField(fieldId);
+              showToast(t("fields.removed"));
+            } catch {
+              showToast(t("common.saveFailed"));
+            } finally {
+              setDeletingId(null);
+            }
+          },
+        },
+      ]
+    );
+  }
 
   return (
     <ScreenContainer>
@@ -52,15 +86,29 @@ export default function FieldsScreen() {
             return (
               <Card key={field.id} className="mb-3">
                 <View className="flex-row items-center justify-between mb-1">
-                  <Text className="text-ink font-semibold" style={{ fontSize: 16 }}>
+                  <Text className="text-ink font-semibold flex-1" style={{ fontSize: 16 }}>
                     {field.name}
                   </Text>
-                  <Text className="text-ink-muted" style={{ fontSize: 13 }}>
+                  <Text className="text-ink-muted mr-3" style={{ fontSize: 13 }}>
                     {formatArea(field.areaHectares, defaultUnit, state)}
                   </Text>
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={t("fields.remove")}
+                    disabled={deletingId === field.id}
+                    onPress={() =>
+                      handleRemove(field.id, field.name, fieldPlantings.length > 0)
+                    }
+                    hitSlop={8}
+                    style={{ opacity: deletingId === field.id ? 0.4 : 1 }}
+                  >
+                    <Text className="text-danger" style={{ fontSize: 13 }}>
+                      {t("fields.remove")}
+                    </Text>
+                  </Pressable>
                 </View>
                 <Text className="text-ink-muted mb-2" style={{ fontSize: 13 }}>
-                  {field.soilType}
+                  {soilTypeDisplay(field.soilType, t)}
                 </Text>
 
                 {fieldPlantings.length === 0 ? (
