@@ -1,7 +1,7 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
-import { useTranslation } from "react-i18next";
 import type { Alert } from "../types/models";
+import { ConfidencePill } from "./ui/ConfidencePill";
 
 const SEVERITY_STYLE = {
   critical: { border: "border-danger", bg: "bg-danger/10", badge: "bg-danger" },
@@ -10,7 +10,6 @@ const SEVERITY_STYLE = {
 } as const;
 
 export function AlertCard({ alert, onPress }: { alert: Alert; onPress: () => void }) {
-  const { t } = useTranslation();
   const style = SEVERITY_STYLE[alert.severity ?? "info"];
 
   return (
@@ -22,11 +21,7 @@ export function AlertCard({ alert, onPress }: { alert: Alert; onPress: () => voi
     >
       <View className="flex-row items-center justify-between mb-1">
         <Text style={{ fontSize: 20 }}>⚠️</Text>
-        <View className={`${style.badge} rounded-full px-2.5 py-0.5`}>
-          <Text className="text-white" style={{ fontSize: 12 }}>
-            {t(`confidence.${alert.confidenceLabel}`)}
-          </Text>
-        </View>
+        <ConfidencePill label={alert.confidenceLabel} className={style.badge} />
       </View>
       <Text className="text-ink font-semibold" numberOfLines={3} style={{ fontSize: 16 }}>
         {alert.headline}
