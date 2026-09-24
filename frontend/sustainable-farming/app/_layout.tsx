@@ -57,6 +57,10 @@ function AppShell() {
             name="ledger/[plantingId]"
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="planting/[plantingId]/photo-check" options={{ headerShown: false }} />
+          <Stack.Screen name="planting/[plantingId]/diseases" options={{ headerShown: false }} />
+          <Stack.Screen name="market" options={{ headerShown: false }} />
+          <Stack.Screen name="photo-history" options={{ headerShown: false }} />
         </Stack>
       </ToastProvider>
     </LanguageProvider>
