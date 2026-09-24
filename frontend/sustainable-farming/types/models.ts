@@ -42,6 +42,7 @@ export type LanguageCode =
 export interface User {
   id: string;
   phoneNumber: string;
+  uniqueId: string;
   name: string;
   languagePref: LanguageCode;
   defaultUnit: LandUnit;
@@ -50,6 +51,9 @@ export interface User {
   state: string;
   district: string;
   onboardingComplete: boolean;
+  /** Consent to use this farmer's photo checks for retraining. Photos are kept
+   * for their own history either way. Off by default. */
+  photoTrainingConsent?: boolean;
 }
 
 export interface Coordinates {
@@ -66,7 +70,6 @@ export interface Field {
   long: number;
   boundary: Coordinates[]; // polygon vertices, >= 3, in the order drawn
   soilType: string;
-  isSynced: boolean;
 }
 
 export type PlantingStatus = "active" | "harvested";
@@ -78,7 +81,6 @@ export interface Planting {
   varietyId: string;
   sowingDate: string; // ISO date
   status: PlantingStatus;
-  isSynced: boolean;
 }
 
 /**
@@ -94,7 +96,6 @@ export interface ScoutingObservation {
   metricValue: number;
   observedAt: string; // ISO date
   notes?: string;
-  isSynced: boolean;
 }
 
 export type InterventionType = "chemical" | "irrigation" | "labor" | "harvest";
@@ -109,7 +110,6 @@ export interface Intervention {
   quantityUnit?: string;
   costInInr: number;
   notes?: string;
-  isSynced: boolean;
 }
 
 // Matches backend RecommendationSeverity exactly (models/recommendation.py) —
@@ -212,6 +212,10 @@ export interface CropGrowthStage {
 export interface Crop {
   id: string;
   name: string;
+  /** The crop's key in the ML layer (backend crops.ml_key, e.g. "rice",
+   * "pearl millet"). Model results name crops by this key. Absent in catalog
+   * payloads cached before 2026-09-24. */
+  mlKey?: string | null;
   varieties: { id: string; name: string }[];
   /** Growth-stage windows from GET /api/v1/catalog/crops; used to compute a
    * planting's current stage client-side. Empty for older cached payloads. */
