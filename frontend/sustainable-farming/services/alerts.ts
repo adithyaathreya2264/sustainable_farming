@@ -45,7 +45,7 @@ function alertFromBackend(row: BackendAlert): Alert {
  * Fetches and caches the alert feed. Best-effort/silent on failure (offline,
  * not yet authenticated) — same pattern as services/catalog.ts's
  * fetchAndCacheCatalog(), fired from the same connectivity/foreground
- * triggers (see hooks/useSyncTriggers.ts), not from screen mount.
+ * triggers (see hooks/useRefreshTriggers.ts), not from screen mount.
  */
 export async function fetchAndCacheAlerts(): Promise<void> {
   if (!getState().isAuthenticated) return;
