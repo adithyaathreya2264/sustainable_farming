@@ -6,7 +6,7 @@
     "continue": "Continue",
     "loading": "Loading...",
     "saved": "Saved",
-    "sampleDataLoaded": "Sample data loaded.",
+    "search": "Search",
     "retry": "Retry",
     "saveFailed": "Couldn't save. Check your connection and try again."
   },
@@ -75,7 +75,13 @@
     "noFieldsTitle": "No fields yet",
     "noFieldsSubtitle": "Map your first field to start tracking a planting.",
     "activePlantings": "Active Plantings",
-    "harvested": "Harvested"
+    "harvested": "Harvested",
+    "remove": "Remove",
+    "removed": "Field removed",
+    "removeConfirmTitle": "Remove this field?",
+    "removeConfirmSubtitle": "\"{{name}}\" will be removed. This can't be undone.",
+    "removeBlockedTitle": "Can't remove this field",
+    "removeBlockedSubtitle": "This field has plantings on it. Remove or harvest them first."
   },
   "addField": {
     "title": "Map Field",
@@ -88,11 +94,30 @@
     "redraw": "Redraw",
     "fieldNameLabel": "Field Name",
     "fieldNamePlaceholder": "e.g. North Ragi Field",
+    "fieldNameDuplicate": "This field name already exists",
     "areaSizeLabel": "Area Size",
     "soilTypeLabel": "Soil Type",
     "soilTypeSuggested": "suggested for your taluk",
     "soilTypeLikely": "likely, based on your district",
     "soilTypeLookupFailed": "Couldn't fetch a suggestion — enter manually",
+    "soilTypeOtherLabel": "Soil Type (specify)",
+    "soilTestSectionTitle": "Soil Test Results (optional)",
+    "soilTestHint": "If you have a recent soil test, enter the values below for a more accurate crop recommendation.",
+    "nitrogenLabel": "Nitrogen (N, kg/ha)",
+    "phosphorusLabel": "Phosphorus (P, kg/ha)",
+    "potassiumLabel": "Potassium (K, kg/ha)",
+    "phLabel": "Soil pH",
+    "soilTypes": {
+      "alluvial": "Alluvial",
+      "black": "Black / Regur",
+      "red": "Red",
+      "laterite": "Laterite",
+      "arid": "Arid / Desert",
+      "saline": "Saline & Alkaline",
+      "peaty": "Peaty & Marshy",
+      "forest": "Forest & Mountain",
+      "other": "Other"
+    },
     "confirmSave": "Confirm Location & Save"
   },
   "addPlanting": {
@@ -105,7 +130,15 @@
     "selectVariety": "Select Variety",
     "startTracking": "Start Tracking",
     "catalogUnavailableTitle": "Crop catalog unavailable",
-    "catalogUnavailableSubtitle": "Connect to the internet once to download crop data, then try again."
+    "catalogUnavailableSubtitle": "Connect to the internet once to download crop data, then try again.",
+    "recommendedFit": "Recommended for this field",
+    "alternativeFit": "Not the top match for this field's conditions",
+    "unscoredFit": "Not scored by this model",
+    "recommendationUnavailable": "Recommendation unavailable right now",
+    "recommendationEstimated": "Using estimated averages — add a soil test in Edit Field for a more accurate recommendation",
+    "recommendationFromSoilTest": "Based on this field's soil test and local weather",
+    "recommendationFromSoilType": "Based on this field's soil type and local weather. Add a soil test for a closer match",
+    "noVarieties": "No varieties listed for this crop"
   },
   "quickLog": {
     "title": "Log Activity",
@@ -170,9 +203,6 @@
     "language": "Language",
     "phoneNumber": "Phone Number",
     "unitPreference": "Unit Preference",
-    "demoDataTitle": "Demo Data",
-    "loadSampleData": "Load Sample Data",
-    "resetDemo": "Reset Demo (New User)",
     "logout": "Log Out"
   },
   "units": {
@@ -196,6 +226,183 @@
       "pheromone_trap_moths_per_night_3day_avg": "Pheromone trap moths (3-day avg)",
       "deadheart_percent": "Dead hearts",
       "percent_plants_with_whorl_damage": "Plants with whorl damage"
+    }
+  },
+  "ml": {
+    "modelNotice": "Computer estimate. Not reviewed by an agricultural expert.",
+    "unavailable": "This check is unavailable right now. Try again later.",
+    "checkFailed": "Could not complete the check. Try again.",
+    "notForThisCrop": "This check is not available for this crop.",
+    "badPhoto": "That photo could not be used. Try a clear JPEG or PNG photo.",
+    "identifySoilFromPhoto": "Identify soil from a photo",
+    "soilPhotoSuggests": "Photo suggests: {{soil}}",
+    "soilPhotoNotInList": "Photo suggests {{soil}}, which is not in the list. Choose manually.",
+    "takePhoto": "Take photo",
+    "choosePhoto": "Choose photo",
+    "checking": "Checking photo…",
+    "cropHealthTitle": "Crop health & advice"
+  },
+  "photoCheck": {
+    "open": "Photo check",
+    "title": "Photo check",
+    "kind": {
+      "leaf": "Leaf disease",
+      "insects": "Insect pest",
+      "wheat_heading": "Heading",
+      "tobacco_lesions": "Leaf spots"
+    },
+    "hint": {
+      "leaf": "Photograph one diseased leaf, close up, in daylight.",
+      "insects": "Photograph one insect, close up. Wide field photos do not work well.",
+      "wheat_heading": "Photograph the crop from above, looking down at the canopy.",
+      "tobacco_lesions": "Photograph one leaf, close up, filling the frame."
+    },
+    "symptomConfirm": "I can see disease symptoms on this leaf",
+    "symptomRequiredHint": "This check can only name a disease. It cannot tell you a leaf is healthy, so use it only when you see symptoms.",
+    "leafReason": {
+      "symptom_required": "Confirm that you can see symptoms before checking a leaf.",
+      "no_model_for_crop": "There is no leaf model for this crop.",
+      "none": "No result for this photo."
+    },
+    "otherPossibilities": "Other possibilities",
+    "noneOfThese": "None of these match",
+    "noneOfTheseChosen": "Noted. The problem may be something this check does not cover. Look through the full disease list below or ask your local agriculture officer.",
+    "noInsectFound": "No insect found in this photo.",
+    "notPestOfThisCrop": "Not usually a pest of this crop",
+    "logScoutingCheck": "Log a scouting count",
+    "headingDetected": "Heads are visible. The crop has started heading.",
+    "headingNotDetected": "No heads found. This does not prove heading has not started.",
+    "lesionArea": "About {{percent}}% of the leaf shows lesions",
+    "lesionOverestimates": "This measure tends to over-estimate lesion area by about a third.",
+    "seeRemedies": "See documented remedies"
+  },
+  "diseases": {
+    "open": "Look up a problem",
+    "title": "Look up a problem",
+    "describeLabel": "Describe what you see",
+    "describePlaceholder": "e.g. brown spots on the leaves",
+    "search": "Search",
+    "languageNote": "You can describe it in English, Hindi or Marathi.",
+    "noCloseMatch": "Nothing close to this description. Look through the full list below.",
+    "noCoverage": "No disease information is available for {{crop}} yet.",
+    "cause": "Cause",
+    "affects": "Affects",
+    "sharedSymptom": "Similar symptoms are also recorded for: {{others}}",
+    "shownInEnglish": "Shown in English. Not available in your language.",
+    "seeAll": "All diseases for this crop",
+    "documentedRemedies": "Documented remedies"
+  },
+  "nutrients": {
+    "title": "Nutrient check",
+    "name": {
+      "N": "Nitrogen (N)",
+      "P": "Phosphorus (P)",
+      "K": "Potassium (K)"
+    },
+    "short": "Low",
+    "ok": "OK",
+    "ph": "Soil pH",
+    "phStatus": {
+      "below_range": "Too acidic",
+      "within_range": "OK",
+      "above_range": "Too alkaline"
+    },
+    "products": "Fertilizers listed for this crop: {{products}}",
+    "basisSoilTest": "Based on this field's soil test.",
+    "basisStateAverage": "Based on your state's average soil, not a soil test. Add a soil test for a reliable result.",
+    "noTarget": "No nutrient guidance is available for {{crop}}.",
+    "unavailable": {
+      "no_state_average": "No average soil data for your state. Add a soil test to get a nutrient check.",
+      "no_nutrient_target": "No nutrient guidance is available for this crop.",
+      "other": "Nutrient check unavailable."
+    }
+  },
+  "yieldOutlook": {
+    "title": "Yield outlook",
+    "position": {
+      "above_typical": "Above typical",
+      "around_typical": "Around typical",
+      "below_typical": "Below typical",
+      "well_below_typical": "Well below typical"
+    },
+    "comparedWith": "Compared with past {{crop}} harvests ({{scope}}, {{records}} records)",
+    "allIndia": "all India",
+    "outsideTrainingYears": "Based on records up to 2014 and average weather, not this season's.",
+    "typicalInputs": "Uses typical fertilizer and pesticide use for this crop, not your logged inputs."
+  },
+  "market": {
+    "homeCardTitle": "Market prices",
+    "homeCardSubtitle": "Past price ranges and a 13-week outlook for Karnataka mandis",
+    "open": "View market prices",
+    "title": "Market prices",
+    "karnatakaOnly": "Market prices are available for Karnataka only",
+    "karnatakaOnlySubtitle": "Price data for other states has not been added yet.",
+    "noHistory": "No price history for this crop in your area.",
+    "scopeDistrict": "{{district}} markets",
+    "scopeState": "Karnataka markets (no data for your district)",
+    "unit": "₹ per quintal",
+    "milledRice": "This is milled rice, not paddy.",
+    "paddyNoForecast": "Paddy prices have no tested forecast. Only past ranges are shown.",
+    "forecastTitle": "13-week outlook",
+    "lastPrice": "Last recorded price (week of {{date}})",
+    "direction": {
+      "up": "Likely to rise",
+      "down": "Likely to fall",
+      "flat": "Likely to stay about the same"
+    },
+    "byDate": "by {{date}}",
+    "likelyRange": "Likely range: {{low}} to {{high}}",
+    "noForecast": "No tested forecast for this crop. Past price ranges only.",
+    "historicalRange": "Historical price range",
+    "historicalRangeNote": "Middle half of past prices for each month, 2023 to early 2026. This is history, not a prediction.",
+    "scaleNote": "Bars run from {{low}} to {{high}}; the dark mark is the middle price.",
+    "month": {
+      "1": "Jan",
+      "2": "Feb",
+      "3": "Mar",
+      "4": "Apr",
+      "5": "May",
+      "6": "Jun",
+      "7": "Jul",
+      "8": "Aug",
+      "9": "Sep",
+      "10": "Oct",
+      "11": "Nov",
+      "12": "Dec"
+    },
+    "commodity": {
+      "arhar": "Arhar (Tur)",
+      "bajra": "Bajra",
+      "bengal_gram": "Bengal gram",
+      "cotton": "Cotton",
+      "groundnut": "Groundnut",
+      "jaggery": "Jaggery",
+      "jowar": "Jowar",
+      "maize": "Maize",
+      "paddy": "Paddy",
+      "ragi": "Ragi",
+      "rice": "Rice (milled)",
+      "soyabean": "Soyabean",
+      "wheat": "Wheat"
+    }
+  },
+  "photoHistory": {
+    "sectionTitle": "Photo checks",
+    "open": "My photo checks",
+    "title": "My photo checks",
+    "storedNote": "Photos you send for checks are saved to your account so you can see them here. Deleting one removes the photo.",
+    "trainingConsent": "Allow my photos to be used to improve the checks",
+    "trainingConsentHint": "Off by default. Your photos are never used for this unless you turn it on.",
+    "empty": "No photo checks yet.",
+    "notChecked": "not checked",
+    "delete": "Delete",
+    "deleted": "Photo deleted",
+    "model": {
+      "soil_type_photo": "Soil type",
+      "insect_detector": "Insect pest",
+      "leaf_condition": "Leaf disease",
+      "wheat_heading": "Wheat heading",
+      "tobacco_lesions": "Tobacco leaf spots"
     }
   }
 }
