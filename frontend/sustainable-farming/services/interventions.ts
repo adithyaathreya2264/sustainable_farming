@@ -1,5 +1,24 @@
+import { apiFetch } from "../lib/apiClient";
+import { type BackendIntervention, interventionFromBackend } from "../lib/syncMapping";
 import { getState, setState } from "../store/appStore";
 import type { Intervention, InterventionType } from "../types/models";
+
+/**
+ * Interventions (backend/src/routes/interventions.js). Same online-only
+ * pattern as services/fields.ts.
+ */
+
+export async function fetchAndCacheInterventions(): Promise<void> {
+  if (!getState().isAuthenticated) return;
+  try {
+    const res = await apiFetch<{ items: BackendIntervention[] }>(
+      "/api/v1/interventions"
+    );
+    setState({ interventions: res.items.map(interventionFromBackend) });
+  } catch {
+    // Silent — cached copy stays as-is until the next trigger.
+  }
+}
 
 export async function getInterventionsByPlanting(
   plantingId: string
@@ -20,18 +39,24 @@ export interface AddInterventionInput {
   notes?: string;
 }
 
+/** POST /api/v1/interventions. Throws on failure — see services/fields.ts. */
 export async function addIntervention(
   input: AddInterventionInput
 ): Promise<Intervention> {
-  const intervention: Intervention = {
-    id: `i${Date.now()}`,
-    isSynced: false,
-    ...input,
-  };
+  const row = await apiFetch<BackendIntervention>("/api/v1/interventions", {
+    method: "POST",
+    body: {
+      planting_id: input.plantingId,
+      type: input.type,
+      product_id: input.productId ?? null,
+      quantity_metric: input.quantityMetric ?? null,
+      quantity_unit: input.quantityUnit ?? null,
+      cost_in_inr: input.costInInr,
+      intervention_date: input.date,
+      notes: input.notes ?? null,
+    },
+  });
+  const intervention = interventionFromBackend(row);
   setState({ interventions: [...getState().interventions, intervention] });
-
-  // Real sync now flips isSynced — see services/sync-manager.ts, triggered
-  // by hooks/useSyncTriggers.ts (connectivity, foreground, periodic fallback).
-
   return intervention;
 }
