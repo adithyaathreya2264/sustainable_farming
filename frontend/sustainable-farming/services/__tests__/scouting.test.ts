@@ -1,11 +1,6 @@
-import {
-  scoutingObservationFromBackend,
-  scoutingObservationToBackend,
-} from "../../lib/syncMapping";
+import { scoutingObservationFromBackend } from "../../lib/syncMapping";
 import { metricForPlanting } from "../../lib/scoutingMetrics";
 import type { Crop, ScoutingObservation } from "../../types/models";
-
-const flush = () => new Promise((r) => setImmediate(r));
 
 async function bootStore() {
   jest.resetModules();
@@ -17,10 +12,25 @@ async function bootStore() {
 }
 
 describe("scouting service + mapping", () => {
-  it("addScoutingObservation appends an unsynced row", async () => {
+  it("addScoutingObservation POSTs to the backend and caches the server row", async () => {
     const store = await bootStore();
+    store.setState({ isAuthenticated: true, authToken: "t" });
     const { addScoutingObservation, getScoutingObservationsByPlanting } =
       require("../scouting") as typeof import("../scouting");
+
+    const serverRow = {
+      id: "so1",
+      planting_id: "pl1",
+      metric_key: "dead_hearts_percent",
+      metric_value: 7,
+      observed_at: "2026-08-01",
+      notes: null,
+    };
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: true,
+      text: async () => JSON.stringify(serverRow),
+    });
+    (global as unknown as { fetch: typeof fetch }).fetch = fetchMock as never;
 
     await addScoutingObservation({
       plantingId: "pl1",
@@ -28,36 +38,35 @@ describe("scouting service + mapping", () => {
       metricValue: 7,
       observedAt: "2026-08-01",
     });
-    await flush();
 
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/api/v1/scouting-observations"),
+      expect.objectContaining({ method: "POST" })
+    );
     const rows = await getScoutingObservationsByPlanting("pl1");
     expect(rows).toHaveLength(1);
-    expect(rows[0].isSynced).toBe(false);
     expect(rows[0].metricValue).toBe(7);
     expect(store.getState().scoutingObservations).toHaveLength(1);
   });
 
-  it("syncMapping round-trips camel<->snake and marks synced on the way in", () => {
-    const local: ScoutingObservation = {
-      id: "so1",
-      plantingId: "pl1",
-      metricKey: "deadheart_percent",
-      metricValue: 12.5,
-      observedAt: "2026-07-15",
-      notes: "north corner",
-      isSynced: false,
-    };
-    const wire = scoutingObservationToBackend(local);
-    expect(wire).toEqual({
+  it("scoutingObservationFromBackend maps snake_case to camelCase", () => {
+    const wire = {
       id: "so1",
       planting_id: "pl1",
       metric_key: "deadheart_percent",
       metric_value: 12.5,
       observed_at: "2026-07-15",
       notes: "north corner",
+    };
+    const local: ScoutingObservation = scoutingObservationFromBackend(wire);
+    expect(local).toEqual({
+      id: "so1",
+      plantingId: "pl1",
+      metricKey: "deadheart_percent",
+      metricValue: 12.5,
+      observedAt: "2026-07-15",
+      notes: "north corner",
     });
-    const back = scoutingObservationFromBackend(wire);
-    expect(back).toEqual({ ...local, isSynced: true });
   });
 });
 
