@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScreenContainer } from "../../components/ui/ScreenContainer";
@@ -23,7 +23,13 @@ import {
   toHectares,
   unitLabel,
 } from "../../utils/unitConversion";
-import { SOIL_TYPE_KEYS, type SoilTypeKey } from "../../utils/soilTypes";
+import { SOIL_TYPE_KEYS, soilTypeDisplay, type SoilTypeKey } from "../../utils/soilTypes";
+import type { PhotoSource } from "../../lib/photo";
+import { pickPhoto } from "../../lib/photo";
+import { identifySoilFromPhoto, mlErrorMessage, type SoilTypePhotoResult } from "../../services/ml";
+import { ConfidencePill } from "../../components/ui/ConfidencePill";
+import { CaveatText } from "../../components/ui/CaveatText";
+import { PhotoSourceButtons } from "../../components/ml/PhotoSourceButtons";
 import type { Coordinates, LandUnit } from "../../types/models";
 
 export default function AddFieldModal() {
@@ -54,6 +60,33 @@ export default function AddFieldModal() {
   const [phosphorus, setPhosphorus] = useState("");
   const [potassium, setPotassium] = useState("");
   const [soilPh, setSoilPh] = useState("");
+  const [soilPhoto, setSoilPhoto] = useState<SoilTypePhotoResult | null>(null);
+  const [soilPhotoBusy, setSoilPhotoBusy] = useState(false);
+  const [soilPhotoError, setSoilPhotoError] = useState<string | null>(null);
+
+  // Model 7b (soil type from photo). Prefills the picker; the farmer still
+  // confirms by saving, and can override it like any suggestion.
+  async function identifySoil(source: PhotoSource) {
+    const photo = await pickPhoto(source);
+    if (!photo) return;
+    setSoilPhotoBusy(true);
+    setSoilPhotoError(null);
+    try {
+      const result = await identifySoilFromPhoto(photo.uri);
+      setSoilPhoto(result);
+      setSoilConfidence(null);
+      setSoilLookupFailed(false);
+      if (result.appSoilKey) {
+        setSoilType(result.appSoilKey);
+        setSoilTypeMode(result.appSoilKey as SoilTypeKey);
+      }
+    } catch (err) {
+      setSoilPhoto(null);
+      setSoilPhotoError(mlErrorMessage(err, t));
+    } finally {
+      setSoilPhotoBusy(false);
+    }
+  }
 
   // Pre-fill from GET /api/v1/soil-lookup (backend/services/soil_lookup.py,
   // Task 3.1) when the farmer's location is known. Best-effort, and never
@@ -183,7 +216,7 @@ export default function AddFieldModal() {
       <PickerField
         label={soilTypeLabel()}
         placeholder={t("addField.soilTypeLabel")}
-        displayValue={soilType || undefined}
+        displayValue={soilType ? soilTypeDisplay(soilType, t) : undefined}
         onPress={() => setSoilTypePickerOpen(true)}
       />
       <BottomSheetPicker
@@ -199,12 +232,32 @@ export default function AddFieldModal() {
           setSoilTypeMode(soilKey);
           setSoilConfidence(null); // farmer's own choice, not a suggestion anymore
           setSoilLookupFailed(false);
-          if (soilKey !== "other") setSoilType(t(`addField.soilTypes.${soilKey}`));
+          setSoilPhoto(null);
+          // Store the key, not the translated label: the backend maps keys to
+          // the crop-from-soil-type model's vocabulary in any app language.
+          if (soilKey !== "other") setSoilType(soilKey);
         }}
         onClose={() => setSoilTypePickerOpen(false)}
         searchable
         searchPlaceholder={t("common.search")}
       />
+      <PhotoSourceButtons
+        label={t("ml.identifySoilFromPhoto")}
+        busy={soilPhotoBusy}
+        onPick={identifySoil}
+      />
+      {soilPhoto && (
+        <View className="flex-row items-center mb-2" style={{ gap: 8 }}>
+          <Text className="text-ink" style={{ fontSize: 13 }}>
+            {soilPhoto.appSoilKey
+              ? t("ml.soilPhotoSuggests", { soil: soilTypeDisplay(soilPhoto.appSoilKey, t) })
+              : t("ml.soilPhotoNotInList", { soil: soilPhoto.predictedSoilType })}
+          </Text>
+          <ConfidencePill label={soilPhoto.confidenceLabel} />
+        </View>
+      )}
+      {soilPhoto && <CaveatText>{t("ml.modelNotice")}</CaveatText>}
+      {soilPhotoError && <CaveatText>{soilPhotoError}</CaveatText>}
       {soilLookupFailed && (
         <Text className="text-ink-muted mb-2" style={{ fontSize: 12 }}>
           {t("addField.soilTypeLookupFailed")}
