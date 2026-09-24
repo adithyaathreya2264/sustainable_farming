@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { ScreenContainer } from "../../components/ui/ScreenContainer";
@@ -15,24 +15,16 @@ import { useToast } from "../../context/ToastContext";
 import { useAppState } from "../../hooks/useAppState";
 import { addPlanting } from "../../services/plantings";
 import {
+  cropFit,
   getCropRecommendation,
+  type CropFit,
+  type CropRecommendationEntry,
   type CropRecommendationResult,
 } from "../../services/cropRecommendation";
+import { ConfidencePill } from "../../components/ui/ConfidencePill";
+import { CaveatText } from "../../components/ui/CaveatText";
 
 const today = new Date().toISOString().slice(0, 10);
-
-type CropFit = "top" | "alternative" | "unscored";
-
-/** Best-effort name match: backend display names/keys for seeded crops are
- * exact-cased ("Sugarcane", "sugarcane") against the catalog's own
- * crops.name, per ml/prep/common.py's SEEDED_CROPS table. */
-function cropFit(cropName: string, rec: CropRecommendationResult): CropFit | null {
-  const lower = cropName.toLowerCase();
-  if (rec.unreachableSeededCrops.some((key) => lower.startsWith(key))) return "unscored";
-  if (rec.recommended.displayName === cropName) return "top";
-  if (rec.alternatives.some((a) => a.displayName === cropName)) return "alternative";
-  return null;
-}
 
 export default function AddPlantingModal() {
   const { t } = useTranslation();
@@ -84,7 +76,19 @@ export default function AddPlantingModal() {
     };
   }, [fieldId]);
 
-  const isValid = Boolean(fieldId && cropId && varietyId && sowingDate);
+  // Pearl millet, wheat and tobacco are seeded without varieties (none have
+  // been sourced), so a variety is only required when the crop has some.
+  const needsVariety = (selectedCrop?.varieties.length ?? 0) > 0;
+  const isValid = Boolean(fieldId && cropId && (varietyId || !needsVariety) && sowingDate);
+  const fit = selectedCrop && recommendation ? cropFit(selectedCrop, recommendation) : null;
+  const fitEntry: CropRecommendationEntry | undefined =
+    fit === "top"
+      ? recommendation?.recommended
+      : fit === "alternative"
+        ? recommendation?.alternatives.find(
+            (a) => a.cropId === selectedCrop?.id || (selectedCrop?.mlKey && a.cropKey === selectedCrop.mlKey)
+          )
+        : undefined;
 
   async function handleSave() {
     setSaving(true);
@@ -151,24 +155,26 @@ export default function AddPlantingModal() {
         searchPlaceholder={t("common.search")}
       />
       {selectedCrop && recommendation && (
-        <RecommendationBadge fit={cropFit(selectedCrop.name, recommendation)} />
+        <RecommendationBadge fit={fit} entry={fitEntry} />
       )}
       {selectedCrop && !recommendation && recommendationUnavailable && (
-        <Text className="text-ink-muted mb-4" style={{ fontSize: 12 }}>
-          {t("addPlanting.recommendationUnavailable")}
-        </Text>
+        <CaveatText className="mb-4">{t("addPlanting.recommendationUnavailable")}</CaveatText>
       )}
-      {recommendation && !recommendation.usedSoilTest && (
-        <Text className="text-ink-muted mb-4" style={{ fontSize: 12 }}>
-          {t("addPlanting.recommendationEstimated")}
-        </Text>
+      {recommendation && (
+        <CaveatText className="mb-4">
+          {recommendation.basis === "soil_test"
+            ? t("addPlanting.recommendationFromSoilTest")
+            : recommendation.basis === "soil_type"
+              ? t("addPlanting.recommendationFromSoilType")
+              : t("addPlanting.recommendationEstimated")}
+        </CaveatText>
       )}
 
       <PickerField
         label={t("addPlanting.varietyLabel")}
-        placeholder={t("addPlanting.selectVariety")}
+        placeholder={selectedCrop && !needsVariety ? t("addPlanting.noVarieties") : t("addPlanting.selectVariety")}
         displayValue={selectedCrop?.varieties.find((v) => v.id === varietyId)?.name}
-        disabled={!selectedCrop}
+        disabled={!selectedCrop || !needsVariety}
         onPress={() => setVarietyPickerOpen(true)}
       />
       <BottomSheetPicker
@@ -202,7 +208,7 @@ export default function AddPlantingModal() {
   );
 }
 
-function RecommendationBadge({ fit }: { fit: CropFit | null }) {
+function RecommendationBadge({ fit, entry }: { fit: CropFit | null; entry?: CropRecommendationEntry }) {
   const { t } = useTranslation();
   if (!fit) return null;
   const copy = {
@@ -211,8 +217,11 @@ function RecommendationBadge({ fit }: { fit: CropFit | null }) {
     unscored: { text: t("addPlanting.unscoredFit"), className: "text-ink-muted" },
   }[fit];
   return (
-    <Text className={`${copy.className} mb-2 font-semibold`} style={{ fontSize: 13 }}>
-      {copy.text}
-    </Text>
+    <View className="flex-row items-center mb-2" style={{ gap: 8 }}>
+      <Text className={`${copy.className} font-semibold`} style={{ fontSize: 13 }}>
+        {copy.text}
+      </Text>
+      {entry && <ConfidencePill label={entry.confidenceLabel} />}
+    </View>
   );
 }
