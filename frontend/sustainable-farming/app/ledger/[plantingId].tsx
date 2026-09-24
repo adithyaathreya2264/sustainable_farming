@@ -13,6 +13,7 @@ import { useAppState } from "../../hooks/useAppState";
 import { metricForPlanting } from "../../lib/scoutingMetrics";
 import { formatInr, formatDate } from "../../utils/format";
 import { roundDisplay } from "../../utils/unitConversion";
+import { PlantingAdvice } from "../../components/ml/PlantingAdvice";
 
 const BREAKDOWN_ICONS: Record<string, string> = {
   chemical: "🧪",
@@ -78,6 +79,8 @@ export default function LedgerScreen() {
           />
         </View>
       ) : null}
+
+      {crop && <PlantingAdvice plantingId={plantingId} cropName={crop.name} />}
 
       <Card className="mb-4 items-center py-6">
         <Text className="text-ink-muted" style={{ fontSize: 13 }}>
