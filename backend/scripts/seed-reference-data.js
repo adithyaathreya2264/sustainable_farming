@@ -18,14 +18,22 @@ const locations = JSON.parse(
   fs.readFileSync(path.join(here, "seed_data", "locations.json"), "utf8")
 );
 
-async function getOrCreateCrop(name) {
-  const existing = await queryOne("SELECT id FROM crops WHERE name = ?", [name]);
-  if (existing) return existing.id;
+// ml_key is the crop's key in the ML layer (ml/prep/common.py crop_key). It is
+// only ever filled in when missing, so re-seeding still never changes a value
+// that already exists.
+async function getOrCreateCrop(name, mlKey = null) {
+  const existing = await queryOne("SELECT id, ml_key FROM crops WHERE name = ?", [name]);
+  if (existing) {
+    if (mlKey && !existing.ml_key) {
+      await query("UPDATE crops SET ml_key = ? WHERE id = ?", [mlKey, existing.id]);
+    }
+    return existing.id;
+  }
   const id = newId();
   const now = utcnow();
   await query(
-    "INSERT INTO crops (id, name, active, created_at, updated_at) VALUES (?, ?, 1, ?, ?)",
-    [id, name, now, now]
+    "INSERT INTO crops (id, name, ml_key, active, created_at, updated_at) VALUES (?, ?, ?, 1, ?, ?)",
+    [id, name, mlKey, now, now]
   );
   return id;
 }
@@ -38,7 +46,7 @@ async function getCropId(name) {
 
 async function seedCrops() {
   for (const entry of ref.crops) {
-    const cropId = await getOrCreateCrop(entry.name);
+    const cropId = await getOrCreateCrop(entry.name, entry.ml_key ?? null);
     for (const variety of entry.varieties) {
       const exists = await queryOne(
         "SELECT id FROM crop_varieties WHERE crop_id = ? AND name = ?",
