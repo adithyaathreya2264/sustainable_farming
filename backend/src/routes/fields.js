@@ -52,8 +52,43 @@ fieldsRouter.get("/", requireUser, async (req, res) => {
   res.json({ items: rows.map(toOut) });
 });
 
+// soil_test is an optional nested object of all-nullable numbers, read and
+// coerced by hand (validateBody's declarative specs don't cover nested shapes).
+// The first four feed crop recommendation and the nutrient check; all twelve
+// (a full soil-test card) are needed by the soil-fertility model (5b).
+export const SOIL_TEST_COLUMNS = [
+  "nitrogen", "phosphorus", "potassium", "ph",
+  "ec", "organic_carbon", "sulphur", "zinc", "iron", "copper", "manganese", "boron",
+];
+
+export function parseSoilTest(raw) {
+  if (raw === null || raw === undefined) return null;
+  if (typeof raw !== "object" || Array.isArray(raw)) {
+    throw new HttpError(422, "soil_test must be an object.");
+  }
+  const num = (v) => (v === null || v === undefined || v === "" ? null : Number(v));
+  const out = Object.fromEntries(SOIL_TEST_COLUMNS.map((c) => [c, num(raw[c])]));
+  if (Object.values(out).some((v) => v !== null && (Number.isNaN(v) || v < 0))) {
+    throw new HttpError(422, "soil_test values must be non-negative numbers.");
+  }
+  if (out.ph !== null && out.ph > 14) throw new HttpError(422, "soil_test.ph must be between 0 and 14.");
+  if (Object.values(out).every((v) => v === null)) return null;
+  return out;
+}
+
+async function insertSoilTest(fieldId, soilTest, now) {
+  const id = newId();
+  await query(
+    `INSERT INTO soil_tests (id, field_id, ${SOIL_TEST_COLUMNS.join(", ")}, tested_at, created_at)
+     VALUES (?, ?, ${SOIL_TEST_COLUMNS.map(() => "?").join(", ")}, ?, ?)`,
+    [id, fieldId, ...SOIL_TEST_COLUMNS.map((c) => soilTest[c]), now, now]
+  );
+  return { id, field_id: fieldId, ...soilTest, tested_at: now };
+}
+
 fieldsRouter.post("/", requireUser, async (req, res) => {
   const { data } = validateBody(CREATE(), req.body);
+  const soilTest = parseSoilTest(req.body.soil_test);
   const now = utcnow();
   const row = {
     id: newId(),
@@ -71,6 +106,7 @@ fieldsRouter.post("/", requireUser, async (req, res) => {
     [row.id, row.user_id, row.name, row.area_size_hectares, row.lat, row.long,
      JSON.stringify(row.boundary), row.soil_type, now, now]
   );
+  if (soilTest) await insertSoilTest(row.id, soilTest, now);
   res.status(201).json(toOut(row));
 });
 
@@ -91,4 +127,14 @@ fieldsRouter.delete("/:id", requireUser, async (req, res) => {
   const now = utcnow();
   await query("UPDATE fields SET deleted_at = ?, updated_at = ? WHERE id = ?", [now, now, row.id]);
   res.status(204).end();
+});
+
+// A new soil test for an existing field (e.g. a soil health card that arrived
+// after the field was created). The latest test by tested_at is what the ML
+// routes read, so this supersedes older ones without deleting them.
+fieldsRouter.post("/:id/soil-tests", requireUser, async (req, res) => {
+  const row = await getOwnedOr404(req.params.id, req.user.id);
+  const soilTest = parseSoilTest(req.body);
+  if (!soilTest) throw new HttpError(422, "At least one soil-test value is required.");
+  res.status(201).json(await insertSoilTest(row.id, soilTest, utcnow()));
 });
