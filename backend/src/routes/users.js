@@ -20,6 +20,7 @@ export function profileOut(u) {
     state: u.state,
     district: u.district,
     onboarding_complete: bool(u.onboarding_complete),
+    photo_training_consent: bool(u.photo_training_consent ?? 0),
   };
 }
 
@@ -33,6 +34,7 @@ const UPDATE_FIELDS = () => [
   str("state", { max: 80 }),
   str("district", { max: 80 }),
   boolSpec("onboarding_complete"),
+  boolSpec("photo_training_consent"),
 ];
 
 const UNIQUE_ID_TAKEN = () => new HttpError(409, "This unique number already exists.");
