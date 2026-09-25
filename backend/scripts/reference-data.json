@@ -5,35 +5,55 @@
       "varieties": [
         "IR-64",
         "Jyothi"
-      ]
+      ],
+      "ml_key": "rice"
     },
     {
       "name": "Ragi (Finger Millet)",
       "varieties": [
         "GPU-28",
         "Indaf-9"
-      ]
+      ],
+      "ml_key": "ragi"
     },
     {
       "name": "Maize",
       "varieties": [
         "NK-6240",
         "DHM-117"
-      ]
+      ],
+      "ml_key": "maize"
     },
     {
       "name": "Cotton",
       "varieties": [
         "Bunny Bt",
         "RCH-2"
-      ]
+      ],
+      "ml_key": "cotton"
     },
     {
       "name": "Sugarcane",
       "varieties": [
         "Co 86032",
         "CoM 0265"
-      ]
+      ],
+      "ml_key": "sugarcane"
+    },
+    {
+      "name": "Pearl Millet (Bajra)",
+      "ml_key": "pearl millet",
+      "varieties": []
+    },
+    {
+      "name": "Wheat",
+      "ml_key": "wheat",
+      "varieties": []
+    },
+    {
+      "name": "Tobacco",
+      "ml_key": "tobacco",
+      "varieties": []
     }
   ],
   "agri_catalog": [
