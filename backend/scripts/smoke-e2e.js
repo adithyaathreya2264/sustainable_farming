@@ -5,10 +5,17 @@
 // SMOKE_BASE_URL=http://localhost:8000 to hit an already-running server.
 // Uses the real dev MySQL. Test users (phones 9123456780 / 9999999999) and all
 // their rows are deleted on the way in and out. Login is mock (see MOCK_OTP).
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { createApp } from "../src/app.js";
 import { settings } from "../src/config.js";
 import { pool, query } from "../src/db.js";
 import { addDays, utcToday } from "../src/time.js";
+import { UPLOADS_DIR } from "../src/routes/ml.js";
+import { mlGet } from "../src/services/mlClient.js";
+
+const FIXTURE_JPEG = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "test", "fixtures", "insect.jpg");
 
 const PHONE = "9123456780";
 const OTHER_PHONE = "9999999999";
@@ -47,7 +54,30 @@ async function call(method, path, { headers = {}, json, params } = {}) {
   return { status: res.status, body, text };
 }
 
+async function upload(path_, headers, fields) {
+  const form = new FormData();
+  form.append("photo", new Blob([fs.readFileSync(FIXTURE_JPEG)], { type: "image/jpeg" }), "p.jpg");
+  for (const [k, v] of Object.entries(fields)) form.append(k, String(v));
+  const res = await fetch(new URL(path_, BASE), { method: "POST", headers, body: form });
+  const text = await res.text();
+  let body;
+  try {
+    body = JSON.parse(text);
+  } catch {
+    body = undefined;
+  }
+  return { status: res.status, body, text };
+}
+
+// Invariants 1 and 3 of ml/README.md, checked on every ML response.
+const leaks = (text) => /probabilit|"_raw|"score"/.test(text ?? "");
+
 async function deleteUserRows(uid) {
+  for (const row of await query("SELECT image_path FROM ml_inferences WHERE user_id = ? AND image_path IS NOT NULL", [uid])) {
+    fs.rmSync(path.join(UPLOADS_DIR, ...row.image_path.split("/")), { force: true });
+  }
+  await query("DELETE FROM ml_inferences WHERE user_id = ?", [uid]);
+  await query("DELETE FROM soil_tests WHERE field_id IN (SELECT id FROM fields WHERE user_id = ?)", [uid]);
   const sub = "(SELECT p.id FROM plantings p JOIN fields f ON p.field_id = f.id WHERE f.user_id = ?)";
   await query("DELETE FROM scheme_matches WHERE user_id = ?", [uid]);
   await query(`DELETE FROM recommendations WHERE planting_id IN ${sub}`, [uid]);
@@ -208,12 +238,90 @@ try {
   r = await call("GET", "/api/v1/scouting-observations", { headers: H });
   check("GET /scouting-observations includes the new one", r.body.items.some((o) => o.id === scoutingId));
 
+
+  // --- 7a. ML serving (skipped when the sidecar is not running) ---
+  const sidecarUp = await mlGet("/health").then(() => true, () => false);
+  if (!sidecarUp) {
+    console.log("ML sidecar not reachable: checking the degraded path only (start it with `npm run ml`)");
+    r = await call("GET", "/api/v1/plantings/recommend-crop", { headers: H, params: { field_id: fieldId } });
+    check("sidecar down -> recommend-crop 503 ml_unavailable", r.status === 503 && r.body?.reason === "ml_unavailable", `${r.status} ${r.text.slice(0, 120)}`);
+    r = await call("GET", "/api/v1/ml/market/outlook", { headers: H, params: { commodity: "maize" } });
+    check("sidecar down -> market 503, never 500", r.status === 503, String(r.status));
+  } else {
+    r = await call("GET", "/api/v1/plantings/recommend-crop", { headers: H, params: { field_id: fieldId } });
+    check("recommend-crop 200", r.status === 200, `${r.status} ${r.text.slice(0, 200)}`);
+    // "Red Sandy Loam" (a legacy free-text soil) maps to Red, so model 2 runs.
+    check("recommend-crop uses the soil-type model", r.body?.basis === "soil_type" && r.body?.model === "crop_soil_type", r.body?.basis);
+    check("recommend-crop entries carry confidence labels", Boolean(r.body?.recommended?.confidence_label));
+    const unreachable = r.body?.unreachable_seeded_crops ?? [];
+    check("model 2 reaches sugarcane but not ragi", !unreachable.includes("sugarcane") && unreachable.includes("ragi"), unreachable.join(","));
+    check("recommend-crop no probability", !leaks(r.text));
+
+    r = await call("GET", "/api/v1/ml/capabilities", { headers: H, params: { planting_id: plantingId } });
+    const caps = r.body?.capabilities ?? {};
+    check("capabilities 200 (rice)", r.status === 200 && caps.leaf_diagnosis?.available && caps.insect_detection?.available, r.text.slice(0, 200));
+    check("rice leaf model is conditional", caps.leaf_diagnosis?.conditional === true);
+
+    r = await call("GET", `/api/v1/ml/plantings/${plantingId}/fertilizer`, { headers: H });
+    check("fertilizer 200 via state average", r.status === 200 && r.body?.available && r.body?.basis === "state_average", r.text.slice(0, 200));
+    check("fertilizer products come from agri_catalog", Array.isArray(r.body?.products));
+
+    r = await call("GET", `/api/v1/ml/plantings/${plantingId}/yield-outlook`, { headers: H });
+    check("yield-outlook 200 with a band", r.status === 200 && typeof r.body?.position === "string", r.text.slice(0, 200));
+    check("yield-outlook has no unit and no raw number", r.body?.unit === null && !leaks(r.text));
+
+    r = await call("GET", `/api/v1/ml/plantings/${plantingId}/diseases`, { headers: H, params: { q: "brown spots on leaves" } });
+    check("disease search 200 with matches", r.status === 200 && (r.body?.matches ?? []).length > 0, r.text.slice(0, 160));
+    r = await call("GET", `/api/v1/ml/plantings/${plantingId}/diseases/all`, { headers: H });
+    check("see-all-diseases path lists 8 rice diseases", (r.body?.diseases ?? []).length === 8);
+
+    r = await call("GET", "/api/v1/ml/market/outlook", { headers: H, params: { commodity: "maize", district: "Davanagere" } });
+    check("market outlook maize/Davanagere has a district forecast", r.body?.level === "district" && r.body?.forecast, r.text.slice(0, 160));
+    r = await call("GET", "/api/v1/ml/market/outlook", { headers: H, params: { commodity: "paddy" } });
+    check("market outlook paddy is outlook-only", r.status === 200 && r.body?.forecast === null);
+
+    // Soil fertility (5b): none -> partial card -> full card.
+    r = await call("GET", `/api/v1/ml/fields/${fieldId}/soil-fertility`, { headers: H });
+    check("soil-fertility with no soil test -> no_soil_test", r.body?.reason === "no_soil_test", r.text.slice(0, 120));
+    r = await call("POST", `/api/v1/fields/${fieldId}/soil-tests`, { headers: H, json: { nitrogen: 280, phosphorus: 22, potassium: 250, ph: 6.8 } });
+    check("POST soil-tests 201", r.status === 201, `${r.status} ${r.text.slice(0, 120)}`);
+    r = await call("GET", `/api/v1/ml/fields/${fieldId}/soil-fertility`, { headers: H });
+    check("partial card -> incomplete_soil_test naming 8 values", r.body?.reason === "incomplete_soil_test" && r.body?.missing?.length === 8, r.text.slice(0, 160));
+    r = await call("POST", `/api/v1/fields/${fieldId}/soil-tests`, {
+      headers: H,
+      json: { nitrogen: 280, phosphorus: 22, potassium: 250, ph: 6.8, ec: 0.4, organic_carbon: 0.62, sulphur: 12, zinc: 0.9, iron: 6.5, copper: 0.8, manganese: 5, boron: 0.6 },
+    });
+    r = await call("GET", `/api/v1/ml/fields/${fieldId}/soil-fertility`, { headers: H });
+    check("full card -> fertility class, provenance flagged", ["low", "medium", "high"].includes(r.body?.fertility_class) && r.body?.provenance_verified === false && !leaks(r.text), r.text.slice(0, 160));
+    r = await call("POST", `/api/v1/fields/${fieldId}/soil-tests`, { headers: H, json: { ph: 20 } });
+    check("soil-test pH 20 -> 422", r.status === 422, String(r.status));
+
+    r = await upload(`/api/v1/ml/plantings/${plantingId}/photo-check`, H, { kind: "insects" });
+    check("photo-check insects 200", r.status === 200 && Array.isArray(r.body?.result?.detections), `${r.status} ${r.text.slice(0, 200)}`);
+    const inferenceId = r.body?.inference_id;
+    r = await upload(`/api/v1/ml/plantings/${plantingId}/photo-check`, H, { kind: "leaf" });
+    check("photo-check leaf without symptom -> 422 symptom_required", r.status === 422 && r.body?.reason === "symptom_required", r.text);
+    r = await upload(`/api/v1/ml/plantings/${plantingId}/photo-check`, H, { kind: "tobacco_lesions" });
+    check("photo-check unavailable kind -> 409", r.status === 409, r.text);
+
+    r = await call("GET", "/api/v1/ml/inferences", { headers: H, params: { planting_id: plantingId } });
+    check("photo history lists the insect check", (r.body?.items ?? []).some((i) => i.id === inferenceId));
+    const img = await fetch(new URL(`/api/v1/ml/inferences/${inferenceId}/image`, BASE), { headers: H });
+    check("stored photo is retrievable by its owner", img.status === 200);
+    r = await call("DELETE", `/api/v1/ml/inferences/${inferenceId}`, { headers: H });
+    check("delete photo check 204", r.status === 204, String(r.status));
+    const gone = await fetch(new URL(`/api/v1/ml/inferences/${inferenceId}/image`, BASE), { headers: H });
+    check("deleted photo is gone", gone.status === 404, String(gone.status));
+  }
+
   // --- 7b. another user's field is not editable ---
   await call("POST", "/api/v1/auth/request-otp", { json: { phone_number: OTHER_PHONE } });
   r = await call("POST", "/api/v1/auth/verify-otp", { json: { phone_number: OTHER_PHONE, otp: OTP } });
   const otherHeaders = { Authorization: `Bearer ${r.body.access_token}` };
   r = await call("PATCH", `/api/v1/fields/${fieldId}`, { headers: otherHeaders, json: { name: "Hijacked" } });
   check("PATCH someone else's field -> 403", r.status === 403, String(r.status));
+  r = await upload(`/api/v1/ml/plantings/${plantingId}/photo-check`, otherHeaders, { kind: "insects" });
+  check("photo-check on someone else's planting -> 403", r.status === 403, String(r.status));
 
   // --- 7c. unique_id: settable, globally unique, format-validated ---
   r = await call("PATCH", "/api/v1/users/me", { headers: H, json: { unique_id: "1234" } });
