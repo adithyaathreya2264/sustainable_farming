@@ -2,11 +2,14 @@
 // {"detail": [ {type, loc, msg, input, ctx?} ]} for validation failures (422).
 
 export class HttpError extends Error {
-  constructor(status, detail, headers = {}) {
+  // `extra` adds machine-readable keys beside `detail` (e.g. {reason} for ML
+  // failures, which the app switches on rather than parsing text).
+  constructor(status, detail, headers = {}, extra = {}) {
     super(typeof detail === "string" ? detail : "HttpError");
     this.status = status;
     this.detail = detail;
     this.headers = headers;
+    this.extra = extra;
   }
 }
 
@@ -32,7 +35,7 @@ export function makeNotFoundHandler(allowedMethodsFor) {
 export function errorHandler(err, _req, res, _next) {
   if (err instanceof HttpError) {
     for (const [k, v] of Object.entries(err.headers)) res.setHeader(k, v);
-    return res.status(err.status).json({ detail: err.detail });
+    return res.status(err.status).json({ detail: err.detail, ...err.extra });
   }
   if (err instanceof ValidationFailure) {
     return res.status(422).json({ detail: err.errors });
