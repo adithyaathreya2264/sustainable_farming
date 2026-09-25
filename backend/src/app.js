@@ -5,6 +5,7 @@ import { alertsRouter } from "./routes/alerts.js";
 import { authRouter } from "./routes/auth.js";
 import { fieldsRouter } from "./routes/fields.js";
 import { internalRouter } from "./routes/internal.js";
+import { mlRouter } from "./routes/ml.js";
 import { interventionsRouter } from "./routes/interventions.js";
 import { plantingsRouter } from "./routes/plantings.js";
 import { catalogRouter, locationsRouter, soilRouter } from "./routes/reference.js";
@@ -52,6 +53,7 @@ export function createApp() {
     ["/api/v1/internal", internalRouter],
     ["/api/v1/alerts", alertsRouter],
     ["/api/v1/weather", weatherRouter],
+    ["/api/v1/ml", mlRouter],
   ];
   for (const [prefix, router] of mounts) app.use(prefix, router);
 
