@@ -85,6 +85,30 @@ Migrations are plain SQL files in `backend/migrations/`, tracked in the
 
 Schema changes from here on are new numbered `.sql` files in `migrations/`.
 
+## ML sidecar (model serving)
+
+The shipped models run in a separate Python process, `ml/serving/` (FastAPI on
+`127.0.0.1:8001`), which this API proxies to. It uses the repo-root `.venv`
+(see `ml/README.md`).
+
+```
+npm run dev:all    # API (node --watch) + sidecar, prefixed output; Ctrl+C stops both
+npm run ml         # sidecar alone; ML_PRELOAD=1 npm run ml warms every model first
+```
+
+Settings: `ML_SIDECAR_URL` (default `http://127.0.0.1:8001`), `ML_PYTHON_BIN`
+(default `../.venv/Scripts/python.exe` or `.venv/bin/python`), `ML_SIDECAR_PORT`.
+
+If the sidecar is down, every ML route returns **503 `{reason: "ml_unavailable"}`**
+and everything else keeps working. The first call to a photo model loads its
+weights (a few seconds); later calls are about a second.
+
+**Photos.** Uploads for photo checks are stored under `backend/uploads/ml/YYYY/MM/`
+(gitignored), one `ml_inferences` row each. Farmers can list and delete their
+own from the app; deleting removes the file. `users.photo_training_consent`
+(off by default) records whether a farmer allows their photos to be used for
+retraining. Nothing reads it yet; any future training export must filter on it.
+
 ## Seeding reference data (idempotent)
 
 ```
