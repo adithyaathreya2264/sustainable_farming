@@ -9,6 +9,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
+    "ml": "node scripts/start-ml.js",
+    "dev:all": "node scripts/dev-all.js",
     "migrate": "node src/migrate.js",
     "seed": "node scripts/seed-reference-data.js",
     "batch": "node scripts/run-batch.js",
@@ -19,6 +21,7 @@
     "dotenv": "^18.0.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.4.0",
     "mysql2": "^3.24.4"
   }
 }
