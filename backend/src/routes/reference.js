@@ -44,6 +44,7 @@ catalogRouter.get("/crops", requireUser, async (_req, res) => {
   const items = crops.map((c) => ({
     id: c.id,
     name: c.name,
+    ml_key: c.ml_key ?? null,
     varieties: varieties
       .filter((v) => v.crop_id === c.id)
       .map((v) => ({ id: v.id, name: v.name })),
