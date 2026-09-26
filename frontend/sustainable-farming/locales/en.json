@@ -85,6 +85,8 @@
   },
   "addField": {
     "title": "Map Field",
+    "locatingYou": "Finding your location…",
+    "locationUnavailable": "Couldn't get your location — drawing without a map background",
     "tapToStart": "Tap on the map to place your first boundary point",
     "tapToAddNext": "Tap to add the next point ({{count}} placed)",
     "boundaryClosed": "Boundary closed ({{count}} points)",
@@ -249,13 +251,21 @@
       "leaf": "Leaf disease",
       "insects": "Insect pest",
       "wheat_heading": "Heading",
-      "tobacco_lesions": "Leaf spots"
+      "tobacco_lesions": "Leaf spots",
+      "curd": "Curd disease",
+      "bulb": "Bulb",
+      "fruit_grade": "Fruit grade",
+      "wheat_kernels": "Wheat grain"
     },
     "hint": {
       "leaf": "Photograph one diseased leaf, close up, in daylight.",
       "insects": "Photograph one insect, close up. Wide field photos do not work well.",
       "wheat_heading": "Photograph the crop from above, looking down at the canopy.",
-      "tobacco_lesions": "Photograph one leaf, close up, filling the frame."
+      "tobacco_lesions": "Photograph one leaf, close up, filling the frame.",
+      "curd": "Photograph the curd (head) from above, close up, in daylight.",
+      "bulb": "Photograph one bulb, close up, on a plain surface.",
+      "fruit_grade": "Photograph one tomato, close up, in daylight.",
+      "wheat_kernels": "Photograph a spread of harvested grain on a plain surface, not the standing crop."
     },
     "symptomConfirm": "I can see disease symptoms on this leaf",
     "symptomRequiredHint": "This check can only name a disease. It cannot tell you a leaf is healthy, so use it only when you see symptoms.",
@@ -274,7 +284,13 @@
     "headingNotDetected": "No heads found. This does not prove heading has not started.",
     "lesionArea": "About {{percent}}% of the leaf shows lesions",
     "lesionOverestimates": "This measure tends to over-estimate lesion area by about a third.",
-    "seeRemedies": "See documented remedies"
+    "seeRemedies": "See documented remedies",
+    "causeNotIdentified": "The photo shows a problem, but this check cannot name its cause.",
+    "gradeTitle": "Fruit grade",
+    "kernel": {
+      "damaged": "Sunn-pest damage seen",
+      "healthy": "No damage seen"
+    }
   },
   "diseases": {
     "open": "Look up a problem",
@@ -402,7 +418,58 @@
       "insect_detector": "Insect pest",
       "leaf_condition": "Leaf disease",
       "wheat_heading": "Wheat heading",
-      "tobacco_lesions": "Tobacco leaf spots"
+      "tobacco_lesions": "Tobacco leaf spots",
+      "leaf_condition_cauliflower_curd": "Cauliflower curd",
+      "leaf_condition_onion_bulb": "Onion bulb",
+      "leaf_condition_tomato_fruit": "Tomato grade",
+      "wheat_kernel_damage": "Wheat grain"
     }
+  },
+  "soilTest": {
+    "title": "Add soil-test card",
+    "hint": "Copy the values from your soil test or soil health card. Leave blank any value your card does not show.",
+    "moreValues": "More values from your soil-test card",
+    "moreValuesHint": "EC, organic carbon, sulphur and micronutrients. All 12 are needed for the soil fertility rating.",
+    "value": {
+      "nitrogen": "Nitrogen (N, kg/ha)",
+      "phosphorus": "Phosphorus (P, kg/ha)",
+      "potassium": "Potassium (K, kg/ha)",
+      "ph": "Soil pH",
+      "ec": "Electrical conductivity (EC, dS/m)",
+      "organic_carbon": "Organic carbon (OC, %)",
+      "sulphur": "Sulphur (S, ppm)",
+      "zinc": "Zinc (Zn, ppm)",
+      "iron": "Iron (Fe, ppm)",
+      "copper": "Copper (Cu, ppm)",
+      "manganese": "Manganese (Mn, ppm)",
+      "boron": "Boron (B, ppm)"
+    },
+    "short": {
+      "nitrogen": "N",
+      "phosphorus": "P",
+      "potassium": "K",
+      "ph": "pH",
+      "ec": "EC",
+      "organic_carbon": "OC",
+      "sulphur": "S",
+      "zinc": "Zn",
+      "iron": "Fe",
+      "copper": "Cu",
+      "manganese": "Mn",
+      "boron": "B"
+    }
+  },
+  "soilFertility": {
+    "title": "Soil fertility",
+    "addCard": "Add soil-test card values",
+    "incomplete": "Needs all 12 soil-card values. Missing: {{values}}",
+    "noTest": "Add this field's soil-test card to see its fertility rating.",
+    "class": {
+      "low": "Low fertility",
+      "medium": "Medium fertility",
+      "high": "High fertility"
+    },
+    "whatItMeans": "The rating a soil lab would give these values. It is not a fertilizer recommendation.",
+    "provenance": "Trained on soil tests whose source has not been verified."
   }
 }
