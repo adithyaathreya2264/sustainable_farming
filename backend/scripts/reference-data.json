@@ -54,6 +54,36 @@
       "name": "Tobacco",
       "ml_key": "tobacco",
       "varieties": []
+    },
+    {
+      "name": "Coffee",
+      "ml_key": "coffee",
+      "varieties": []
+    },
+    {
+      "name": "Tea",
+      "ml_key": "tea",
+      "varieties": []
+    },
+    {
+      "name": "Cauliflower",
+      "ml_key": "cauliflower",
+      "varieties": []
+    },
+    {
+      "name": "Onion",
+      "ml_key": "onion",
+      "varieties": []
+    },
+    {
+      "name": "Potato",
+      "ml_key": "potato",
+      "varieties": []
+    },
+    {
+      "name": "Tomato",
+      "ml_key": "tomato",
+      "varieties": []
     }
   ],
   "agri_catalog": [
