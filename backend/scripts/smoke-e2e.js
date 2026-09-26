@@ -304,6 +304,27 @@ try {
     r = await upload(`/api/v1/ml/plantings/${plantingId}/photo-check`, H, { kind: "tobacco_lesions" });
     check("photo-check unavailable kind -> 409", r.status === 409, r.text);
 
+    // Models 20-28: part checks through the leaf pipeline, and a held model.
+    const catalog = (await call("GET", "/api/v1/catalog/crops", { headers: H })).body.items;
+    const plantCrop = async (name) =>
+      (await call("POST", "/api/v1/plantings", {
+        headers: H,
+        json: { field_id: fieldId, crop_id: catalog.find((c) => c.name === name).id, variety_id: null, sowing_date: sowing, status: "active" },
+      })).body.id;
+    const tomatoId = await plantCrop("Tomato");
+    r = await call("GET", "/api/v1/ml/capabilities", { headers: H, params: { planting_id: tomatoId } });
+    check("tomato offers fruit_grade (model 27)", r.body?.capabilities?.fruit_grade?.available === true, r.text.slice(0, 160));
+    r = await upload(`/api/v1/ml/plantings/${tomatoId}/photo-check`, H, { kind: "fruit_grade" });
+    check("fruit_grade upload -> a grade", r.status === 200 && r.body?.result?.condition?.category === "grade", `${r.status} ${r.text.slice(0, 160)}`);
+    const wheatId = await plantCrop("Wheat");
+    r = await call("GET", "/api/v1/ml/capabilities", { headers: H, params: { planting_id: wheatId } });
+    check("wheat_kernels held (awaiting_lighting_check)", r.body?.capabilities?.wheat_kernels?.reason === "awaiting_lighting_check", r.text.slice(0, 200));
+    check("wheat offers insect_detection (wheat thrips)", r.body?.capabilities?.insect_detection?.available === true, r.text.slice(0, 200));
+    const before = (await call("GET", "/api/v1/ml/inferences", { headers: H })).body.items.length;
+    r = await upload(`/api/v1/ml/plantings/${wheatId}/photo-check`, H, { kind: "wheat_kernels" });
+    const after = (await call("GET", "/api/v1/ml/inferences", { headers: H })).body.items.length;
+    check("held wheat_kernels upload -> 409, no photo stored", r.status === 409 && r.body?.reason === "awaiting_lighting_check" && after === before, `${r.status} ${r.text.slice(0, 160)}`);
+
     r = await call("GET", "/api/v1/ml/inferences", { headers: H, params: { planting_id: plantingId } });
     check("photo history lists the insect check", (r.body?.items ?? []).some((i) => i.id === inferenceId));
     const img = await fetch(new URL(`/api/v1/ml/inferences/${inferenceId}/image`, BASE), { headers: H });
