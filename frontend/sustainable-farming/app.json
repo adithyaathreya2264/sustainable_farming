@@ -36,6 +36,12 @@
           "photosPermission": "Choose a photo of your soil, leaf or pest so the app can check it.",
           "cameraPermission": "Take a photo of your soil, leaf or pest so the app can check it."
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location to center the map when you draw a field boundary."
+        }
       ]
     ]
   }
