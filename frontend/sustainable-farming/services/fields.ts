@@ -28,11 +28,49 @@ export async function getFieldById(id: string): Promise<Field | undefined> {
   return getState().fields.find((f) => f.id === id);
 }
 
+/** Values from a soil-test card. The first four feed crop recommendation and
+ * the nutrient check; all twelve are needed for the soil-fertility class
+ * (model 5b). Units as printed on soil health cards: N/P/K kg/ha, EC dS/m,
+ * organic carbon %, the rest ppm. */
 export interface SoilTestInput {
   nitrogen: number | null;
   phosphorus: number | null;
   potassium: number | null;
   ph: number | null;
+  ec?: number | null;
+  organicCarbon?: number | null;
+  sulphur?: number | null;
+  zinc?: number | null;
+  iron?: number | null;
+  copper?: number | null;
+  manganese?: number | null;
+  boron?: number | null;
+}
+
+function soilTestToBackend(t: SoilTestInput): Record<string, number | null> {
+  return {
+    nitrogen: t.nitrogen,
+    phosphorus: t.phosphorus,
+    potassium: t.potassium,
+    ph: t.ph,
+    ec: t.ec ?? null,
+    organic_carbon: t.organicCarbon ?? null,
+    sulphur: t.sulphur ?? null,
+    zinc: t.zinc ?? null,
+    iron: t.iron ?? null,
+    copper: t.copper ?? null,
+    manganese: t.manganese ?? null,
+    boron: t.boron ?? null,
+  };
+}
+
+/** POST /api/v1/fields/:id/soil-tests - a new soil test for an existing field.
+ * It becomes the field's current test. Throws on failure. */
+export async function addSoilTest(fieldId: string, input: SoilTestInput): Promise<void> {
+  await apiFetch(`/api/v1/fields/${encodeURIComponent(fieldId)}/soil-tests`, {
+    method: "POST",
+    body: soilTestToBackend(input),
+  });
 }
 
 export interface AddFieldInput {
@@ -70,14 +108,7 @@ export async function addField(input: AddFieldInput): Promise<Field> {
       long,
       boundary: input.boundary,
       soil_type: input.soilType || null,
-      soil_test: input.soilTest
-        ? {
-            nitrogen: input.soilTest.nitrogen,
-            phosphorus: input.soilTest.phosphorus,
-            potassium: input.soilTest.potassium,
-            ph: input.soilTest.ph,
-          }
-        : null,
+      soil_test: input.soilTest ? soilTestToBackend(input.soilTest) : null,
     },
   });
   const field = fieldFromBackend(row);
