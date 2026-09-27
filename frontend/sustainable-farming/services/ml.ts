@@ -20,8 +20,12 @@ import type { ConfidenceLabel } from "../types/models";
 
 export type CapabilityName =
   | "leaf_diagnosis"
+  | "curd_diagnosis"
+  | "bulb_diagnosis"
+  | "fruit_grade"
   | "insect_detection"
   | "wheat_heading"
+  | "wheat_kernels"
   | "tobacco_lesions"
   | "disease_info"
   | "fertilizer"
@@ -34,6 +38,8 @@ export interface Capability {
   /** leaf_diagnosis only: the model has no healthy class, so the farmer must
    * confirm visible symptoms first. */
   conditional?: boolean;
+  /** Leaf-pipeline checks: which registry model serves it ("cauliflower curd"). */
+  model_key?: string;
   commodities?: MarketCommodity[];
 }
 
@@ -73,12 +79,26 @@ export async function identifySoilFromPhoto(uri: string, fieldId?: string): Prom
 
 // --- photo checks on a planting ---------------------------------------------
 
-export type PhotoCheckKind = "insects" | "leaf" | "wheat_heading" | "tobacco_lesions";
+/** Checks answered by the leaf-condition pipeline: same response shape, one
+ * per part of the plant or produce (models 12, 13, 20-27). */
+export type LeafPart = "leaf" | "curd" | "bulb" | "fruit_grade";
+
+export type PhotoCheckKind = LeafPart | "insects" | "wheat_heading" | "wheat_kernels" | "tobacco_lesions";
+
+export const LEAF_PARTS: readonly LeafPart[] = ["leaf", "curd", "bulb", "fruit_grade"];
+
+export function isLeafPart(kind: PhotoCheckKind): kind is LeafPart {
+  return (LEAF_PARTS as readonly string[]).includes(kind);
+}
 
 export const PHOTO_CHECK_CAPABILITY: Record<PhotoCheckKind, CapabilityName> = {
-  insects: "insect_detection",
   leaf: "leaf_diagnosis",
+  curd: "curd_diagnosis",
+  bulb: "bulb_diagnosis",
+  fruit_grade: "fruit_grade",
+  insects: "insect_detection",
   wheat_heading: "wheat_heading",
+  wheat_kernels: "wheat_kernels",
   tobacco_lesions: "tobacco_lesions",
 };
 
@@ -102,7 +122,8 @@ export interface InsectDetection {
 export interface LeafCondition {
   key: string;
   displayName: string;
-  category: "healthy" | "disease" | "pest_damage" | "abiotic" | "unclassified";
+  /** "grade" is produce quality (tomato fruit), not a plant problem. */
+  category: "healthy" | "disease" | "pest_damage" | "abiotic" | "unclassified" | "grade";
   /** Name to look up in the disease corpus, or null when none is linked. */
   qaDisease: string | null;
   confidenceLabel: ConfidenceLabel;
@@ -112,6 +133,8 @@ export type PhotoCheckResult =
   | { kind: "insects"; detections: InsectDetection[]; noDetection: boolean; caveats: string[] }
   | {
       kind: "leaf";
+      /** Which leaf-pipeline check produced this (leaf, curd, bulb, fruit_grade). */
+      part: LeafPart;
       condition: LeafCondition | null;
       alternatives: LeafCondition[];
       offerNoneOfThese: boolean;
@@ -119,6 +142,7 @@ export type PhotoCheckResult =
       caveats: string[];
     }
   | { kind: "wheat_heading"; headingDetected: boolean; caveats: string[] }
+  | { kind: "wheat_kernels"; kernelCondition: "damaged" | "healthy"; confidenceLabel: ConfidenceLabel; caveats: string[] }
   | { kind: "tobacco_lesions"; lesionAreaPercent: number; caveats: string[] };
 
 interface BackendLeafCondition {
@@ -157,8 +181,12 @@ export function photoCheckFromBackend(kind: PhotoCheckKind, r: any): PhotoCheckR
         })),
       };
     case "leaf":
+    case "curd":
+    case "bulb":
+    case "fruit_grade":
       return {
-        kind,
+        kind: "leaf",
+        part: kind,
         caveats,
         condition: r.condition ? leafFromBackend(r.condition) : null,
         alternatives: (r.alternatives ?? []).map(leafFromBackend),
@@ -167,6 +195,8 @@ export function photoCheckFromBackend(kind: PhotoCheckKind, r: any): PhotoCheckR
       };
     case "wheat_heading":
       return { kind, caveats, headingDetected: Boolean(r.heading_detected) };
+    case "wheat_kernels":
+      return { kind, caveats, kernelCondition: r.kernel_condition, confidenceLabel: r.confidence_label };
     case "tobacco_lesions":
       return { kind, caveats, lesionAreaPercent: Number(r.lesion_area_percent) };
   }
@@ -180,7 +210,7 @@ export async function runPhotoCheck(
 ): Promise<{ inferenceId: string; result: PhotoCheckResult }> {
   const res = await apiUpload<{ inference_id: string; result: unknown }>(
     `/api/v1/ml/plantings/${encodeURIComponent(plantingId)}/photo-check`,
-    { uri, fields: { kind, symptom_reported: kind === "leaf" ? symptomReported : undefined } }
+    { uri, fields: { kind, symptom_reported: isLeafPart(kind) ? symptomReported : undefined } }
   );
   return { inferenceId: res.inference_id, result: photoCheckFromBackend(kind, res.result) };
 }
@@ -211,6 +241,41 @@ export async function getFertilizerCheck(plantingId: string): Promise<Fertilizer
     ph: { value: r.ph.value, targetMin: r.ph.target_min, targetMax: r.ph.target_max, status: r.ph.status },
     confidenceLabel: r.confidence_label,
     products: (r.products ?? []).map((p: { id: string; name: string }) => ({ id: p.id, name: p.name })),
+  };
+}
+
+// --- soil fertility class (model 5b) ------------------------------------------
+
+/** soil_tests column names, as the backend reports missing values. */
+export type SoilCardValue =
+  | "nitrogen" | "phosphorus" | "potassium" | "ph" | "ec" | "organic_carbon"
+  | "sulphur" | "zinc" | "iron" | "copper" | "manganese" | "boron";
+
+export interface SoilFertility {
+  available: boolean;
+  /** no_soil_test | incomplete_soil_test */
+  reason?: string;
+  missing: SoilCardValue[];
+  fertilityClass?: "low" | "medium" | "high";
+  confidenceLabel?: ConfidenceLabel;
+  caveats: string[];
+  testedAt?: string;
+}
+
+/** Keyed by field: fertility is a property of the soil, not of the crop. */
+export async function getSoilFertility(fieldId: string): Promise<SoilFertility> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const r = await apiFetch<any>(`/api/v1/ml/fields/${encodeURIComponent(fieldId)}/soil-fertility`);
+  if (!r.available) {
+    return { available: false, reason: r.reason, missing: r.missing ?? [], caveats: [], testedAt: r.tested_at };
+  }
+  return {
+    available: true,
+    missing: [],
+    fertilityClass: r.fertility_class,
+    confidenceLabel: r.confidence_label,
+    caveats: r.caveats ?? [],
+    testedAt: r.tested_at,
   };
 }
 
