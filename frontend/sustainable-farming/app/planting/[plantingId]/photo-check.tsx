@@ -17,6 +17,7 @@ import { pickPhoto, type PhotoSource, type PreparedPhoto } from "../../../lib/ph
 import { metricForPlanting } from "../../../lib/scoutingMetrics";
 import {
   getCapabilities,
+  isLeafPart,
   mlErrorMessage,
   PHOTO_CHECK_CAPABILITY,
   runPhotoCheck,
@@ -26,7 +27,9 @@ import {
   type PhotoCheckResult,
 } from "../../../services/ml";
 
-const KIND_ORDER: PhotoCheckKind[] = ["leaf", "insects", "wheat_heading", "tobacco_lesions"];
+const KIND_ORDER: PhotoCheckKind[] = [
+  "leaf", "curd", "bulb", "fruit_grade", "insects", "wheat_heading", "wheat_kernels", "tobacco_lesions",
+];
 
 /**
  * Photo checks for one planting: leaf disease (rice, pearl millet), insect
@@ -63,7 +66,7 @@ export default function PhotoCheckScreen() {
     () => KIND_ORDER.filter((k) => caps?.[PHOTO_CHECK_CAPABILITY[k]]?.available),
     [caps]
   );
-  const conditional = kind === "leaf" && Boolean(caps?.leaf_diagnosis?.conditional);
+  const conditional = Boolean(kind && isLeafPart(kind) && caps?.[PHOTO_CHECK_CAPABILITY[kind]]?.conditional);
   const canPick = Boolean(kind) && (!conditional || symptomConfirmed);
   const scoutingMetric = planting ? metricForPlanting(crop, planting.sowingDate) : undefined;
 
@@ -205,6 +208,7 @@ function ResultView({
   const { t } = useTranslation();
 
   if (result.kind === "leaf") {
+    const isGrade = result.part === "fruit_grade";
     if (!result.condition) {
       return <CaveatText>{t(`photoCheck.leafReason.${result.reason ?? "none"}`, { defaultValue: t("ml.checkFailed") })}</CaveatText>;
     }
@@ -220,7 +224,15 @@ function ResultView({
     }
     return (
       <Card className="mb-3">
+        {isGrade && (
+          <Text className="text-ink-muted mb-1" style={{ fontSize: 13 }}>
+            {t("photoCheck.gradeTitle")}
+          </Text>
+        )}
         <LeafRow condition={result.condition} plantingId={plantingId} primary />
+        {result.condition.category === "unclassified" && (
+          <CaveatText className="mb-1">{t("photoCheck.causeNotIdentified")}</CaveatText>
+        )}
         {result.alternatives.length > 0 && (
           <Text className="text-ink-muted mt-3 mb-1" style={{ fontSize: 13 }}>
             {t("photoCheck.otherPossibilities")}
@@ -286,6 +298,25 @@ function ResultView({
           <ModelNotice />
         </Card>
       </View>
+    );
+  }
+
+  if (result.kind === "wheat_kernels") {
+    return (
+      <Card className="mb-3">
+        <View className="flex-row items-center justify-between">
+          <Text className="text-ink font-semibold" style={{ fontSize: 16 }}>
+            {t(`photoCheck.kernel.${result.kernelCondition}`)}
+          </Text>
+          <ConfidencePill label={result.confidenceLabel} />
+        </View>
+        {result.caveats.map((c) => (
+          <CaveatText key={c} className="mt-2">
+            {c}
+          </CaveatText>
+        ))}
+        <ModelNotice />
+      </Card>
     );
   }
 
