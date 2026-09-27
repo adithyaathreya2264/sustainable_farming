@@ -185,7 +185,367 @@ is partly a memory test. Concretely: taking the shipped split at face value
 gave a validation accuracy of exactly 1.0000 and inflated test accuracy by
 about 4 points for the classical model.
 
+### 2.8 Leaf photo dataset: sugarcane (supplied 2026-09-23)
+
+_Added 2026-09-23, during ML training._
+
+A crop-specific leaf dataset, which partly unblocks the disease-from-photo
+model parked on 2026-09-22 (`ml/PARKED_MODELS.md` §1):
+
+| Crop | Folder | Images | Classes |
+|---|---|---|---|
+| Sugarcane | `Sugarcane Leaf Image Dataset/Sugarcane Leaf Image Dataset` | 6,748 | 11, incl. Healthy Leaves and Dried Leaves |
+
+**Sugarcane's class folders sit at uneven depths.** The nine disease folders
+are under `Diseases/Diseases/`, while `Dried Leaves` and `Healthy Leaves` are
+one level shallower. A loader assuming one layout silently misses classes.
+
+**The dataset contains the same photograph filed under two different
+labels.** Measured with a flip- and rotation-invariant hash, then confirmed
+pixel by pixel (mean difference under 5/255 after best alignment):
+
+**294 duplicate groups, 614 images (9.1% of the dataset)** carry conflicting
+labels. The largest overlaps are Pokkah Boeng / smut (95 groups) and Banded
+Chlorosis / BrownRust (64). There are also Healthy / Viral Disease pairs. More
+broadly, the 6,748 images are only 5,610 distinct photographs.
+
+One photo cannot be of two conditions, and nothing in the data says which
+label is right, so every conflicting group is excluded from training and
+evaluation. The Healthy ↔ disease pairs are the most consequential: kept, they
+would train the model to call a diseased leaf healthy.
+
+**What this implies about the rest of the sugarcane labels.** When 95
+identical photos are filed as both Pokkah Boeng and smut, it is likely that one
+folder was partly filled from the other. Removing the exact duplicates cannot
+detect *non-duplicate* images that were misfiled the same way. The test
+labels may carry some of that noise, which would cap measured accuracy on
+those classes — a limit of the data, not necessarily of the model.
+
+**A hash alone is not enough here.** Leaf photos are uniform (a green leaf,
+centred, similar backgrounds), so even a 256-bit hash matched 23 pairs of
+genuinely different photographs. Grouping on the hash alone would have
+wrongly discarded 105 good images as "conflicts". Duplicates must be confirmed
+at pixel level.
+
+**The dataset is a few hundred capture sessions, not thousands of
+independent photos.** Every image carries an EXIF capture time, and each class
+was shot in continuous streams, frames seconds apart. Grouping images of one
+class taken within 10 seconds of each other, 5,316 distinct photos form **216**
+independent sessions (8 to 51 per class).
+
+Frames of one session share leaf, light, background and camera settings. **Any
+split of this dataset must be made by capture session.** Splitting by photo
+lets a model score by recognising the session instead of the condition. This
+was measured, not assumed: split by photo, the model scored 0.98 macro-F1;
+split by session, it fell to 0.52 (`ml/MODEL_RESULTS.md` §10). 78% of test
+images had their most similar training image within three filenames of them.
+
 ---
+
+### 2.9 Rice leaf disease and insect detection datasets (supplied 2026-09-23)
+
+_Added 2026-09-23, during ML training._
+
+**`datasets/rice_leafs_disease`** — 5,932 JPGs, mostly 300x300, four disease
+classes (Bacterial blight 1,584, Blast 1,440, Brown spot 1,600, Tungro 1,308).
+
+- **No healthy class.** A model trained on it names one of four diseases for
+  any rice leaf, so it can only be used conditionally, after a symptom has
+  been reported (`ml/MODEL_BARS.md`, model 12).
+- **Heavily pre-augmented.** The flip/rotation hash with pixel verification
+  reduces 5,932 images to 1,094 distinct photos. Similarity grouping then
+  finds brightened, zoomed and recropped copies on top of that: at a
+  similarity of 0.93, comparing every image, the data is **302 independent
+  groups**, about 5% of its file count. No near-copy pair crosses a disease
+  label.
+- **Almost no capture metadata** (about 7% of sampled images carry an EXIF
+  time), so a session split is not possible.
+- All four classes map to Q&A corpus diseases (Bacterial Leaf Blight, Rice
+  Blast, Brown Spot, Rice Tungro).
+
+**`datasets/insects.v2-release.yolov8`** — Roboflow RF100 "insects" v2, YOLOv8
+export, **CC BY 4.0**. That is the first dataset in this folder with a recorded
+licence. 995 images, 10 classes, shipped split 696 / 199 / 100.
+
+- **224x224 tight crops, a median of one insect each, and no insect-free
+  images.** It is an identification set in detection format; it does not
+  resemble a field photo.
+- **16 photos appear in two shipped splits** (pixel-verified; 11 train/valid,
+  4 train/test, 1 valid/test). None of the pairs has conflicting labels.
+- **Filenames do not identify source images.** `100_jpg.rf.<hash>` appears under
+  five different classes, because merged class folders each had their own
+  `100.jpg`.
+- No EXIF. Nine of the ten classes are pests of the app's crops; legume
+  blister beetle is not. Wheat phloeothrips joined on 2026-09-26, when wheat
+  became an app crop.
+- Test instances per class run 5 to 17, so per-class metrics are coarse.
+
+---
+
+### 2.10 Pearl millet leaf disease dataset (supplied 2026-09-24)
+
+_Added 2026-09-24, during ML training._
+
+**`datasets/millets_dataset`**: three folders, blast 2,926, rust 2,059 and
+Healthy 1,326 (no licence recorded).
+
+- **It is pearl millet (bajra), not finger millet (ragi).** The leaves are broad
+  with a midrib, and the classes are pearl millet's two classic leaf diseases.
+  Confirmed with the user on 2026-09-24. It does **not** unblock a ragi leaf
+  model; ragi still has no leaf dataset.
+- **Healthy is a different source from the diseases.**
+
+  | | Blast and rust | Healthy |
+  |---|---|---|
+  | Image size | 256x256 | 640x640 |
+  | Framing | one leaf across a background | close, full-frame leaves |
+  | Origin | camera `DSC_####` shots | phone and WhatsApp photos, dated Aug-Sep 2021, from a Roboflow export |
+
+  Healthy's 1,326 files are about 502 photos with Roboflow augmentations. Any
+  healthy-vs-disease model trained on this folder could learn the source
+  instead of the condition, so Healthy is excluded from training.
+- **The disease folders are mostly crops and bursts of the same shots.**
+  - Each `DSC_####` number appears as up to four crops (`normal0` to `normal3`).
+    4,985 files are 2,002 distinct shots.
+  - Consecutive shot numbers are bursts of the same leaf: median similarity
+    0.95, against 0.69 for distant shots.
+  - Linking consecutive shots gives only **84 independent sessions**, 45 blast
+    and 39 rust.
+- **No EXIF** in any image, so shot numbers are the only session signal.
+
+### 2.11 Wheat canopy segmentation dataset (supplied 2026-09-24)
+
+_Added 2026-09-24, during ML training._
+
+**`datasets/wheat_dataset`**: GlobalWheat **GWFSS v1.0**, organ segmentation.
+The files are 512x512 top-down canopy JPEGs with indexed PNG masks (0
+background, 1 head, 2 stem, 3 leaf), plus `classes.json`,
+`dataset_summary.json` and per-split metadata CSVs with pixel counts.
+
+- **Partial download: 438 of 1,096 images (40%)**, per its own
+  `dataset_summary.json`. The shipped split is 350 train and 88 val.
+- **Not a disease dataset.** It supports growth-stage (heading) and canopy-cover
+  signals only. Wheat is not a seeded app crop.
+- **Clean with respect to near-copies.** No EXIF or site metadata.
+  - Val-to-train nearest similarity has median 0.85, with none at >= 0.97.
+  - Only 4 train images reach >= 0.93 to a val image.
+  - Within train there is a single link at 0.93.
+- **Class balance** (train pixels): leaf 58%, background 27%, head 11%, stem
+  3.5%. 68 of 350 train images have no head pixels.
+
+### 2.12 Soybean agricultural dataset (supplied 2026-09-24)
+
+_Added 2026-09-24, during ML training._
+
+**`datasets/soybean_dataset/Advanced Soybean Agricultural Dataset.csv`**: 55,450
+rows, 15 columns (a `Parameters` code, a replicate `Random`, and 13 plant
+traits including seed yield).
+
+- **Only 108 unique rows.** Every row is repeated about 500 times. Any model or
+  statistic computed on the raw file counts each plot about 500 times, and a
+  random split puts copies on both sides.
+- **One factorial field experiment, not farm data.** `C#S#G#` means 2
+  conditions x 3 treatments x 6 genotypes, with 35 combinations present and 3
+  replicates. None of the codes is documented, so the genotypes and treatments
+  are anonymous.
+- **The features are lab-only or post-harvest.** Chlorophyll a and b, sugars,
+  protein and leaf water content need a lab. Pods, seeds per pod, seed weight
+  and biomass exist only after harvest.
+- **Yield is mostly treatment, not traits.** 93% of its variance lies between
+  treatment codes, and it correlates only 0.57 with pods x seeds per pod x seed
+  weight.
+- **The yield unit is not stated.** Soybean is not an app crop.
+
+Model 15 (`ml/MODEL_RESULTS.md` §15) fails on this data.
+
+### 2.13 Sugarcane farm CSV — synthetic (supplied 2026-09-24)
+
+_Added 2026-09-24, during ML training._
+
+**`datasets/sugarcane_dataset/FINAL_SUGARCANE_DATASET.csv`**: 3,000 rows and
+81 columns covering weather, soil, irrigation, management, crop traits,
+location (Haridwar district, one sugar mill) and yield in quintals per acre,
+2018-2024. Despite its farm-record appearance, **it is generated, not
+collected.**
+
+- **Weather does not follow the seasons.** Monthly rainfall averages about
+  1,400 mm in every month, including December and January.
+- **Soil texture is impossible.** Sand + silt + clay ranges from 13.5% to 136%
+  instead of summing to 100.
+- **Dates contradict each other.** `Crop_Duration_Days` disagrees with the
+  planting and harvest dates, for example 104 days between the dates against a
+  stated 255, and 3.4 years against 288.
+- **The categories look generated.** Three varieties, four soil types, three
+  irrigation methods and every other category are near-perfectly uniform.
+- **Missing values look injected.** About 4% are missing in every column,
+  independently.
+- **Yield follows a few rules.** It depends on nitrogen (r = 0.47), potassium
+  and disease severity (low 351, medium 293, high 195 q/acre). Variety, soil,
+  irrigation, season and growth stage have no effect. A linear model recovers
+  it with R-squared 0.89.
+
+It must not be used as evidence about sugarcane: not for model training that
+is served, and not for statistics shown to users. It is the second synthetic
+dataset in this folder, after `Fertilizer.csv`. Model 16
+(`ml/MODEL_RESULTS.md` §16) was trained on it for the record and is never
+served.
+
+### 2.14 Tobacco leaf lesion segmentation dataset (supplied 2026-09-24)
+
+_Added 2026-09-24, during ML training._
+
+**`datasets/tobacco_dataset`**: a curated 40% subset of Kaggle "Dataset for
+Tobacco Leaf Disease Segmentation". It has 1,400 800x800 PNG tiles with binary
+masks (0 background/healthy, 1 lesion) and a shipped split of 1,120 / 280. Its
+metadata CSVs record each tile's source path and whether it is real or
+augmented.
+
+- **Lesions are small:** about 2% of pixels on average, 0-18% per tile. No
+  disease is named.
+- **Only 320 tiles are real,** cut from **84 photos** taken on 14-15 October
+  2023 (the timestamp is in the name, e.g. `IMG_20231015_110523_7`). In the
+  shipped split, **34 photos have tiles on both sides**, so it leaks.
+- **1,080 tiles (77%) are augmented**, with no source recorded.
+  - The 540 in `data1/` derive from the real tiles: nearest real tile at
+    median similarity 0.90, against 0.66 between tiles of different photos.
+  - The 540 in `data2/` derive from originals **not included** here.
+- **Use:** evaluate on real tiles only, split by capture session, and keep each
+  augmented tile on the side of its source. Model 17 does this
+  (`ml/MODEL_RESULTS.md` §17).
+
+### 2.15 Historical mandi prices (supplied 2026-09-24)
+
+_Added 2026-09-24, during ML training._
+
+**`datasets/historical_price_dataset`**: Agmarknet/data.gov.in daily prices. It
+holds 1,381 daily CSVs plus yearly files, `market_prices_<year>.csv`, which
+contain exactly the same rows. About 8.87 million rows (1.6 GB) cover
+**2023-01-01 to 2026-09-24 continuously**, plus an isolated 13 days of 2020.
+The columns are date, state, district, market, commodity, variety, grade and
+the min/max/modal price in Rs/quintal. There are 72 commodities in 7,374
+markets across 34 states. This replaces the single-day
+`market datasets(1)/csv` as the price source.
+
+- **Defects:**
+  - 168,502 duplicate market-day-commodity-variety-grade rows;
+  - 4,547 rows with min > max;
+  - 20,435 rows with the modal outside [min, max];
+  - unit or typo outliers, such as rice at Rs 61,899 against a median of
+    Rs 3,250.
+- **Karnataka coverage for the app's crops.**
+  - Individual markets report sparsely; few report on even 300 of 1,206 days.
+  - A statewide weekly series is near-continuous for rice, maize, cotton and
+    jaggery (174-187 of 196 weeks).
+  - Paddy and ragi have 139-140 weeks, because they are traded only after
+    harvest.
+- **Sugarcane is essentially absent** (365 rows nationally, none in Karnataka).
+  It is sold to mills at the FRP, not in mandis. Jaggery is the nearest mandi
+  proxy.
+- **"Rice" is milled rice.** Paddy is a separate commodity.
+
+### 2.16 Vegetable produce images — labels corrupted at source (supplied 2026-09-24)
+
+_Added 2026-09-24, during ML training._
+
+**`datasets/Vegetables Image Dataset for Machine Applications`** contains
+harvested-produce photos from Pune: 6 vegetables in 14 folders. Chilli has 3
+varieties, although the published description says 13 classes. There are
+22,804 512x512 JPEGs, shot on 2025-04-06, of single items on white sheets and
+often beside a ruler. The folder names say `-aug`, meaning augmented copies. It
+is a produce-grading set, not a crop-health set, and none of these vegetables is
+an app crop. The user confirmed on 2026-09-24 that this is the original source.
+
+**The labels are corrupted, in the source itself.**
+
+- The 22,804 files are only **12,519 distinct**.
+- **6,368 byte-identical files sit in more than one class folder**, including
+  across vegetable types. The same tomato photos are filed under Okra Long, Okra
+  Short, Tomato Gaavran and Tomato Regular, and some also under Potato medium
+  and small. Chilli photos sit in all three chilli varieties.
+- **Share of each folder's files that also appear in another class:**
+  - 99-100%: Tomato Regular, Tomato Gaavran, Okra Short, Potato small, Beans
+    Long, Chili Sitara, Chili Jipoor;
+  - 77-82%: Okra Long, Chili Jwala;
+  - 49-51%: Beans Short, Potato medium;
+  - **0%**: only Cucumber Gaavran, Cucumber Regular and Potato Large.
+- **Uncontradicted distinct files per class:**
+
+  | Class | Files |
+  |---|---|
+  | Tomato Regular | **0** |
+  | Chili Sitara | 7 |
+  | Beans Long | 10 |
+  | Chili Jipoor | 13 |
+  | Potato small | 13 |
+  | Okra Short | 15 |
+  | Tomato Gaavran | 16 |
+  | Chili Jwala | 344 |
+  | Okra Long | 879 |
+  | Potato medium | 938 |
+  | Potato Large | 955 |
+  | Cucumber Regular | 978 |
+  | Beans Short | 990 |
+  | Cucumber Gaavran | 993 |
+
+**Consequence.** The variety or size of a contradicted file cannot be
+recovered, so **the published 13-class task cannot be trained or measured
+honestly from this data**. Any accuracy reported on it is partly accuracy on
+wrong labels. Only cucumber variety (Regular vs Gaavran) is fully clean.
+
+### 2.17 Labelled soil tests, Karnataka and pan-India (supplied 2026-09-25)
+
+_Added 2026-09-25, during ML training._
+
+**`datasets/soil_dataset/`** now holds four files (the earlier KVK Bareilly
+files, which were unlabelled, were replaced):
+
+- `karnataka_soil_fertility_dataset.csv`: 1,831 rows, 1,500 fields, 12
+  districts, sampled 2022-2024.
+- `pan_india_soil_fertility_dataset.csv`: 3,805 rows, 10 states, 819 in
+  Karnataka.
+- `soil_12_features_ml_ready.csv` and `pan_india_soil_12_features_ml_ready.csv`:
+  column subsets of the two above.
+
+The two full files share no sample, field or nutrient row. Their columns are
+IDs, state, district, taluk, village, GPS, agro-climatic zone, soil type,
+previous crop, date, season, the 12 soil-test values, `Fertility_Index`,
+`Fertility_Class` and `Lab_Source`.
+
+- **The label is a formula.** `Fertility_Class` is `Fertility_Index` cut at
+  1.70 and 2.35, identically in both files, and the index is computed from the
+  nutrients.
+- **Provenance is undisclosed.** The user states the data is real.
+  - Against: the files were created minutes after a message specifying this
+    column set; N and OC correlate at 0.90; a few rows share exact P, Fe and Mn
+    values across states.
+  - For: the coordinates sit inside their districts, and fields are re-tested
+    across years.
+- **Not merged with `soil_fertility.csv`**, whose 0/1/2 labels follow a
+  different, undocumented scheme.
+
+Used by model 5b (`ml/MODEL_RESULTS.md` §5b).
+
+### 2.18 Seven image datasets supplied 2026-09-25 (coffee, tea, cauliflower, onion, potato, tomato, wheat kernels)
+
+_Added 2026-09-26, after ML training._ The figures were measured at pixel or
+byte level, not inferred from file names.
+
+| Folder | What it is | Measured |
+|---|---|---|
+| `coffee_dataset` | leaves: Health / leaf rust / phoma, 256 px | 3,322 files: **102 empty (0-byte)**; of the 3,220 real files, 1,809 distinct contents. 437 images are stored 2-24 times under different names. 1 content is filed as both rust and phoma. File-name prefixes (1, 1200, 2300) are class codes, not source ids |
+| `tea_leaves_datasets` | leaves: Fresh / Helopeltis / Red Spider | 35,299 files: every `IMG_####` photo has 11 files (`_result` plus blur 3-9, noise 2/4 %, grey, binary, rotate +-15; the 3x3 blur differs from the original by 1/255). 3,097 source photos. 1,221 are `.heic` at 300x450, in Fresh and Red Spider only, and need `pillow-heif`. EXIF present |
+| `Cauliflower Dataset` | two tasks: curd (6 classes) and leaves (3) | 2,677 files, 48 byte duplicates, mixed sizes and formats. Curd photos are highly alike (median same-class similarity 0.795). Curd Alternaria has 45 images |
+| `Red and White Onion Dataset` | two tasks: bulbs (healthy/unhealthy; red/white; single/multiple; Mixed ratio folders) and leaves (healthy/unhealthy) | 24,000 files, all distinct, EXIF on all. "Unhealthy" names no cause |
+| `potato_dataset` | Kaggle `arajmishra/potato-dataset` (PlantVillage): early blight / late blight / healthy | 2,152 distinct files, **healthy only 152**. Lab photos |
+| `tomato_dataset` | Kaggle `enalis/tomatoes-dataset`: fruit Damaged / Old / Ripe / Unripe | 7,226 files; each image is saved as .jpg and .png under one stem. **The shipped train/val split leaks** (13 identical files cross it) |
+| `Wheat Dataset for Species Classification and Sunn Pest Damage Detection` | grain heaps, 6 Turkish cultivars, damaged / healthy | 170 PNGs at 5184x2920; the zips repeat the extracted folders. **Average photo colour alone separates damaged from healthy at 0.94-0.96** |
+
+Trained as models 20-28 (`ml/MODEL_RESULTS.md` §20-28). None of these crops is
+an app crop except wheat.
+
+Also noted 2026-09-26: the sugarcane leaf image folder (`Sugarcane Leaf Image
+Dataset`) is **no longer in `datasets/`**. The model 10 result stands, but it
+cannot be re-audited.
 
 ## 3. Reading order for whoever picks up the training work next
 
