@@ -51,6 +51,10 @@ function AppShell() {
             name="modals/log-scouting"
             options={{ presentation: "modal", headerShown: false }}
           />
+          <Stack.Screen
+            name="modals/add-soil-test"
+            options={{ presentation: "modal", headerShown: false }}
+          />
           <Stack.Screen name="alert/[id]" options={{ headerShown: false }} />
           <Stack.Screen name="scheme/[id]" options={{ headerShown: false }} />
           <Stack.Screen
