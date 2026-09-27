@@ -11,6 +11,12 @@ import {
   PickerField,
 } from "../../components/ui/BottomSheetPicker";
 import { FieldBoundaryMap } from "../../components/FieldBoundaryMap";
+import {
+  hasAnySoilValue,
+  SoilTestFields,
+  toSoilTestInput,
+  type SoilTestValues,
+} from "../../components/SoilTestFields";
 import { useToast } from "../../context/ToastContext";
 import { useAppState } from "../../hooks/useAppState";
 import { addField } from "../../services/fields";
@@ -56,10 +62,7 @@ export default function AddFieldModal() {
   const [soilLookupFailed, setSoilLookupFailed] = useState(false);
   const [soilTypePickerOpen, setSoilTypePickerOpen] = useState(false);
   const [soilTypeMode, setSoilTypeMode] = useState<SoilTypeKey | null>(null);
-  const [nitrogen, setNitrogen] = useState("");
-  const [phosphorus, setPhosphorus] = useState("");
-  const [potassium, setPotassium] = useState("");
-  const [soilPh, setSoilPh] = useState("");
+  const [soilValues, setSoilValues] = useState<SoilTestValues>({});
   const [soilPhoto, setSoilPhoto] = useState<SoilTypePhotoResult | null>(null);
   const [soilPhotoBusy, setSoilPhotoBusy] = useState(false);
   const [soilPhotoError, setSoilPhotoError] = useState<string | null>(null);
@@ -148,15 +151,7 @@ export default function AddFieldModal() {
         areaHectares: toHectares(Number(area), unit, state),
         boundary: points,
         soilType: soilType.trim(),
-        soilTest:
-          nitrogen || phosphorus || potassium || soilPh
-            ? {
-                nitrogen: nitrogen ? Number(nitrogen) : null,
-                phosphorus: phosphorus ? Number(phosphorus) : null,
-                potassium: potassium ? Number(potassium) : null,
-                ph: soilPh ? Number(soilPh) : null,
-              }
-            : undefined,
+        soilTest: hasAnySoilValue(soilValues) ? toSoilTestInput(soilValues) : undefined,
       });
       showToast(t("common.saved"));
       router.back();
@@ -278,30 +273,7 @@ export default function AddFieldModal() {
       <Text className="text-ink-muted mb-3" style={{ fontSize: 13 }}>
         {t("addField.soilTestHint")}
       </Text>
-      <NumericField
-        label={t("addField.nitrogenLabel")}
-        placeholder="0"
-        value={nitrogen}
-        onChangeText={(v) => setNitrogen(v.replace(/[^0-9.]/g, ""))}
-      />
-      <NumericField
-        label={t("addField.phosphorusLabel")}
-        placeholder="0"
-        value={phosphorus}
-        onChangeText={(v) => setPhosphorus(v.replace(/[^0-9.]/g, ""))}
-      />
-      <NumericField
-        label={t("addField.potassiumLabel")}
-        placeholder="0"
-        value={potassium}
-        onChangeText={(v) => setPotassium(v.replace(/[^0-9.]/g, ""))}
-      />
-      <NumericField
-        label={t("addField.phLabel")}
-        placeholder="0"
-        value={soilPh}
-        onChangeText={(v) => setSoilPh(v.replace(/[^0-9.]/g, ""))}
-      />
+      <SoilTestFields values={soilValues} onChange={setSoilValues} />
 
       <Button
         label={t("addField.confirmSave")}
