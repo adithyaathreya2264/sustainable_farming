@@ -80,7 +80,9 @@ export default function LedgerScreen() {
         </View>
       ) : null}
 
-      {crop && <PlantingAdvice plantingId={plantingId} cropName={crop.name} />}
+      {crop && planting && (
+        <PlantingAdvice plantingId={plantingId} fieldId={planting.fieldId} cropName={crop.name} />
+      )}
 
       <Card className="mb-4 items-center py-6">
         <Text className="text-ink-muted" style={{ fontSize: 13 }}>
