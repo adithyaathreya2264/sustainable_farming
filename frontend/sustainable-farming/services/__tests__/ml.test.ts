@@ -117,3 +117,62 @@ describe("apiUpload", () => {
     expect(apiErrorReason(err)).toBe("ml_unavailable");
   });
 });
+
+describe("soil-test card (model 5b)", () => {
+  it("toSoilTestInput turns blanks into null and keeps all 12 values", () => {
+    const { toSoilTestInput, hasAnySoilValue } = require("../../components/SoilTestFields") as typeof import("../../components/SoilTestFields");
+    expect(hasAnySoilValue({})).toBe(false);
+    expect(hasAnySoilValue({ zinc: "" })).toBe(false);
+    const input = toSoilTestInput({ nitrogen: "280", organic_carbon: "0.62", boron: "0.6" });
+    expect(input).toMatchObject({ nitrogen: 280, organicCarbon: 0.62, boron: 0.6, ph: null, zinc: null });
+    expect(Object.keys(input)).toHaveLength(12);
+  });
+
+  it("getSoilFertility maps both the incomplete and the rated case", async () => {
+    await bootStore();
+    const { getSoilFertility } = require("../ml") as typeof import("../ml");
+    const reply = (body: unknown) =>
+      ((global as unknown as { fetch: typeof fetch }).fetch = jest
+        .fn()
+        .mockResolvedValue({ ok: true, text: async () => JSON.stringify(body) }) as never);
+
+    reply({ available: false, reason: "incomplete_soil_test", missing: ["ec", "boron"] });
+    expect(await getSoilFertility("f1")).toMatchObject({ available: false, reason: "incomplete_soil_test", missing: ["ec", "boron"] });
+
+    reply({ available: true, fertility_class: "medium", confidence_label: "provisional", provenance_verified: false, caveats: ["c"] });
+    expect(await getSoilFertility("f1")).toMatchObject({ available: true, fertilityClass: "medium", confidenceLabel: "provisional" });
+  });
+});
+
+describe("models 20-28 photo checks", () => {
+  it("every kind maps to a capability, and leaf parts are recognised", () => {
+    const { PHOTO_CHECK_CAPABILITY, isLeafPart } = require("../ml") as typeof import("../ml");
+    expect(Object.keys(PHOTO_CHECK_CAPABILITY).sort()).toEqual(
+      ["bulb", "curd", "fruit_grade", "insects", "leaf", "tobacco_lesions", "wheat_heading", "wheat_kernels"]
+    );
+    expect(["leaf", "curd", "bulb", "fruit_grade"].every((k) => isLeafPart(k as never))).toBe(true);
+    expect(isLeafPart("wheat_kernels")).toBe(false);
+  });
+
+  it("a fruit grade keeps its part and grade category, with no none-of-these", () => {
+    const r = photoCheckFromBackend("fruit_grade", {
+      condition: { key: "ripe", display_name: "Ripe", category: "grade", qa_disease: null, confidence_label: "provisional" },
+      alternatives: [],
+      offer_none_of_these: false,
+    });
+    expect(r.kind).toBe("leaf");
+    if (r.kind !== "leaf") return;
+    expect(r.part).toBe("fruit_grade");
+    expect(r.condition?.category).toBe("grade");
+    expect(r.offerNoneOfThese).toBe(false);
+  });
+
+  it("maps a wheat-kernel result", () => {
+    const r = photoCheckFromBackend("wheat_kernels", {
+      kernel_condition: "damaged",
+      confidence_label: "provisional",
+      caveats: ["lighting"],
+    });
+    expect(r).toEqual({ kind: "wheat_kernels", kernelCondition: "damaged", confidenceLabel: "provisional", caveats: ["lighting"] });
+  });
+});
