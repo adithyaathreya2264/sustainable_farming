@@ -108,6 +108,94 @@ _SOIL_IMAGES = DATASETS_DIR / "soil datasets" / "soil datasets(1)"
 SOIL_IMAGES_TRAIN = _SOIL_IMAGES / "Soil Train" / "Soil Train"
 SOIL_IMAGES_TEST = _SOIL_IMAGES / "Soil Test" / "Soil Test"
 
+# Leaf condition photos, one dataset per crop, supplied 2026-09-23.
+
+# Sugarcane: the class folders sit at uneven depths - diseases are nested one
+# level deeper than the dried and healthy folders - so the loader walks for
+# leaf directories rather than assuming a fixed layout.
+SUGARCANE_LEAF_IMAGES = (
+    DATASETS_DIR / "Sugarcane Leaf Image Dataset" / "Sugarcane Leaf Image Dataset"
+)
+
+# Rice: supplied 2026-09-23. Four disease classes and NO healthy class, so a
+# model trained on it can never answer "this leaf is healthy".
+RICE_LEAF_IMAGES = DATASETS_DIR / "rice_leafs_disease"
+
+# Pearl millet (bajra): supplied 2026-09-24 as "millets_dataset". Blast and rust
+# come from one camera source (256px, DSC_#### shots, several crops of each);
+# its Healthy folder is a different source (640px phone photos, Roboflow
+# export) and is excluded - see EXCLUDED_FOLDERS in ml/leaf_conditions.py.
+PEARL_MILLET_LEAF_IMAGES = DATASETS_DIR / "millets_dataset"
+
+# Models 20-27, supplied 2026-09-25. One root per task; cauliflower and onion
+# each hold two tasks (leaves, and curd or bulb).
+COFFEE_LEAF_IMAGES = DATASETS_DIR / "coffee_dataset"
+TEA_LEAF_IMAGES = DATASETS_DIR / "tea_leaves_datasets"
+_CAULIFLOWER = DATASETS_DIR / "Cauliflower Dataset"
+_ONION = DATASETS_DIR / "Red and White Onion Dataset" / "New Onion"
+POTATO_LEAF_IMAGES = DATASETS_DIR / "potato_dataset" / "PlantVillage"
+TOMATO_FRUIT_IMAGES = DATASETS_DIR / "tomato_dataset"  # train/ and val/ pooled; shipped split leaks
+
+LEAF_IMAGE_ROOTS = {
+    "sugarcane": SUGARCANE_LEAF_IMAGES,
+    "rice": RICE_LEAF_IMAGES,
+    "pearl millet": PEARL_MILLET_LEAF_IMAGES,
+    "coffee": COFFEE_LEAF_IMAGES,
+    "tea": TEA_LEAF_IMAGES,
+    "cauliflower": _CAULIFLOWER / "Leaves Categories",
+    "cauliflower curd": _CAULIFLOWER / "Cauliflower Categories",
+    "onion": _ONION / "Leaves",
+    "onion bulb": _ONION / "Bulb",
+    "potato": POTATO_LEAF_IMAGES,
+    "tomato fruit": TOMATO_FRUIT_IMAGES,
+}
+
+# Wheat kernels (sunn pest damage), model 28. The extracted folders; the .zip
+# files beside them hold the same images.
+WHEAT_KERNEL_IMAGES = (
+    DATASETS_DIR / "Wheat Dataset for Species Classification and Sunn Pest Damage Detection" / "Wheat Dataset"
+)
+
+# Insect detection: Roboflow RF100 "insects" v2, YOLOv8 export, CC BY 4.0.
+# Ships its own train/valid/test split and data.yaml.
+INSECTS_YOLO_ROOT = DATASETS_DIR / "insects.v2-release.yolov8"
+
+# Wheat: GlobalWheat GWFSS v1.0, organ segmentation (background/head/stem/leaf),
+# supplied 2026-09-24 as a 40% download. Shipped split train/ and val/, each
+# with images/ (512px JPEG) and masks/ (indexed PNG, values 0-3).
+WHEAT_SEGMENTATION_ROOT = DATASETS_DIR / "wheat_dataset"
+
+# Soybean: one factorial field experiment (108 unique plots), shipped as a CSV
+# in which every row is repeated about 500 times. See MODEL_BARS.md, model 15.
+SOYBEAN_CSV = DATASETS_DIR / "soybean_dataset" / "Advanced Soybean Agricultural Dataset.csv"
+
+# Sugarcane farm CSV, supplied 2026-09-24. SYNTHETIC (see MODEL_BARS.md, model
+# 16): trained for the record, never served.
+SUGARCANE_SYNTHETIC_CSV = DATASETS_DIR / "sugarcane_dataset" / "FINAL_SUGARCANE_DATASET.csv"
+
+# Tobacco: lesion segmentation (binary), a 40% curated subset of a Kaggle set,
+# supplied 2026-09-24. Same layout as wheat; metadata CSVs record each tile's
+# source path and whether it is real or augmented. See MODEL_BARS.md, model 17.
+TOBACCO_SEGMENTATION_ROOT = DATASETS_DIR / "tobacco_dataset"
+
+# Mandi prices: Agmarknet/data.gov.in daily records, 2023-01-01 onward, one
+# yearly CSV per year (the daily/ folder holds the same rows). See
+# MODEL_BARS.md, model 18.
+PRICE_HISTORY_DIR = DATASETS_DIR / "historical_price_dataset"
+
+# Labelled soil tests supplied 2026-09-25 (provenance undisclosed - see
+# MODEL_BARS.md, model 5b). The *_ml_ready.csv files are column subsets.
+SOIL_TESTS_DIR = DATASETS_DIR / "soil_dataset"
+SOIL_TESTS_KARNATAKA_CSV = SOIL_TESTS_DIR / "karnataka_soil_fertility_dataset.csv"
+SOIL_TESTS_PAN_INDIA_CSV = SOIL_TESTS_DIR / "pan_india_soil_fertility_dataset.csv"
+
+# Vegetable produce images (Pune), 14 variety/size folders. Labels partly
+# corrupted at source - see DATASETS_STATUS.md section 2.16 and MODEL_BARS.md,
+# model 19.
+VEGETABLE_IMAGES = (
+    DATASETS_DIR / "Vegetables Image Dataset for Machine Applications" / "Vegetables Images" / "Vegetables"
+)
+
 # --------------------------------------------------------------------------
 # Outputs
 # --------------------------------------------------------------------------
@@ -122,7 +210,28 @@ SOIL_TYPE_CNN_MODEL = ARTIFACTS_DIR / "soil_type_cnn_model.pt"
 YIELD_MODEL = ARTIFACTS_DIR / "yield_model.pkl"
 YIELD_BENCHMARKS = ARTIFACTS_DIR / "yield_benchmarks.json"
 DISEASE_QA_INDEX = ARTIFACTS_DIR / "disease_qa_index.pkl"
+WHEAT_SEGMENTATION_MODEL = ARTIFACTS_DIR / "wheat_canopy_segmentation.pt"
+SOYBEAN_YIELD_MODEL = ARTIFACTS_DIR / "soybean_yield_model.pkl"
+SUGARCANE_SYNTHETIC_YIELD_MODEL = ARTIFACTS_DIR / "sugarcane_synthetic_yield_model.pkl"
+TOBACCO_LESION_MODEL = ARTIFACTS_DIR / "tobacco_lesion_segmentation.pt"
+PRICE_FORECAST_MODEL = ARTIFACTS_DIR / "price_forecast_model.pkl"
+VEGETABLE_CLASSIFIER_MODEL = ARTIFACTS_DIR / "vegetable_classifier.pt"
+SOIL_FERTILITY_V2_MODEL = ARTIFACTS_DIR / "soil_fertility_v2_model.pkl"
+WHEAT_KERNEL_MODEL = ARTIFACTS_DIR / "wheat_kernel_damage.pt"
 FERTILIZER_TARGETS = ARTIFACTS_DIR / "fertilizer_targets.json"
+
+# Pre-resized copies of training photos. Lives under artifacts/ so it is
+# gitignored; safe to delete, rebuilt on the next training run.
+IMAGE_CACHE_DIR = ARTIFACTS_DIR / "image_cache"
+
+
+def crop_slug(crop: str) -> str:
+    """Filesystem-safe form of a crop key ("pearl millet" -> "pearl_millet")."""
+    return crop.replace(" ", "_")
+
+
+def leaf_condition_model(crop: str) -> Path:
+    return ARTIFACTS_DIR / f"leaf_condition_{crop_slug(crop)}.pt"
 
 
 def require(path: Path) -> Path:
