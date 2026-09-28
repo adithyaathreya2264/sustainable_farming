@@ -20,6 +20,15 @@ xgboost==3.4.1
 joblib==1.6.0
 scipy==1.18.1
 pillow==12.2.0
+pillow-heif==1.8.0  # tea dataset ships .heic files
+ultralytics==8.4.160   # insect detector (model 11); was used but never listed
+
+# Serving sidecar (ml/serving/). httpx and pytest are for its test suite.
+fastapi==0.116.1
+uvicorn==0.35.0
+python-multipart==0.0.20
+httpx==0.28.1
+pytest==9.0.3
 
 # Inherited from the global environment, recorded here because the metrics in
 # MODEL_RESULTS.md depend on them:
