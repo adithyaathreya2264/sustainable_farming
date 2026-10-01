@@ -1,0 +1,3426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Agriculture ML Architecture & Codebase Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Default Light Theme */
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f1f5f9;
+      --bg-glass: rgba(255, 255, 255, 0.88);
+      --border-subtle: #e2e8f0;
+      --border-accent: rgba(5, 150, 105, 0.35);
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+      --card-shadow-hover: 0 12px 28px -4px rgba(0, 0, 0, 0.09), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
+      
+      --text-main: #0f172a;
+      --text-muted: #334155;
+      --text-dim: #64748b;
+      
+      --color-emerald: #059669;
+      --color-emerald-glow: rgba(5, 150, 105, 0.15);
+      --color-cyan: #0284c7;
+      --color-cyan-glow: rgba(2, 132, 199, 0.15);
+      --color-amber: #d97706;
+      --color-amber-glow: rgba(217, 119, 6, 0.15);
+      --color-indigo: #6366f1;
+      --color-indigo-glow: rgba(99, 102, 241, 0.15);
+      --color-rose: #e11d48;
+      --color-rose-glow: rgba(225, 29, 72, 0.15);
+
+      --hero-title-gradient: linear-gradient(135deg, #0f172a 30%, #334155 100%);
+      --logo-text-gradient: linear-gradient(to right, #0f172a, #475569);
+      
+      --table-header-bg: #f8fafc;
+      --table-border: #e2e8f0;
+      --table-text: #334155;
+      --flow-step-bg: #f1f5f9;
+      
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      
+      --caveat-bg: rgba(245, 158, 11, 0.08);
+      --caveat-border: rgba(245, 158, 11, 0.35);
+      --caveat-text: #92400e;
+      --caveat-strong: #78350f;
+      
+      --deep-dive-bg: rgba(2, 132, 199, 0.06);
+      --deep-dive-border: rgba(2, 132, 199, 0.25);
+      --deep-dive-text: #334155;
+      --deep-dive-title: #0369a1;
+
+      --glow-1: radial-gradient(circle, rgba(16, 185, 129, 0.07) 0%, rgba(248, 250, 252, 0) 70%);
+      --glow-2: radial-gradient(circle, rgba(6, 182, 212, 0.06) 0%, rgba(248, 250, 252, 0) 70%);
+      --glow-3: radial-gradient(circle, rgba(99, 102, 241, 0.05) 0%, rgba(248, 250, 252, 0) 70%);
+      
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      
+      --transition-fast: 0.18s ease;
+      --transition-normal: 0.28s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg-base: #0a0e17;
+      --bg-surface: #111827;
+      --bg-surface-elevated: #1a2234;
+      --bg-glass: rgba(17, 24, 39, 0.75);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(16, 185, 129, 0.3);
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+      --card-shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.5);
+      
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      
+      --color-emerald: #10b981;
+      --color-emerald-glow: rgba(16, 185, 129, 0.18);
+      --color-cyan: #06b6d4;
+      --color-cyan-glow: rgba(6, 182, 212, 0.18);
+      --color-amber: #f59e0b;
+      --color-amber-glow: rgba(245, 158, 11, 0.15);
+      --color-indigo: #8b5cf6;
+      --color-indigo-glow: rgba(139, 92, 246, 0.18);
+      --color-rose: #f43f5e;
+      --color-rose-glow: rgba(244, 63, 94, 0.15);
+
+      --hero-title-gradient: linear-gradient(135deg, #ffffff 30%, #9ca3af 100%);
+      --logo-text-gradient: linear-gradient(to right, #fff, #9ca3af);
+
+      --table-header-bg: rgba(0, 0, 0, 0.3);
+      --table-border: rgba(255, 255, 255, 0.04);
+      --table-text: #9ca3af;
+      --flow-step-bg: rgba(0, 0, 0, 0.25);
+      
+      --code-bg: #06090e;
+      --code-text: #e5e7eb;
+
+      --caveat-bg: rgba(245, 158, 11, 0.07);
+      --caveat-border: rgba(245, 158, 11, 0.25);
+      --caveat-text: #fbbf24;
+      --caveat-strong: #ffffff;
+      
+      --deep-dive-bg: rgba(6, 182, 212, 0.05);
+      --deep-dive-border: rgba(6, 182, 212, 0.2);
+      --deep-dive-text: #9ca3af;
+      --deep-dive-title: #06b6d4;
+
+      --glow-1: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(10, 14, 23, 0) 70%);
+      --glow-2: radial-gradient(circle, rgba(6, 182, 212, 0.09) 0%, rgba(10, 14, 23, 0) 70%);
+      --glow-3: radial-gradient(circle, rgba(139, 92, 246, 0.08) 0%, rgba(10, 14, 23, 0) 70%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color var(--transition-normal), color var(--transition-normal);
+    }
+
+    /* Ambient Background Gradients */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -150px;
+      left: 10%;
+      width: 600px;
+      height: 600px;
+      background: var(--glow-1);
+      pointer-events: none;
+      z-index: 0;
+      transition: background var(--transition-normal);
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      top: 40%;
+      right: -100px;
+      width: 650px;
+      height: 650px;
+      background: var(--glow-2);
+      pointer-events: none;
+      z-index: 0;
+      transition: background var(--transition-normal);
+    }
+
+    .ambient-glow-3 {
+      position: fixed;
+      bottom: -150px;
+      left: 20%;
+      width: 700px;
+      height: 700px;
+      background: var(--glow-3);
+      pointer-events: none;
+      z-index: 0;
+      transition: background var(--transition-normal);
+    }
+
+    /* Layout */
+    .app-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 320px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      border-right: 1px solid var(--border-subtle);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      z-index: 50;
+      transition: background var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    .sidebar-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--color-emerald), var(--color-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px var(--color-emerald-glow);
+      flex-shrink: 0;
+    }
+
+    .logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: #fff;
+    }
+
+    .logo-text h1 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: var(--logo-text-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo-subtitle {
+      font-size: 0.76rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 7px 12px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--color-emerald);
+      color: var(--text-main);
+    }
+
+    .theme-toggle-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .theme-pill {
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      background: rgba(5, 150, 105, 0.12);
+      color: var(--color-emerald);
+    }
+
+    .sidebar-search {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input-wrapper svg {
+      position: absolute;
+      left: 12px;
+      width: 16px;
+      height: 16px;
+      fill: var(--text-dim);
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px 9px 36px;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      transition: var(--transition-fast);
+    }
+
+    .search-input:focus {
+      border-color: var(--color-emerald);
+      box-shadow: 0 0 0 2px var(--color-emerald-glow);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sidebar-nav::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-full);
+    }
+
+    .nav-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-weight: 700;
+      padding: 10px 12px 6px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      transition: var(--transition-fast);
+    }
+
+    .nav-link:hover {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+    }
+
+    .nav-link.active {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--color-emerald);
+      border-left: 3px solid var(--color-emerald);
+      font-weight: 600;
+    }
+
+    .nav-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-dim);
+    }
+
+    .nav-link.active .nav-dot {
+      background: var(--color-emerald);
+      box-shadow: 0 0 6px var(--color-emerald);
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      max-width: calc(100vw - 320px);
+      padding: 40px 48px 100px;
+      overflow-y: auto;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      margin-bottom: 40px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      background: rgba(5, 150, 105, 0.1);
+      border: 1px solid rgba(5, 150, 105, 0.3);
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      color: var(--color-emerald);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+      background: var(--hero-title-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 860px;
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-accent);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--stat-accent, var(--color-emerald)), transparent);
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Interactive Pipeline Flowchart */
+    .flowchart-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 48px;
+      position: relative;
+      box-shadow: var(--card-shadow);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--color-cyan);
+    }
+
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .pipeline-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: var(--transition-fast);
+    }
+
+    .pipeline-card:hover {
+      border-color: var(--color-cyan);
+      box-shadow: 0 4px 16px var(--color-cyan-glow);
+    }
+
+    .pipeline-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-cyan);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pipeline-name {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .pipeline-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .flow-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      background: var(--flow-step-bg);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+    }
+
+    .flow-arrow {
+      color: var(--color-emerald);
+      font-weight: bold;
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .filter-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+
+    .filter-btn:hover {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border-color: var(--color-emerald);
+    }
+
+    .filter-btn.active {
+      background: var(--color-emerald);
+      color: #ffffff;
+      border-color: var(--color-emerald);
+      box-shadow: 0 2px 10px var(--color-emerald-glow);
+    }
+
+    .filter-count {
+      background: rgba(0, 0, 0, 0.08);
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-size: 0.72rem;
+      color: inherit;
+    }
+
+    .filter-btn.active .filter-count {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+    }
+
+    /* Python File Detail Cards */
+    .file-cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .file-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      position: relative;
+      transition: var(--transition-normal);
+      scroll-margin-top: 30px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .file-card:hover {
+      border-color: var(--border-accent);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .file-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .file-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .file-name {
+      font-family: var(--font-mono);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .file-path {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .badges-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-algo {
+      background: rgba(5, 150, 105, 0.1);
+      color: var(--color-emerald);
+      border: 1px solid rgba(5, 150, 105, 0.3);
+    }
+
+    .badge-train {
+      background: rgba(2, 132, 199, 0.1);
+      color: var(--color-cyan);
+      border: 1px solid rgba(2, 132, 199, 0.3);
+    }
+
+    .badge-data {
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--color-indigo);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .badge-pkg {
+      background: rgba(100, 116, 139, 0.1);
+      color: var(--text-muted);
+      border: 1px solid rgba(100, 116, 139, 0.3);
+    }
+
+    .badge-lines {
+      background: var(--bg-surface-elevated);
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .file-summary {
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* Subsections inside File Card */
+    .card-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 992px) {
+      .card-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info-pane {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+    }
+
+    .info-pane-title {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-pane-title svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Tables */
+    .contract-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .contract-table th {
+      text-align: left;
+      padding: 8px 10px;
+      background: var(--table-header-bg);
+      color: var(--text-dim);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .contract-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--table-border);
+      color: var(--table-text);
+      vertical-align: top;
+    }
+
+    .param-name {
+      font-family: var(--font-mono);
+      color: var(--color-cyan);
+      font-weight: 600;
+    }
+
+    .param-type {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-indigo);
+    }
+
+    /* Step by step logic */
+    .logic-step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .logic-step-item {
+      display: flex;
+      gap: 12px;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .step-number {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(5, 150, 105, 0.15);
+      color: var(--color-emerald);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Math / Algorithm Deep Dive */
+    .deep-dive-box {
+      background: var(--deep-dive-bg);
+      border: 1px solid var(--deep-dive-border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+
+    .deep-dive-title {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--deep-dive-title);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .deep-dive-content {
+      font-size: 0.86rem;
+      color: var(--deep-dive-text);
+      line-height: 1.6;
+    }
+
+    /* Caveat / Warning Callout */
+    .caveat-box {
+      background: var(--caveat-bg);
+      border: 1px solid var(--caveat-border);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .caveat-icon {
+      color: var(--color-amber);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .caveat-text {
+      font-size: 0.85rem;
+      color: var(--caveat-text);
+      line-height: 1.55;
+    }
+
+    .caveat-text strong {
+      color: var(--caveat-strong);
+    }
+
+    /* Interconnection Footer */
+    .interconnection-tags {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .tag-label {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .file-tag {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: var(--transition-fast);
+    }
+
+    .file-tag:hover {
+      background: var(--color-emerald-glow);
+      color: var(--color-emerald);
+      border-color: var(--border-accent);
+    }
+
+    /* Code Snippet block */
+    pre.code-preview {
+      background: var(--code-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--code-text);
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    code .kw { color: #f43f5e; font-weight: 600; }
+    code .fn { color: #38bdf8; font-weight: 600; }
+    code .str { color: #34d399; }
+    code .num { color: #fbbf24; }
+    code .cm { color: #6b7280; font-style: italic; }
+
+    /* Scroll to top button */
+    .scroll-top {
+      position: fixed;
+      bottom: 24px;
+      right: 28px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      transition: var(--transition-fast);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .scroll-top:hover {
+      background: var(--color-emerald);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* Mobile Navigation Bar & Elements */
+    .mobile-top-bar {
+      display: none;
+    }
+
+    .sidebar-backdrop {
+      display: none;
+    }
+
+    .sidebar-close-btn {
+      display: none;
+    }
+
+    .sidebar-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .mobile-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        padding: 0 18px;
+        background: var(--bg-glass);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--border-subtle);
+        z-index: 90;
+      }
+
+      .mobile-logo-area {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-icon-sm {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-sm);
+        background: linear-gradient(135deg, var(--color-emerald), var(--color-cyan));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px var(--color-emerald-glow);
+      }
+
+      .logo-icon-sm svg {
+        width: 18px;
+        height: 18px;
+        fill: #fff;
+      }
+
+      .mobile-site-title {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 1.05rem;
+        letter-spacing: -0.01em;
+        color: var(--text-main);
+      }
+
+      .mobile-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .mobile-theme-btn, .mobile-menu-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: var(--radius-sm);
+        background: var(--bg-surface-elevated);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition-fast);
+      }
+
+      .mobile-theme-btn svg, .mobile-menu-btn svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+
+      .mobile-theme-btn:active, .mobile-menu-btn:active {
+        transform: scale(0.95);
+      }
+
+      .sidebar-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 95;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.28s ease;
+      }
+
+      .sidebar-backdrop.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .sidebar-close-btn {
+        display: flex;
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-sm);
+        background: var(--bg-surface-elevated);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-muted);
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-fast);
+      }
+
+      .sidebar-close-btn svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+
+      .sidebar-close-btn:hover {
+        color: var(--text-main);
+        border-color: var(--color-emerald);
+      }
+
+      .app-container {
+        flex-direction: column;
+        min-height: calc(100vh - 60px);
+      }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: min(320px, 86vw);
+        height: 100vh;
+        z-index: 100;
+        transform: translateX(-105%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        border-right: 1px solid var(--border-subtle);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        max-width: 100%;
+        width: 100%;
+        padding: 24px 20px 80px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 20px 14px 70px;
+      }
+
+      .hero-section {
+        margin-bottom: 28px;
+      }
+
+      .hero-title {
+        font-size: 1.85rem;
+        line-height: 1.22;
+        margin-bottom: 12px;
+      }
+
+      .hero-description {
+        font-size: 0.92rem;
+        line-height: 1.55;
+        margin-bottom: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 28px;
+      }
+
+      .stat-card {
+        padding: 14px 14px;
+      }
+
+      .stat-value {
+        font-size: 1.7rem;
+      }
+
+      .stat-label {
+        font-size: 0.74rem;
+      }
+
+      .flowchart-section {
+        padding: 18px 14px;
+        margin-bottom: 30px;
+      }
+
+      .section-header {
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .section-title {
+        font-size: 1.18rem;
+      }
+
+      .pipeline-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .filter-bar {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 10px;
+        gap: 8px;
+        margin-bottom: 24px;
+        scrollbar-width: thin;
+      }
+
+      .filter-bar::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      .filter-bar::-webkit-scrollbar-thumb {
+        background: var(--border-subtle);
+        border-radius: var(--radius-full);
+      }
+
+      .filter-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 7px 14px;
+        font-size: 0.78rem;
+        min-height: 36px;
+      }
+
+      .file-cards-container {
+        gap: 20px;
+      }
+
+      .file-card {
+        padding: 18px 14px;
+        border-radius: var(--radius-md);
+      }
+
+      .file-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .file-name {
+        font-size: 1.18rem;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+
+      .file-path {
+        font-size: 0.72rem;
+        word-break: break-all;
+      }
+
+      .badges-wrapper {
+        margin-top: 2px;
+      }
+
+      .file-summary {
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+        padding-bottom: 14px;
+      }
+
+      .card-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+
+      .info-pane {
+        padding: 14px 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .contract-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        min-width: 280px;
+      }
+
+      .contract-table th, .contract-table td {
+        padding: 7px 8px;
+        font-size: 0.78rem;
+      }
+
+      .logic-step-item {
+        font-size: 0.82rem;
+        gap: 10px;
+      }
+
+      .step-number {
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+      }
+
+      .deep-dive-box {
+        padding: 14px 12px;
+        margin-bottom: 14px;
+      }
+
+      .deep-dive-content {
+        font-size: 0.82rem;
+      }
+
+      .caveat-box {
+        padding: 12px 12px;
+        margin-bottom: 14px;
+      }
+
+      .caveat-text {
+        font-size: 0.8rem;
+      }
+
+      pre.code-preview {
+        font-size: 0.74rem;
+        padding: 10px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .scroll-top {
+        bottom: 20px;
+        right: 18px;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-content {
+        padding: 16px 12px 60px;
+      }
+
+      .hero-title {
+        font-size: 1.55rem;
+      }
+
+      .hero-badge {
+        font-size: 0.74rem;
+        padding: 4px 10px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .stat-card {
+        padding: 12px 14px;
+      }
+
+      .file-card {
+        padding: 14px 12px;
+      }
+
+      .file-name {
+        font-size: 1.08rem;
+      }
+
+      .badge {
+        font-size: 0.68rem;
+        padding: 3px 8px;
+      }
+
+      .scroll-top {
+        bottom: 16px;
+        right: 14px;
+        width: 38px;
+        height: 38px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+  <div class="ambient-glow-3"></div>
+
+  <!-- Mobile Top Bar (Visible on mobile/tablet screens <= 1024px) -->
+  <header class="mobile-top-bar" id="mobileTopBar">
+    <div class="mobile-logo-area">
+      <div class="logo-icon-sm">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      </div>
+      <span class="mobile-site-title">Smart Agri ML</span>
+    </div>
+    <div class="mobile-actions">
+      <button class="mobile-theme-btn" id="mobileThemeToggleBtn" aria-label="Toggle Theme">
+        <svg id="mobileThemeIcon" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+      </button>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open Navigation Menu">
+        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Backdrop Overlay -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <div class="app-container">
+    <!-- Navigation Sidebar Drawer -->
+    <aside class="sidebar" id="sidebarDrawer">
+      <div class="sidebar-header">
+        <div class="sidebar-header-top">
+          <div class="logo-container">
+            <div class="logo-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            </div>
+            <div class="logo-text">
+              <h1>Smart Agri ML</h1>
+              <div class="logo-subtitle">Codebase Deep Dive</div>
+            </div>
+          </div>
+          <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close navigation menu">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+        </div>
+        <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light / Dark Theme">
+          <div class="theme-toggle-content">
+            <svg id="themeIcon" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+            <span id="themeToggleText">Theme</span>
+          </div>
+          <span class="theme-pill" id="themePill">Light Mode</span>
+        </button>
+      </div>
+
+      <div class="sidebar-search">
+        <div class="search-input-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search files, models, logic...">
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebarNav">
+        <div class="nav-section-title">Overview & Architecture</div>
+        <a href="#overview" class="nav-link active"><span class="nav-dot"></span> System Pipelines</a>
+
+        <div class="nav-section-title">Inference Algorithms (10)</div>
+        <a href="#crop_recommendation_py" class="nav-link"><span class="nav-dot"></span> crop_recommendation.py</a>
+        <a href="#disease_info_retrieval_py" class="nav-link"><span class="nav-dot"></span> disease_info_retrieval.py</a>
+        <a href="#disease_prediction_py" class="nav-link"><span class="nav-dot"></span> disease_prediction.py</a>
+        <a href="#disease_presence_prediction_py" class="nav-link"><span class="nav-dot"></span> disease_presence_prediction.py</a>
+        <a href="#fertilizer_recommendation_py" class="nav-link"><span class="nav-dot"></span> fertilizer_recommendation.py</a>
+        <a href="#insect_presence_prediction_py" class="nav-link"><span class="nav-dot"></span> insect_presence_prediction.py</a>
+        <a href="#market_price_prediction_py" class="nav-link"><span class="nav-dot"></span> market_price_prediction.py</a>
+        <a href="#soil_to_crop_bridge_py" class="nav-link"><span class="nav-dot"></span> soil_to_crop_bridge.py</a>
+        <a href="#soil_type_prediction_py" class="nav-link"><span class="nav-dot"></span> soil_type_prediction.py</a>
+        <a href="#yield_prediction_py" class="nav-link"><span class="nav-dot"></span> yield_prediction.py</a>
+
+        <div class="nav-section-title">Training Pipelines (12)</div>
+        <a href="#train_crop_recommendation_model_py" class="nav-link"><span class="nav-dot"></span> train_crop_recommendation_model.py</a>
+        <a href="#train_crop_soil_type_model_py" class="nav-link"><span class="nav-dot"></span> train_crop_soil_type_model.py</a>
+        <a href="#train_disease_cnn_model_py" class="nav-link"><span class="nav-dot"></span> train_disease_cnn_model.py</a>
+        <a href="#train_disease_model_py" class="nav-link"><span class="nav-dot"></span> train_disease_model.py</a>
+        <a href="#train_disease_presence_model_py" class="nav-link"><span class="nav-dot"></span> train_disease_presence_model.py</a>
+        <a href="#train_disease_segmentation_model_py" class="nav-link"><span class="nav-dot"></span> train_disease_segmentation_model.py</a>
+        <a href="#train_insect_model_py" class="nav-link"><span class="nav-dot"></span> train_insect_model.py</a>
+        <a href="#train_insect_presence_model_py" class="nav-link"><span class="nav-dot"></span> train_insect_presence_model.py</a>
+        <a href="#train_market_price_model_py" class="nav-link"><span class="nav-dot"></span> train_market_price_model.py</a>
+        <a href="#train_soil_fertility_model_py" class="nav-link"><span class="nav-dot"></span> train_soil_fertility_model.py</a>
+        <a href="#train_soil_type_model_py" class="nav-link"><span class="nav-dot"></span> train_soil_type_model.py</a>
+        <a href="#train_yield_model_py" class="nav-link"><span class="nav-dot"></span> train_yield_model.py</a>
+
+        <div class="nav-section-title">Data Preparation & Lookups (5)</div>
+        <a href="#build_city_climatology_py" class="nav-link"><span class="nav-dot"></span> build_city_climatology.py</a>
+        <a href="#build_disease_qa_index_py" class="nav-link"><span class="nav-dot"></span> build_disease_qa_index.py</a>
+        <a href="#build_fertilizer_lookup_py" class="nav-link"><span class="nav-dot"></span> build_fertilizer_lookup.py</a>
+        <a href="#prepare_disease_yolo_split_py" class="nav-link"><span class="nav-dot"></span> prepare_disease_yolo_split.py</a>
+        <a href="#prepare_insect_yolo_split_py" class="nav-link"><span class="nav-dot"></span> prepare_insect_yolo_split.py</a>
+
+        <div class="nav-section-title">Package Inits (2)</div>
+        <a href="#root_init_py" class="nav-link"><span class="nav-dot"></span> root __init__.py</a>
+        <a href="#algorithms_init_py" class="nav-link"><span class="nav-dot"></span> algorithms/__init__.py</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero-section" id="overview">
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2zm0-6h2v4h-2z"/></svg>
+          Repository Technical Specification
+        </div>
+        <h1 class="hero-title">Python Codebase & Machine Learning Guide</h1>
+        <p class="hero-description">
+          A low-level, comprehensive architectural analysis of all <strong>29 Python files</strong> in this repository (excluding the raw datasets directory). Each file is deconstructed line-by-line: mathematical principles, function input/output signatures, real-world agronomic caveats, and inter-file dependencies.
+        </p>
+
+        <!-- Stats Bar -->
+        <div class="stats-grid">
+          <div class="stat-card" style="--stat-accent: var(--color-emerald);">
+            <div class="stat-value">29</div>
+            <div class="stat-label">Total Python Source Files</div>
+          </div>
+          <div class="stat-card" style="--stat-accent: var(--color-cyan);">
+            <div class="stat-value">10</div>
+            <div class="stat-label">Inference Algorithm Modules</div>
+          </div>
+          <div class="stat-card" style="--stat-accent: var(--color-indigo);">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Model Training Scripts</div>
+          </div>
+          <div class="stat-card" style="--stat-accent: var(--color-amber);">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Data Prep & Climatology Lookups</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- System Architecture & Pipelines Flowchart -->
+      <section class="flowchart-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>
+            End-to-End Pipeline Dataflow
+          </h2>
+          <span style="font-size: 0.8rem; color: var(--text-dim);">Training ➔ Artifact ➔ Inference</span>
+        </div>
+
+        <div class="pipeline-grid">
+          <!-- Pipeline 1: Crop Recommendation -->
+          <div class="pipeline-card">
+            <div class="pipeline-badge">Pipeline 01</div>
+            <div class="pipeline-name">Crop Recommendation</div>
+            <div class="pipeline-flow">
+              <div class="flow-step">train_crop_recommendation_model.py</div>
+              <div class="flow-arrow">▼ generates crop_recommendation_model.pkl</div>
+              <div class="flow-step">crop_recommendation.py (recommend_crop)</div>
+            </div>
+          </div>
+
+          <!-- Pipeline 2: Soil to Crop Bridge -->
+          <div class="pipeline-card">
+            <div class="pipeline-badge">Pipeline 02</div>
+            <div class="pipeline-name">Soil Photo ➔ Crop Bridge</div>
+            <div class="pipeline-flow">
+              <div class="flow-step">soil_type_prediction.py (4 soil classes)</div>
+              <div class="flow-arrow">▼ maps vocab via SOIL_TYPE_BRIDGE</div>
+              <div class="flow-step">soil_to_crop_bridge.py ➔ crop_recommendation.py</div>
+            </div>
+          </div>
+
+          <!-- Pipeline 3: Fertilizer & Fertility -->
+          <div class="pipeline-card">
+            <div class="pipeline-badge">Pipeline 03</div>
+            <div class="pipeline-name">Fertilizer Deficit & Soil Fertility</div>
+            <div class="pipeline-flow">
+              <div class="flow-step">train_soil_fertility_model.py + build_fertilizer_lookup.py</div>
+              <div class="flow-arrow">▼ outputs soil_fertility_model.pkl & fertilizer_targets.json</div>
+              <div class="flow-step">fertilizer_recommendation.py (Deficit Engine)</div>
+            </div>
+          </div>
+
+          <!-- Pipeline 4: Disease Diagnostic Suite -->
+          <div class="pipeline-card">
+            <div class="pipeline-badge">Pipeline 04</div>
+            <div class="pipeline-name">Disease Image, Checklist & FAQ</div>
+            <div class="pipeline-flow">
+              <div class="flow-step">train_disease_model.py / train_disease_presence_model.py</div>
+              <div class="flow-arrow">▼ outputs disease_model.pkl / disease_qa_index.pkl</div>
+              <div class="flow-step">disease_prediction.py / disease_info_retrieval.py</div>
+            </div>
+          </div>
+
+          <!-- Pipeline 5: Commodity Market Price -->
+          <div class="pipeline-card">
+            <div class="pipeline-badge">Pipeline 05</div>
+            <div class="pipeline-name">Mandi Market Price Time-Series</div>
+            <div class="pipeline-flow">
+              <div class="flow-step">train_market_price_model.py (Lag-1 + Rolling-7)</div>
+              <div class="flow-arrow">▼ builds saved_models/market_price_models/*.pkl</div>
+              <div class="flow-step">market_price_prediction.py (predict_market_price)</div>
+            </div>
+          </div>
+
+          <!-- Pipeline 6: Crop Yield Regression -->
+          <div class="pipeline-card">
+            <div class="pipeline-badge">Pipeline 06</div>
+            <div class="pipeline-name">Crop Yield Climatology Regression</div>
+            <div class="pipeline-flow">
+              <div class="flow-step">train_yield_model.py (Area-normalized kg/ha + Weather)</div>
+              <div class="flow-arrow">▼ outputs yield_model.pkl</div>
+              <div class="flow-step">yield_prediction.py (Auto weather lookup fallback)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Category Filter Bar -->
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All Files <span class="filter-count">29</span></button>
+        <button class="filter-btn" data-filter="algo">Algorithms & Inference <span class="filter-count">10</span></button>
+        <button class="filter-btn" data-filter="train">Training Scripts <span class="filter-count">12</span></button>
+        <button class="filter-btn" data-filter="data">Data Prep & Lookups <span class="filter-count">5</span></button>
+        <button class="filter-btn" data-filter="pkg">Package Infrastructure <span class="filter-count">2</span></button>
+      </div>
+
+      <!-- File Cards Container -->
+      <div class="file-cards-container" id="fileContainer">
+
+        <!-- ========================================================================= -->
+        <!-- ALGORITHMS / INFERENCE FILES -->
+        <!-- ========================================================================= -->
+
+        <!-- 1. crop_recommendation.py -->
+        <article class="file-card" id="crop_recommendation_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">crop_recommendation.py</div>
+              <div class="file-path">ml/algorithms/crop_recommendation.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-lines">53 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Provides real-time agronomic crop recommendation through two distinct pathways: (1) chemical soil test (N, P, K) combined with meteorological inputs across 51 crops, and (2) visual soil type string combined with weather across 31 crops. Also ranks top-3 alternative crops by probability.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                Function Signatures & Contracts
+              </div>
+              <table class="contract-table">
+                <thead>
+                  <tr><th>Function</th><th>Inputs</th><th>Return Value</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="param-name">recommend_crop()</td>
+                    <td>
+                      <span class="param-name">N, P, K</span> <span class="param-type">float (mg/kg)</span><br>
+                      <span class="param-name">temperature</span> <span class="param-type">float (°C)</span><br>
+                      <span class="param-name">humidity</span> <span class="param-type">float (%)</span><br>
+                      <span class="param-name">ph</span> <span class="param-type">float (0-14)</span><br>
+                      <span class="param-name">rainfall</span> <span class="param-type">float (mm)</span>
+                    </td>
+                    <td>
+                      <span class="param-name">dict</span>: <br>
+                      - recommended_crop: str<br>
+                      - confidence: float (0-1)<br>
+                      - alternatives: list[dict]
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="param-name">recommend_crop_from_soil_type()</td>
+                    <td>
+                      <span class="param-name">soil_type</span> <span class="param-type">str</span><br>
+                      <span class="param-name">temperature, humidity, ph, rainfall</span> <span class="param-type">float</span>
+                    </td>
+                    <td>
+                      <span class="param-name">dict</span>: <br>
+                      Same structure as above; uses 31-crop model with OneHotEncoded soil type.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                Step-by-Step Low-Level Mechanics
+              </div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><strong>Base Path Resolution:</strong> Dynamically derives <code>BASE_DIR</code> using <code>os.path.dirname(os.path.abspath(__file__))</code> to prevent broken relative imports when executed from external backend endpoints.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div><strong>Joblib Deserialization:</strong> Loads <code>crop_recommendation_model.pkl</code> and <code>crop_soil_type_model.pkl</code> into memory at module load time. Unpacks the estimator alongside original training feature names.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div><strong>DataFrame Row Construction:</strong> Formats input arguments into a single-row Pandas DataFrame matching exact expected column ordering to avoid scikit-learn feature name mismatch warnings.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div><strong>Probability Ranking:</strong> Calls <code>predict_proba()</code>, zips classes with probabilities, sorts descending, and returns the top class plus ranks 2 through 4 as alternative recommendations.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="deep-dive-box">
+            <div class="deep-dive-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+              Algorithmic Nuance: Multi-Model Separation
+            </div>
+            <div class="deep-dive-content">
+              Why two separate models instead of one? A farmer with laboratory N-P-K soil test results should not be constrained by broad textural categories (like "Alluvial" or "Clay loam"). Conversely, a farmer without a soil lab test only knows their physical soil type and regional weather. Separating these into <code>crop_recommendation_model.pkl</code> (51 crops, 6,596 rows) and <code>crop_soil_type_model.pkl</code> (31 crops, 3,100 rows) provides maximum utility for both user personas without synthetic data contamination.
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Dependencies:</span>
+            <a href="#train_crop_recommendation_model_py" class="file-tag">train_crop_recommendation_model.py</a>
+            <a href="#train_crop_soil_type_model_py" class="file-tag">train_crop_soil_type_model.py</a>
+            <span class="tag-label">Consumed By:</span>
+            <a href="#soil_to_crop_bridge_py" class="file-tag">soil_to_crop_bridge.py</a>
+          </div>
+        </article>
+
+        <!-- 2. disease_info_retrieval.py -->
+        <article class="file-card" id="disease_info_retrieval_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">disease_info_retrieval.py</div>
+              <div class="file-path">ml/algorithms/disease_info_retrieval.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-data">NLP Retrieval</span>
+              <span class="badge badge-lines">55 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Multilingual Information Retrieval (IR) engine for plant pathology. Given a farmer's free-text natural language symptom description in English, Hindi, or Marathi, it computes vector cosine similarity against 2,231 verified diagnostic Q&A pairs and returns the diagnosis and remedy.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Function Specification</div>
+              <table class="contract-table">
+                <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">query</td><td class="param-type">str</td><td>Farmer's raw complaint (e.g. "upper leaves yellow drying maize") in EN, HI, or MR.</td></tr>
+                  <tr><td class="param-name">top_k</td><td class="param-type">int (default 3)</td><td>Maximum number of relevant remedies to retrieve.</td></tr>
+                  <tr><td class="param-name">Returns</td><td class="param-type">dict</td><td><code>{"matches": [...]}</code> with similarity, matched question, crop, disease, severity, and remedies in 3 languages.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Low-Level Search Algorithm</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><strong>Vectorization:</strong> Projects query string into the 5,000-feature unigram+bigram TF-IDF space via <code>_vectorizer.transform([query])</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div><strong>Cosine Similarity:</strong> Calculates dot product normalized by L2-norm against precomputed <code>_tfidf_matrix</code>, producing a similarity vector in range [0, 1].</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div><strong>Threshold Filtering:</strong> Rejects candidate matches scoring below <code>LOW_CONFIDENCE_THRESHOLD = 0.15</code> to avoid hallucinating remedies on irrelevant questions.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div><strong>Source Metadata Hydration:</strong> Maps matrix index back to original CSV row via <code>row_idx</code> to fetch multilingual remedy strings.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="caveat-box">
+            <div class="caveat-icon">⚠️</div>
+            <div class="caveat-text">
+              <strong>Confidence Guardrail:</strong> If the cosine similarity score is below 0.15, the system explicitly returns <code>"No close match found in the knowledge base"</code> rather than guessing. Agricultural remedies (e.g. chemical fungicides) can destroy crops if prescribed erroneously.
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Generated By:</span>
+            <a href="#build_disease_qa_index_py" class="file-tag">build_disease_qa_index.py</a>
+            <span class="tag-label">Artifact:</span>
+            <span class="file-tag">saved_models/disease_qa_index.pkl</span>
+          </div>
+        </article>
+
+        <!-- 3. disease_prediction.py -->
+        <article class="file-card" id="disease_prediction_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">disease_prediction.py</div>
+              <div class="file-path">ml/algorithms/disease_prediction.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-lines">61 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Image-based plant disease classification using classical computer vision features (HSV color histograms and local variance texture) with a Random Forest classifier over 26 PlantDoc classes. Serves as a CPU-compatible baseline with a warning regarding CNN superiority.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Feature Extraction Mechanics (44 dimensions)</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><strong>Color Normalization:</strong> Reads image via PIL, converts to RGB, resizes to 96x96 pixels, and scales values to [0.0, 1.0].</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div><strong>HSV Histogram (36 feats):</strong> Converts to HSV color space and computes 12-bin normalized histograms independently for Hue, Saturation, and Value channels.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div><strong>Texture Variance (2 feats):</strong> Converts to grayscale and runs <code>scipy.ndimage.generic_filter</code> with a 5x5 window calculating local pixel variance; extracts mean and standard deviation of texture roughness.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div><strong>RGB Channel Moments (6 feats):</strong> Appends mean and standard deviation across R, G, and B color channels.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">I/O Contract</div>
+              <table class="contract-table">
+                <thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">image_path</td><td class="param-type">str</td><td>Local absolute path to jpg/png leaf image.</td></tr>
+                  <tr><td class="param-name">predicted_class</td><td class="param-type">str</td><td>One of 26 PlantDoc disease categories.</td></tr>
+                  <tr><td class="param-name">confidence</td><td class="param-type">float</td><td>Predicted probability (0.0 to 1.0).</td></tr>
+                  <tr><td class="param-name">top_3</td><td class="param-type">list[dict]</td><td>Top 3 classes with corresponding confidence.</td></tr>
+                  <tr><td class="param-name">warning</td><td class="param-type">str</td><td>Explains the 18.6% classical CV accuracy ceiling.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="caveat-box">
+            <div class="caveat-icon">⚠️</div>
+            <div class="caveat-text">
+              <strong>Architectural Reality:</strong> This model achieves ~18.6% accuracy because plant pathology involves micro-lesions, ring spots, and necrotic edges that color histograms cannot resolve. This script provides the standard backend interface so that swapping in <code>disease_cnn_model.keras</code> requires zero API changes.
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Trained By:</span>
+            <a href="#train_disease_model_py" class="file-tag">train_disease_model.py</a>
+            <span class="tag-label">Modern Successor:</span>
+            <a href="#train_disease_cnn_model_py" class="file-tag">train_disease_cnn_model.py</a>
+          </div>
+        </article>
+
+        <!-- 4. disease_presence_prediction.py -->
+        <article class="file-card" id="disease_presence_prediction_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">disease_presence_prediction.py</div>
+              <div class="file-path">ml/algorithms/disease_presence_prediction.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-lines">44 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Field checklist diagnostic tool for extension workers. Evaluates a dictionary of binary "Yes"/"No" answers against a trained Scikit-Learn Decision Tree (max depth 5) to predict Early Blight disease presence.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Input/Output Protocol</div>
+              <table class="contract-table">
+                <thead><tr><th>Field</th><th>Format</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">answers</td><td class="param-type">dict[str, str]</td><td>Mapping of question string to "Yes" or "No".</td></tr>
+                  <tr><td class="param-name">prediction</td><td class="param-type">str</td><td>"Disease Present" or "Disease Not Present".</td></tr>
+                  <tr><td class="param-name">confidence</td><td class="param-type">float</td><td>Decision tree leaf node purity probability.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Critical Checklist Trap & Mechanics</div>
+              <div class="deep-dive-content" style="font-size: 0.82rem;">
+                The function maps <code>1 if answers.get(q) == "Yes" else 0</code> for each of the 30 recognized questions in <code>_features</code>.
+                <br><br>
+                <strong>The Partial Checklist Trap:</strong> If an officer only answers 3 questions as "Yes" and leaves 27 blank, those 27 default to 0 ("No"). The decision tree path requires a combination of co-occurring symptoms; 27 negative answers will override the 3 positive symptoms and falsely classify as "Not Present". The caller UI must ensure all 30 questions are completed.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Trained By:</span>
+            <a href="#train_disease_presence_model_py" class="file-tag">train_disease_presence_model.py</a>
+            <span class="tag-label">Sister Module:</span>
+            <a href="#insect_presence_prediction_py" class="file-tag">insect_presence_prediction.py</a>
+          </div>
+        </article>
+
+        <!-- 5. fertilizer_recommendation.py -->
+        <article class="file-card" id="fertilizer_recommendation_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">fertilizer_recommendation.py</div>
+              <div class="file-path">ml/algorithms/fertilizer_recommendation.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-data">Agronomic Logic</span>
+              <span class="badge badge-lines">132 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            A hybrid agronomic decision engine combining ML soil fertility classification (Random Forest on 12 chemical parameters) with deterministic nutrient deficit calculations and plain-language fertilizer advice (Urea, DAP, Lime, Gypsum). Also includes a state-average regional fallback.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Primary Functions</div>
+              <table class="contract-table">
+                <thead><tr><th>Function</th><th>Input Scope</th><th>Core Responsibility</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td class="param-name">recommend_fertilizer()</td>
+                    <td><span class="param-name">crop</span>: str<br><span class="param-name">soil_sample</span>: dict with N, P, K, pH, EC, OC, S, Zn, Fe, Cu, Mn, B</td>
+                    <td>Classifies fertility (0/1/2), calculates exact deficits (Target - Sample) for N, P, K, checks pH boundaries, and generates prescription advice.</td>
+                  </tr>
+                  <tr>
+                    <td class="param-name">recommend_fertilizer_without_soil_test()</td>
+                    <td><span class="param-name">crop</span>: str<br><span class="param-name">state</span>: str (Indian state name)</td>
+                    <td>Fallback for farmers without soil test kits; queries <code>state_soil_data.csv</code> state-level averages to calculate estimated deficits with clear disclaimers.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Deficit Math & Advisory Rules</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><code>deficit_N = round(target["N"] - soil_sample["N"], 1)</code></div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>If <code>deficit_N > 10 kg/ha</code>: Recommends Urea nitrogen amendment.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>If <code>deficit_P > 10 kg/ha</code>: Recommends Diammonium Phosphate (DAP).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>If <code>pH &lt; ph_min</code>: Advises Agricultural Lime. If <code>pH &gt; ph_max</code>: Advises Gypsum amendment.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Trained By:</span>
+            <a href="#train_soil_fertility_model_py" class="file-tag">train_soil_fertility_model.py</a>
+            <a href="#build_fertilizer_lookup_py" class="file-tag">build_fertilizer_lookup.py</a>
+            <span class="tag-label">Data Read:</span>
+            <span class="file-tag">datasets/farm_datasets/state_soil_data.csv</span>
+          </div>
+        </article>
+
+        <!-- 6. insect_presence_prediction.py -->
+        <article class="file-card" id="insect_presence_prediction_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">insect_presence_prediction.py</div>
+              <div class="file-path">ml/algorithms/insect_presence_prediction.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-lines">32 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Binary checklist evaluation module for armyworm (Spodoptera frugiperda) presence. Encodes 30 symptom and infestation observation questions into binary inputs for a Decision Tree classifier.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Input & Execution</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Accepts dictionary <code>answers</code> mapping feature strings to <code>"Yes"</code> / <code>"No"</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Binarizes features: <code>1 if answers.get(q) == "Yes" else 0</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Predicts probability via <code>_model.predict_proba(row)</code> and returns prediction label plus confidence.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Checklist Integrity</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Requires full 30-question completion before calling. Missing keys evaluate to <code>0</code>, which can distort the tree traversal and result in false negatives.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Trained By:</span>
+            <a href="#train_insect_presence_model_py" class="file-tag">train_insect_presence_model.py</a>
+            <span class="tag-label">Artifact:</span>
+            <span class="file-tag">saved_models/insect_presence_model.pkl</span>
+          </div>
+        </article>
+
+        <!-- 7. market_price_prediction.py -->
+        <article class="file-card" id="market_price_prediction_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">market_price_prediction.py</div>
+              <div class="file-path">ml/algorithms/market_price_prediction.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-train">Time Series</span>
+              <span class="badge badge-lines">61 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Commodity mandi market price predictor using per-crop XGBoost Regressors. Employs dynamic in-memory model caching and computes lag and rolling momentum features from recent historical prices.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Function Inputs & Feature Engineering</div>
+              <table class="contract-table">
+                <thead><tr><th>Argument</th><th>Type</th><th>Internal Role</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">commodity</td><td class="param-type">str</td><td>Determines which model file to load (e.g. "Potato", "Onion").</td></tr>
+                  <tr><td class="param-name">state, district, market</td><td class="param-type">str</td><td>Categorical locations passed into pipeline OneHotEncoder.</td></tr>
+                  <tr><td class="param-name">recent_prices</td><td class="param-type">list[float]</td><td>
+                    History ordered oldest to newest. Computes:<br>
+                    - <code>lag_1 = recent_prices[-1]</code><br>
+                    - <code>rolling_7 = sum(recent_prices[-7:]) / len(recent_prices[-7:])</code>
+                  </td></tr>
+                  <tr><td class="param-name">target_date</td><td class="param-type">datetime.date</td><td>Extracts <code>month</code> (1-12) and <code>day_of_week</code> (0-6).</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Lazy Loading & Caching Logic</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><code>_cache</code> dictionary stores loaded joblib models to avoid disk I/O on repeated requests.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>If a commodity is requested that has no model, raises <code>ValueError</code> listing all available trained commodities.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Returns rounded <code>predicted_modal_price</code> in INR per quintal.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Trained By:</span>
+            <a href="#train_market_price_model_py" class="file-tag">train_market_price_model.py</a>
+            <span class="tag-label">Directory:</span>
+            <span class="file-tag">saved_models/market_price_models/</span>
+          </div>
+        </article>
+
+        <!-- 8. soil_to_crop_bridge.py -->
+        <article class="file-card" id="soil_to_crop_bridge_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">soil_to_crop_bridge.py</div>
+              <div class="file-path">ml/algorithms/soil_to_crop_bridge.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-data">Integration Bridge</span>
+              <span class="badge badge-lines">73 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Integration adapter connecting computer vision (soil photo classification) with tabular crop recommendation. Maps image taxonomy to agronomic training taxonomy and fails loudly on incompatible classes.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Taxonomy Mapping Contract</div>
+              <table class="contract-table">
+                <thead><tr><th>Image Model Label</th><th>Bridge Target</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">"Alluvial Soil"</td><td>"Alluvial"</td><td><span style="color: var(--color-emerald);">Direct Match</span></td></tr>
+                  <tr><td class="param-name">"Black Soil"</td><td>"Black"</td><td><span style="color: var(--color-emerald);">Direct Match</span></td></tr>
+                  <tr><td class="param-name">"Red Soil"</td><td>"Red"</td><td><span style="color: var(--color-emerald);">Direct Match</span></td></tr>
+                  <tr><td class="param-name">"Cinder Soil"</td><td>None</td><td><span style="color: var(--color-rose);">Fails Loudly with Error</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Low-Level Bridge Execution</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Calls <code>predict_soil_type(image_path)</code> to classify photo into one of the 4 visual classes.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Checks <code>SOIL_TYPE_BRIDGE.get(predicted_type)</code>. If missing (e.g. Cinder Soil), returns diagnostic error asking farmer to select manually from 26 known agronomic soils.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>If mapped, invokes <code>recommend_crop_from_soil_type()</code> with mapped string and weather parameters, combining image confidence with crop rankings.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="caveat-box">
+            <div class="caveat-icon">⚠️</div>
+            <div class="caveat-text">
+              <strong>Vocabulary Mismatch Solved:</strong> The image classifier knows 4 physical categories. The crop tabular dataset contains 26 descriptive soil classes (e.g. "Sandy loam", "Laterite", "Clay loam"). Only 3 overlap. Rather than guessing, this bridge maps the valid 3 and provides an actionable error message for the rest.
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Imports From:</span>
+            <a href="#soil_type_prediction_py" class="file-tag">soil_type_prediction.py</a>
+            <a href="#crop_recommendation_py" class="file-tag">crop_recommendation.py</a>
+          </div>
+        </article>
+
+        <!-- 9. soil_type_prediction.py -->
+        <article class="file-card" id="soil_type_prediction_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">soil_type_prediction.py</div>
+              <div class="file-path">ml/algorithms/soil_type_prediction.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-lines">53 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Visual soil classifier classifying photos into Alluvial, Black, Cinder, or Red Soil. Computes 56 hand-crafted computer vision features (16-bin HSV histograms, local texture variance, RGB moments) and predicts with a Random Forest.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">56-Dimensional Feature Construction</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Resizes input photo to 128x128 pixels and scales to [0.0, 1.0].</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Computes 16 bins for Hue, 16 for Saturation, 16 for Value (48 normalized color bins).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Applies 5x5 local variance filter over grayscale to extract mean and std of surface graininess (2 features).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>Computes RGB means and standard deviations (6 features). Total = 48 + 2 + 6 = 56 features.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Prediction Output Structure</div>
+              <table class="contract-table">
+                <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">predicted_soil_type</td><td class="param-type">str</td><td>Winning category (e.g. "Red Soil").</td></tr>
+                  <tr><td class="param-name">confidence</td><td class="param-type">float</td><td>Highest class probability (0-1).</td></tr>
+                  <tr><td class="param-name">all_probabilities</td><td class="param-type">dict[str, float]</td><td>Distribution across all 4 soil classes.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Trained By:</span>
+            <a href="#train_soil_type_model_py" class="file-tag">train_soil_type_model.py</a>
+            <span class="tag-label">Consumed By:</span>
+            <a href="#soil_to_crop_bridge_py" class="file-tag">soil_to_crop_bridge.py</a>
+          </div>
+        </article>
+
+        <!-- 10. yield_prediction.py -->
+        <article class="file-card" id="yield_prediction_py" data-category="algo">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">yield_prediction.py</div>
+              <div class="file-path">ml/algorithms/yield_prediction.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-algo">Inference Algorithm</span>
+              <span class="badge badge-train">XGBoost Regressor</span>
+              <span class="badge badge-lines">54 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Crop yield forecasting engine. Accepts field-level fertilizer and pesticide rates per hectare, automatically looks up state-year climatology (temperature, rainfall, humidity) from historical records, and predicts yield via gradient-boosted trees.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Input Signature & Units</div>
+              <table class="contract-table">
+                <thead><tr><th>Parameter</th><th>Type & Unit</th><th>Agronomic Meaning</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">crop</td><td class="param-type">str</td><td>Crop type (e.g. "Rice", "Wheat", "Maize").</td></tr>
+                  <tr><td class="param-name">season</td><td class="param-type">str</td><td>Agricultural season ("Kharif", "Rabi", "Whole Year").</td></tr>
+                  <tr><td class="param-name">state</td><td class="param-type">str</td><td>State location in India.</td></tr>
+                  <tr><td class="param-name">year</td><td class="param-type">int</td><td>Target year for weather correlation.</td></tr>
+                  <tr><td class="param-name">fertilizer_per_ha</td><td class="param-type">float (kg/ha)</td><td>Field fertilizer application rate.</td></tr>
+                  <tr><td class="param-name">pesticide_per_ha</td><td class="param-type">float (kg/ha)</td><td>Field pesticide application rate.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Automated Weather Lookup Logic</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Queries <code>state_weather_data_1997_2020.csv</code> for matched <code>(state, year)</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>If year is not present in records, falls back to the state's historical multi-year average for temp, rainfall, and humidity.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Feeds the combined feature row to <code>yield_model.pkl</code> and returns predicted yield (metric tonnes per hectare) and the weather parameters used.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Trained By:</span>
+            <a href="#train_yield_model_py" class="file-tag">train_yield_model.py</a>
+            <span class="tag-label">Data Read:</span>
+            <span class="file-tag">datasets/farm_datasets/state_weather_data_1997_2020.csv</span>
+          </div>
+        </article>
+
+        <!-- ========================================================================= -->
+        <!-- MODEL TRAINING SCRIPTS -->
+        <!-- ========================================================================= -->
+
+        <!-- 11. train_crop_recommendation_model.py -->
+        <article class="file-card" id="train_crop_recommendation_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_crop_recommendation_model.py</div>
+              <div class="file-path">ml/training/train_crop_recommendation_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Model Training</span>
+              <span class="badge badge-lines">44 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Trains a 300-tree Random Forest classifier on 6,596 rows of verified agricultural data across 51 unique crops using 7 soil-chemical and environmental features (N, P, K, temp, humidity, pH, rainfall). Replaces earlier synthetic models.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Training Pipeline Specifications</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><strong>Data Source:</strong> <code>datasets/crop_datasets/merged_crop_dataset.csv</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div><strong>Partitioning:</strong> 80/20 train/test split with <code>stratify=y</code> to preserve class representation across all 51 crop varieties.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div><strong>Estimator:</strong> <code>RandomForestClassifier(n_estimators=300, random_state=42, n_jobs=-1)</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div><strong>Output:</strong> Dumps <code>{"model": model, "features": FEATURES}</code> to <code>saved_models/crop_recommendation_model.pkl</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Features Trained</div>
+              <pre class="code-preview"><code>FEATURES = [
+  <span class="str">"N"</span>, <span class="str">"P"</span>, <span class="str">"K"</span>, 
+  <span class="str">"temperature"</span>, 
+  <span class="str">"humidity"</span>, 
+  <span class="str">"ph"</span>, 
+  <span class="str">"rainfall"</span>
+]</code></pre>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Generated Artifact:</span>
+            <span class="file-tag">saved_models/crop_recommendation_model.pkl</span>
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#crop_recommendation_py" class="file-tag">crop_recommendation.py</a>
+          </div>
+        </article>
+
+        <!-- 12. train_crop_soil_type_model.py -->
+        <article class="file-card" id="train_crop_soil_type_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_crop_soil_type_model.py</div>
+              <div class="file-path">ml/training/train_crop_soil_type_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Model Training</span>
+              <span class="badge badge-lines">69 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Trains a Scikit-Learn Pipeline combining <code>OneHotEncoder</code> on categorical soil types with a 300-tree Random Forest classifier across 31 crops and 3,100 rows. Saves the model alongside the complete 26-soil vocabulary list.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Pipeline Architecture</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><code>ColumnTransformer</code> applies <code>OneHotEncoder(handle_unknown="ignore")</code> to <code>["Soil type"]</code> and passthrough to <code>["temperature", "humidity", "ph", "rainfall"]</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Chains preprocessor with <code>RandomForestClassifier(n_estimators=300, random_state=42)</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Saves dictionary with model, categorical feature names, numeric feature names, and <code>soil_type_vocab</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Vocabulary Note</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Trained on 26 cleaned soil strings: Alluvial, Black, Red, Sandy loam, Clay loam, Laterite, Arid/Desert, etc. Used by <code>soil_to_crop_bridge.py</code>.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Generated Artifact:</span>
+            <span class="file-tag">saved_models/crop_soil_type_model.pkl</span>
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#crop_recommendation_py" class="file-tag">crop_recommendation.py</a>
+          </div>
+        </article>
+
+        <!-- 13. train_disease_cnn_model.py -->
+        <article class="file-card" id="train_disease_cnn_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_disease_cnn_model.py</div>
+              <div class="file-path">ml/training/train_disease_cnn_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Deep Learning</span>
+              <span class="badge badge-lines">114 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            TensorFlow/Keras Convolutional Neural Network trained from scratch for leaf disease classification over PlantDoc. Includes data augmentation layers (random flip and rotation), convolutional feature extraction blocks, and smoke-testing capability.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Neural Network Architecture</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><strong>Input:</strong> <code>(96, 96, 3)</code> RGB images rescaled by <code>1.0 / 255</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div><strong>Augmentation:</strong> <code>RandomFlip("horizontal")</code> + <code>RandomRotation(0.1)</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div><strong>Conv Layers:</strong> 3 blocks of <code>Conv2D(filters, 3, activation="relu", padding="same")</code> with 32, 64, and 128 filters, each followed by <code>MaxPooling2D()</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div><strong>Classifier Head:</strong> <code>GlobalAveragePooling2D()</code> ➔ <code>Dense(128, relu)</code> ➔ <code>Dropout(0.4)</code> ➔ <code>Dense(num_classes, softmax)</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Execution Controls</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                <strong>Smoke Test Mode:</strong> Contains <code>SMOKE_TEST = True</code> flag that runs on a 10-batch subset (~320 images, 2 epochs) to verify code execution on CPU machines. For production, set to <code>False</code> on a GPU.
+                <br><br>
+                <strong>Exclusion:</strong> Excludes "Tomato two spotted spider mites leaf" (only 2 training images in dataset).
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Generated Artifacts:</span>
+            <span class="file-tag">saved_models/disease_cnn_model.keras</span>
+            <span class="file-tag">saved_models/disease_cnn_labels.json</span>
+          </div>
+        </article>
+
+        <!-- 14. train_disease_model.py -->
+        <article class="file-card" id="train_disease_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_disease_model.py</div>
+              <div class="file-path">ml/training/train_disease_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Model Training</span>
+              <span class="badge badge-lines">99 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Trains a 400-tree Random Forest with balanced class weights on 44 classical CV features extracted from PlantDoc leaf photos. Serves as the training script for the working baseline in <code>disease_prediction.py</code>.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Training Execution Details</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Extracts 44-dimensional feature vectors (12-bin HSV histograms, 5x5 grayscale local variance, RGB moments) across training and test splits.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Trains <code>RandomForestClassifier(n_estimators=400, class_weight="balanced", random_state=42)</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Evaluates on official test split (~18.6% accuracy due to spot pattern nuance).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>Saves model bundle to <code>saved_models/disease_model.pkl</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Design Rationale</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Built to operate in environments where downloading pretrained ImageNet weights via Google APIs is restricted. Provides an end-to-end verified baseline with consistent data contracts.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#disease_prediction_py" class="file-tag">disease_prediction.py</a>
+            <span class="tag-label">Artifact:</span>
+            <span class="file-tag">saved_models/disease_model.pkl</span>
+          </div>
+        </article>
+
+        <!-- 15. train_disease_presence_model.py -->
+        <article class="file-card" id="train_disease_presence_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_disease_presence_model.py</div>
+              <div class="file-path">ml/training/train_disease_presence_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Model Training</span>
+              <span class="badge badge-lines">66 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Trains an interpretable Decision Tree classifier (max depth 5) on 30 binary symptom questions. Prints the top symptom features used by tree split nodes to validate the field diagnostic logic.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Model Specifications</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><strong>Data:</strong> <code>synthetic_disease_presence_30_questions.csv</code> (150 rows).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div><strong>Encoding:</strong> Binary lambda <code>(col == "Yes").astype(int)</code> across 30 questions.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div><strong>Estimator:</strong> <code>DecisionTreeClassifier(max_depth=5, class_weight="balanced")</code>. Depth limit prevents overfitting on small samples.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Interpretability Analysis</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Extracts <code>model.feature_importances_</code> to identify the decisive symptoms (e.g. concentric ring spots, yellow halos) that guide the tree branch decisions.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#disease_presence_prediction_py" class="file-tag">disease_presence_prediction.py</a>
+            <span class="tag-label">Artifact:</span>
+            <span class="file-tag">saved_models/disease_presence_model.pkl</span>
+          </div>
+        </article>
+
+        <!-- 16. train_disease_segmentation_model.py -->
+        <article class="file-card" id="train_disease_segmentation_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_disease_segmentation_model.py</div>
+              <div class="file-path">ml/training/train_disease_segmentation_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Computer Vision</span>
+              <span class="badge badge-lines">58 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            YOLOv8n-seg instance segmentation training script for pixel-level crop lesion boundary delineation. Uses polygon point coordinates from annotations rather than standard bounding boxes.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Segmentation Hyperparameters</div>
+              <table class="contract-table">
+                <thead><tr><th>Parameter</th><th>Value</th><th>Rationale</th></tr></thead>
+                <tbody>
+                  <tr><td class="param-name">model</td><td>yolov8n-seg.pt</td><td>Nano segmentation backbone minimizes overfitting on small sets.</td></tr>
+                  <tr><td class="param-name">imgsz</td><td>416</td><td>Appropriate balance of resolution and compute.</td></tr>
+                  <tr><td class="param-name">batch</td><td>8</td><td>Stable batch size for small datasets.</td></tr>
+                  <tr><td class="param-name">patience</td><td>15</td><td>Early stopping if validation mask mAP plateaus.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Polygon Label Representation</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Source label files contain <code>&lt;class_id&gt; x1 y1 x2 y2 x3 y3 ...</code> polygon boundary points. Using YOLOv8n-seg preserves this lesion shape data, outputting segmentation masks rather than simple bounding boxes.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Prepared By:</span>
+            <a href="#prepare_disease_yolo_split_py" class="file-tag">prepare_disease_yolo_split.py</a>
+            <span class="tag-label">Dataset Spec:</span>
+            <span class="file-tag">datasets/crop_diseases_yolo/data.yaml</span>
+          </div>
+        </article>
+
+        <!-- 17. train_insect_model.py -->
+        <article class="file-card" id="train_insect_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_insect_model.py</div>
+              <div class="file-path">ml/training/train_insect_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Computer Vision</span>
+              <span class="badge badge-lines">73 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Object detection training script fine-tuning a COCO-pretrained YOLOv8n (nano) model to localize crop insects. Configured with early stopping and bounding box metrics reporting.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Training Configuration</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Loads <code>YOLO("yolov8n.pt")</code> nano detection weights.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Trains for 50 epochs at <code>imgsz=416</code>, <code>batch=8</code>, with <code>patience=15</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Validates bounding box mAP50 and mAP50-95 metrics.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Scope Note</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Single-class model (class 0: "insects"). Localizes insect presence within the frame rather than performing species-level classification, reflecting the single-class annotations in the source data.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Prepared By:</span>
+            <a href="#prepare_insect_yolo_split_py" class="file-tag">prepare_insect_yolo_split.py</a>
+            <span class="tag-label">Dataset Spec:</span>
+            <span class="file-tag">datasets/crop_insects_yolo/data.yaml</span>
+          </div>
+        </article>
+
+        <!-- 18. train_insect_presence_model.py -->
+        <article class="file-card" id="train_insect_presence_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_insect_presence_model.py</div>
+              <div class="file-path">ml/training/train_insect_presence_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Model Training</span>
+              <span class="badge badge-lines">54 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Trains an interpretable Decision Tree classifier (max depth 5) on 30 symptom checklist questions specifically modeling armyworm presence. Encodes binary responses and exports the trained decision structure.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Pipeline Architecture</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Reads <code>datasets/synthetic_insect_presence_30_questions.csv</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Binarizes Yes/No values: <code>(col == "Yes").astype(int)</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Splits 80/20 stratified by <code>Insect_Present</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>Fits <code>DecisionTreeClassifier(max_depth=5, class_weight="balanced")</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Why Decision Trees?</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                On binary checklist inputs, a single decision tree operates as a transparent diagnostic flowchart. Every decision split can be traced and explained directly to agricultural field officers.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#insect_presence_prediction_py" class="file-tag">insect_presence_prediction.py</a>
+            <span class="tag-label">Artifact:</span>
+            <span class="file-tag">saved_models/insect_presence_model.pkl</span>
+          </div>
+        </article>
+
+        <!-- 19. train_market_price_model.py -->
+        <article class="file-card" id="train_market_price_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_market_price_model.py</div>
+              <div class="file-path">ml/training/train_market_price_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Time Series</span>
+              <span class="badge badge-lines">112 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Commodity-specific market price forecasting pipeline using XGBoost Regressors. Builds panel time-series features (1-day lag, 7-day rolling mean, calendar month, weekday), trims extreme price outliers, and trains a dedicated model per crop.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Feature Engineering Operations</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Sorts panel data by <code>["STATE", "District Name", "Market Name", "Price Date"]</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Generates <code>lag_1 = groupby(...).shift(1)</code> to capture the previous observed price.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Computes <code>rolling_7 = shift(1).rolling(7, min_periods=1).mean()</code> for weekly price momentum without data leakage.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>Filters out outliers via 0.5% and 99.5% percentile thresholds to remove data entry errors.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Estimator Details</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Pipeline with <code>OneHotEncoder(handle_unknown="ignore")</code> on categorical location fields and <code>xgb.XGBRegressor(n_estimators=250, max_depth=6, learning_rate=0.08)</code>. Exports separate <code>.pkl</code> models per commodity (minimum 100 observations required).
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#market_price_prediction_py" class="file-tag">market_price_prediction.py</a>
+            <span class="tag-label">Output Directory:</span>
+            <span class="file-tag">saved_models/market_price_models/</span>
+          </div>
+        </article>
+
+        <!-- 20. train_soil_fertility_model.py -->
+        <article class="file-card" id="train_soil_fertility_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_soil_fertility_model.py</div>
+              <div class="file-path">ml/training/train_soil_fertility_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Model Training</span>
+              <span class="badge badge-lines">49 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Trains a 300-tree Random Forest classifier predicting soil fertility category (0: Low, 1: Medium, 2: High) from 12 chemical and physical indicators. Uses balanced class weights to address data imbalance.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">12 Soil Features Used</div>
+              <pre class="code-preview"><code>FEATURES = [
+  <span class="str">"N"</span>, <span class="str">"P"</span>, <span class="str">"K"</span>, 
+  <span class="str">"pH"</span>, <span class="str">"EC"</span>, <span class="str">"OC"</span>, 
+  <span class="str">"S"</span>, <span class="str">"Zn"</span>, <span class="str">"Fe"</span>, 
+  <span class="str">"Cu"</span>, <span class="str">"Mn"</span>, <span class="str">"B"</span>
+]</code></pre>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Class Imbalance Handling</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Class distribution in <code>soil_fertility.csv</code> is imbalanced (401 rows in class 0, 440 in class 1, 39 in class 2). The script sets <code>class_weight="balanced"</code> in the Random Forest to prevent the minority class (High fertility) from being ignored, and evaluates performance using stratified per-class F1 metrics.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#fertilizer_recommendation_py" class="file-tag">fertilizer_recommendation.py</a>
+            <span class="tag-label">Artifact:</span>
+            <span class="file-tag">saved_models/soil_fertility_model.pkl</span>
+          </div>
+        </article>
+
+        <!-- 21. train_soil_type_model.py -->
+        <article class="file-card" id="train_soil_type_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_soil_type_model.py</div>
+              <div class="file-path">ml/training/train_soil_type_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">Computer Vision</span>
+              <span class="badge badge-lines">97 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Trains a 300-tree Random Forest classifier for 4-class soil category identification from photos (Alluvial, Black, Cinder, Red). Computes 56 color and texture features per image across the train and test directories.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Feature Extraction Architecture</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Resizes images to 128x128 pixels and scales to [0.0, 1.0].</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>16-bin normalized histograms across H, S, and V channels (48 features).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>5x5 moving window local variance on grayscale (2 features: mean and std).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>RGB channel moments (6 features: means and stds). Total = 56 dimensions.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Why Color Features Work Well Here</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Unlike leaf diseases where patterns are subtle, soil types exhibit strong spectral differentiation: Red laterite vs. dark Black cotton soil vs. pale Alluvial loam vs. dark grey Cinder. Color histograms provide an effective feature representation without requiring deep neural networks.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#soil_type_prediction_py" class="file-tag">soil_type_prediction.py</a>
+            <span class="tag-label">Artifact:</span>
+            <span class="file-tag">saved_models/soil_type_model.pkl</span>
+          </div>
+        </article>
+
+        <!-- 22. train_yield_model.py -->
+        <article class="file-card" id="train_yield_model_py" data-category="train">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">train_yield_model.py</div>
+              <div class="file-path">ml/training/train_yield_model.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-train">XGBoost Regressor</span>
+              <span class="badge badge-lines">102 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Trains an XGBoost regression model for crop yield per hectare. Normalizes state-level inputs to per-hectare application rates, joins historical climatology by (state, year) with 100% match, and one-hot encodes categorical factors.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Data Preprocessing & Normalization</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div><strong>Area Normalization:</strong> Source CSV columns <code>fertilizer</code> and <code>pesticide</code> represent state totals. The script divides each by <code>area</code>: <code>fertilizer_per_ha = fertilizer / area</code> to enable field-level inputs.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div><strong>Weather Enrichment:</strong> Merges <code>state_weather_data_1997_2020.csv</code> on <code>["state", "year"]</code> to incorporate <code>avg_temp_c</code>, <code>total_rainfall_mm</code>, and <code>avg_humidity_percent</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div><strong>Pipeline Training:</strong> <code>ColumnTransformer</code> (OneHot on crop, season, state) + <code>xgb.XGBRegressor(n_estimators=300, max_depth=6, lr=0.05, subsample=0.8)</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Feature Importance Analysis</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                The script computes the aggregate feature importance of the three weather variables, confirming that climatology provides measurable predictive signal over categorical and chemical features alone.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#yield_prediction_py" class="file-tag">yield_prediction.py</a>
+            <span class="tag-label">Artifact:</span>
+            <span class="file-tag">saved_models/yield_model.pkl</span>
+          </div>
+        </article>
+
+        <!-- ========================================================================= -->
+        <!-- DATA PREPARATION & LOOKUP BUILDERS -->
+        <!-- ========================================================================= -->
+
+        <!-- 23. build_city_climatology.py -->
+        <article class="file-card" id="build_city_climatology_py" data-category="data">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">build_city_climatology.py</div>
+              <div class="file-path">ml/training/build_city_climatology.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-data">Data Aggregation</span>
+              <span class="badge badge-lines">57 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Aggregates over 96,000 hourly historical weather observations per city (2009–2020+) into 12 monthly climate normals (average temperature, humidity, rainfall) for 8 major Indian agricultural cities.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Aggregation Operations</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Iterates over all city CSV files in <code>datasets/city_weather/*.csv</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Parses <code>date_time</code> column into datetime objects and extracts calendar month (1–12).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Groups by month and computes: <code>avg_temp_c</code>, <code>avg_humidity_percent</code>, <code>avg_rainfall_mm</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>Serializes clean nested dictionary to <code>saved_models/city_climatology.json</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Design Rationale</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                Historical observation logs are reference data rather than labeled prediction targets. Aggregating into climate normals provides a reliable, deterministic offline fallback when live meteorological APIs are unreachable.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Input Directory:</span>
+            <span class="file-tag">datasets/city_weather/</span>
+            <span class="tag-label">Generated Artifact:</span>
+            <span class="file-tag">saved_models/city_climatology.json</span>
+          </div>
+        </article>
+
+        <!-- 24. build_disease_qa_index.py -->
+        <article class="file-card" id="build_disease_qa_index_py" data-category="data">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">build_disease_qa_index.py</div>
+              <div class="file-path">ml/training/build_disease_qa_index.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-data">NLP Indexing</span>
+              <span class="badge badge-lines">62 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Builds a multilingual TF-IDF vector index over 2,231 rows across 88 crop-disease combinations. Indexes question formulations in English, Hindi, and Marathi together into a unified 5,000-dimensional semantic space.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Indexing Architecture</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Flattens <code>question_en</code>, <code>question_hi</code>, and <code>question_mr</code> into a single list of documents, retaining row index pointers.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Fits <code>TfidfVectorizer(max_features=5000, ngram_range=(1, 2))</code> to index single words and bi-grams.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Serializes the vectorizer, sparse matrix, flattened questions DataFrame, and source DataFrame into a unified joblib bundle.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Why Information Retrieval?</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                With 88 fine-grained disease classes and ~25 question variations per class across 3 languages, training a classification head from scratch would struggle with sparse data. Information retrieval via TF-IDF and cosine similarity enables nearest-neighbor symptom matching without requiring GPU resources.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Generated Artifact:</span>
+            <span class="file-tag">saved_models/disease_qa_index.pkl</span>
+            <span class="tag-label">Inference Pair:</span>
+            <a href="#disease_info_retrieval_py" class="file-tag">disease_info_retrieval.py</a>
+          </div>
+        </article>
+
+        <!-- 25. build_fertilizer_lookup.py -->
+        <article class="file-card" id="build_fertilizer_lookup_py" data-category="data">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">build_fertilizer_lookup.py</div>
+              <div class="file-path">ml/training/build_fertilizer_lookup.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-data">Lookup Builder</span>
+              <span class="badge badge-lines">44 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Extracts deterministic nutritional requirements per crop from <code>Fertilizer.csv</code>. Groups by crop to extract constant optimal N, P, and K targets along with minimum and maximum acceptable pH ranges into a clean JSON table.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Extraction Logic</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Reads <code>datasets/Fertilizer.csv</code> and groups rows by <code>"Crop"</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Extracts N, P, and K values (which are constant per crop).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Computes <code>ph_min = group["pH"].min()</code> and <code>ph_max = group["pH"].max()</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>Writes structured JSON lookup to <code>saved_models/fertilizer_targets.json</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Why a Lookup Table Instead of ML?</div>
+              <div class="deep-dive-content" style="font-size: 0.84rem;">
+                In the raw data, N, P, and K values for a given crop are constant across all entries (e.g. Rice is always N=80, P=40, K=40). Training a regression model would simply memorize a static key-value mapping. Building a clean lookup table avoids unnecessary model overhead while serving the deficit calculation directly.
+              </div>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Generated Artifact:</span>
+            <span class="file-tag">saved_models/fertilizer_targets.json</span>
+            <span class="tag-label">Consumed By:</span>
+            <a href="#fertilizer_recommendation_py" class="file-tag">fertilizer_recommendation.py</a>
+          </div>
+        </article>
+
+        <!-- 26. prepare_disease_yolo_split.py -->
+        <article class="file-card" id="prepare_disease_yolo_split_py" data-category="data">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">prepare_disease_yolo_split.py</div>
+              <div class="file-path">ml/training/prepare_disease_yolo_split.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-data">Dataset Splitter</span>
+              <span class="badge badge-lines">46 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Splits the 50-image Crop_Diseases segmentation dataset into an 80/20 train/validation partition (40 train, 10 val), mirrors corresponding polygon annotation files, and generates the YOLO <code>data.yaml</code> configuration.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Splitting Mechanics</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Shuffles images deterministically with <code>seed=42</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Allocates 20% validation split (10 images) and 80% train split (40 images).</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Copies images and matching <code>.txt</code> polygon label files into structured subdirectories: <code>images/train</code>, <code>images/val</code>, <code>labels/train</code>, <code>labels/val</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>Generates <code>data.yaml</code> with class name <code>0: disease</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Generated data.yaml Specification</div>
+              <pre class="code-preview"><code>path: datasets/crop_diseases_yolo
+train: images/train
+val: images/val
+names:
+  0: disease</code></pre>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Output Directory:</span>
+            <span class="file-tag">datasets/crop_diseases_yolo/</span>
+            <span class="tag-label">Consumed By:</span>
+            <a href="#train_disease_segmentation_model_py" class="file-tag">train_disease_segmentation_model.py</a>
+          </div>
+        </article>
+
+        <!-- 27. prepare_insect_yolo_split.py -->
+        <article class="file-card" id="prepare_insect_yolo_split_py" data-category="data">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">prepare_insect_yolo_split.py</div>
+              <div class="file-path">ml/training/prepare_insect_yolo_split.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-data">Dataset Splitter</span>
+              <span class="badge badge-lines">51 lines</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Splits the 50-image Crop_Insects detection dataset into an 80/20 train/val partition, pairs images with bounding-box label files, and writes the YOLO configuration file.
+          </p>
+
+          <div class="card-grid-2">
+            <div class="info-pane">
+              <div class="info-pane-title">Splitting Mechanics</div>
+              <div class="logic-step-list">
+                <div class="logic-step-item">
+                  <div class="step-number">1</div>
+                  <div>Shuffles 50 images deterministically with <code>seed=42</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">2</div>
+                  <div>Carves off 10 validation images and 40 training images.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">3</div>
+                  <div>Copies bounding-box label files into <code>labels/train</code> and <code>labels/val</code>.</div>
+                </div>
+                <div class="logic-step-item">
+                  <div class="step-number">4</div>
+                  <div>Writes <code>data.yaml</code> with class name <code>0: insects</code>.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-pane">
+              <div class="info-pane-title">Generated data.yaml Specification</div>
+              <pre class="code-preview"><code>path: datasets/crop_insects_yolo
+train: images/train
+val: images/val
+names:
+  0: insects</code></pre>
+            </div>
+          </div>
+
+          <div class="interconnection-tags">
+            <span class="tag-label">Output Directory:</span>
+            <span class="file-tag">datasets/crop_insects_yolo/</span>
+            <span class="tag-label">Consumed By:</span>
+            <a href="#train_insect_model_py" class="file-tag">train_insect_model.py</a>
+          </div>
+        </article>
+
+        <!-- ========================================================================= -->
+        <!-- PACKAGE INFRASTRUCTURE INITS -->
+        <!-- ========================================================================= -->
+
+        <!-- 28. root __init__.py -->
+        <article class="file-card" id="root_init_py" data-category="pkg">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">__init__.py (Root)</div>
+              <div class="file-path">ml/__init__.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-pkg">Package Init</span>
+              <span class="badge badge-lines">1 line (empty)</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Marks the root directory as an importable Python package module. Enables absolute import statements such as <code>from ml.algorithms.soil_type_prediction import predict_soil_type</code> to resolve cleanly across backend services and test runners.
+          </p>
+
+          <div class="deep-dive-box">
+            <div class="deep-dive-title">Import Resolution Mechanics</div>
+            <div class="deep-dive-content">
+              Without this file, importing from <code>ml.*</code> when running code from outside the repository root would fail with <code>ModuleNotFoundError: No module named 'ml'</code>. This file establishes the package boundary for Python's module resolution system.
+            </div>
+          </div>
+        </article>
+
+        <!-- 29. algorithms/__init__.py -->
+        <article class="file-card" id="algorithms_init_py" data-category="pkg">
+          <div class="file-header">
+            <div class="file-title-area">
+              <div class="file-name">__init__.py (algorithms/)</div>
+              <div class="file-path">ml/algorithms/__init__.py</div>
+            </div>
+            <div class="badges-wrapper">
+              <span class="badge badge-pkg">Package Init</span>
+              <span class="badge badge-lines">1 line (empty)</span>
+            </div>
+          </div>
+          <p class="file-summary">
+            Marks the <code>algorithms/</code> directory as a subpackage of <code>ml</code>. Allows modules like <code>soil_to_crop_bridge.py</code> to import sister modules using <code>from ml.algorithms.crop_recommendation import ...</code>.
+          </p>
+
+          <div class="deep-dive-box">
+            <div class="deep-dive-title">Subpackage Namespace</div>
+            <div class="deep-dive-content">
+              Ensures that all inference modules exist under the structured <code>ml.algorithms</code> namespace, preventing naming collisions with standard library modules and external packages.
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- Back to top button -->
+  <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+  </button>
+
+  <script>
+    // Theme Toggle Logic (Desktop + Mobile)
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const mobileThemeToggleBtn = document.getElementById('mobileThemeToggleBtn');
+    const themePill = document.getElementById('themePill');
+    const themeIcon = document.getElementById('themeIcon');
+    const mobileThemeIcon = document.getElementById('mobileThemeIcon');
+
+    // Mobile Navigation Drawer Elements
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+    const sidebarDrawer = document.getElementById('sidebarDrawer');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+    const sunPath = "M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z";
+    const moonPath = "M12.3 2a10 10 0 0 0-1.9 20 10 10 0 0 0 9.6-6.8 1 1 0 0 0-1.2-1.3 8 8 0 1 1-7.8-10.6 1 1 0 0 0-1.3-1.3z";
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('agri_ml_theme', theme);
+      if (theme === 'dark') {
+        if (themePill) {
+          themePill.textContent = 'Dark Mode';
+          themePill.style.background = 'rgba(16, 185, 129, 0.2)';
+          themePill.style.color = '#34d399';
+        }
+        if (themeIcon) themeIcon.innerHTML = `<path d="${moonPath}"/>`;
+        if (mobileThemeIcon) mobileThemeIcon.innerHTML = `<path d="${moonPath}"/>`;
+      } else {
+        if (themePill) {
+          themePill.textContent = 'Light Mode';
+          themePill.style.background = 'rgba(5, 150, 105, 0.12)';
+          themePill.style.color = 'var(--color-emerald)';
+        }
+        if (themeIcon) themeIcon.innerHTML = `<path d="${sunPath}"/>`;
+        if (mobileThemeIcon) mobileThemeIcon.innerHTML = `<path d="${sunPath}"/>`;
+      }
+    }
+
+    // Default to Light Mode as requested
+    const savedTheme = localStorage.getItem('agri_ml_theme') || 'light';
+    setTheme(savedTheme);
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      setTheme(current === 'light' ? 'dark' : 'light');
+    }
+
+    if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+    if (mobileThemeToggleBtn) mobileThemeToggleBtn.addEventListener('click', toggleTheme);
+
+    // Mobile Drawer Controls
+    function openSidebar() {
+      sidebarDrawer.classList.add('open');
+      sidebarBackdrop.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+      sidebarDrawer.classList.remove('open');
+      sidebarBackdrop.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', openSidebar);
+    if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
+    if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
+
+    // Auto-close mobile drawer when a navigation link is clicked
+    document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+          closeSidebar();
+        }
+      });
+    });
+
+    // Search Filtering
+    const searchInput = document.getElementById('searchInput');
+    const fileCards = document.querySelectorAll('.file-card');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    let currentFilter = 'all';
+
+    function applyFilterAndSearch() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+
+      fileCards.forEach(card => {
+        const category = card.dataset.category;
+        const text = card.innerText.toLowerCase();
+
+        const matchesCategory = (currentFilter === 'all' || category === currentFilter);
+        const matchesSearch = (!searchTerm || text.includes(searchTerm));
+
+        if (matchesCategory && matchesSearch) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', applyFilterAndSearch);
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        applyFilterAndSearch();
+      });
+    });
+
+    // Scrollspy for sidebar navigation
+    const navLinks = document.querySelectorAll('.nav-link');
+    const observerOptions = {
+      root: null,
+      rootMargin: '-10% 0px -70% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          navLinks.forEach(link => {
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.file-card, #overview').forEach(section => {
+      observer.observe(section);
+    });
+
+    // Scroll to Top Button
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        scrollTopBtn.classList.add('visible');
+      } else {
+        scrollTopBtn.classList.remove('visible');
+      }
+    });
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
