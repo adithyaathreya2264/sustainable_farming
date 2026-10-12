@@ -1,8 +1,41 @@
 # Backend operations
 
-The backend is Node.js (Express + mysql2). All commands run from `backend/`
-after a one-time `npm install`. Configuration comes from `backend/.env`
-(see `.env.example`).
+The backend is Node.js ≥ 20 (Express 5 + mysql2). All commands run from
+`backend/` after a one-time `npm install`. Configuration comes from
+`backend/.env` (see `.env.example`). For the system overview see the
+[root README](../README.md).
+
+## First-time setup
+
+1. Create a MySQL 8 database `sustainable-farming` and an app user (the example
+   config uses `sf_app`) with full rights on it.
+2. `cp .env.example .env` and fill in `DATABASE_URL`, `JWT_SECRET` and
+   `INTERNAL_API_KEY` (generate secrets with
+   `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`).
+3. `npm install`, then `npm run migrate`, then `npm run seed`.
+4. `npm run dev` (API only) or `npm run dev:all` (API + ML sidecar).
+
+Login is a permanent mock: `verify-otp` accepts `MOCK_OTP` (default `123456`)
+for any phone number and still issues a real JWT.
+
+### Environment variables
+
+| Variable | Required | Default |
+|---|---|---|
+| `DATABASE_URL` | yes | — |
+| `JWT_SECRET` | yes | — |
+| `INTERNAL_API_KEY` | yes (guards `/api/v1/internal/*` via `X-Internal-Key`) | — |
+| `MOCK_OTP` | no | `123456` |
+| `CORS_ALLOW_ORIGINS` | no | `*` (tighten outside dev) |
+| `JWT_ALGORITHM` / `JWT_EXPIRY_MINUTES` | no | `HS256` / `10080` |
+| `PORT` | no | `8000` |
+| `MYSQL_ROOT_PASSWORD` | no — only to provision the DB, then remove | — |
+| `ML_SIDECAR_URL`, `ML_SIDECAR_PORT`, `ML_PYTHON_BIN`, `ML_PRELOAD` | no | see "ML sidecar" below |
+
+### npm scripts
+
+`start`, `dev`, `ml`, `dev:all`, `migrate`, `seed`, `batch`, `smoke`, `test`
+— each is described in the section for its job below.
 
 ## Running the API
 
@@ -84,6 +117,8 @@ Migrations are plain SQL files in `backend/migrations/`, tracked in the
   a clear message rather than guessed at.
 
 Schema changes from here on are new numbered `.sql` files in `migrations/`.
+Current files: `0001_baseline`, `0002_soil_tests`, `0003_ml_serving`,
+`0004_soil_test_card`, `0005_soil_test_order`.
 
 ## ML sidecar (model serving)
 
