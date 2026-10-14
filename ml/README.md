@@ -1,21 +1,35 @@
 # `ml/` — models for the sustainable farming app
 
-Twenty-two models ship, including nine added 2026-09-26 for coffee, tea,
-cauliflower (leaf, curd), onion (leaf, bulb), potato, tomato fruit and wheat
-kernels (models 20-28; not yet app crops except wheat), soil fertility (model
-5b, 2026-09-25, provenance-unverified data), insect detection (YOLOv8n), the conditional
-rice and pearl millet disease-type models, wheat heading detection, tobacco
-lesion severity and the Karnataka mandi price outlook (forecast for 8 of 13
-commodities), all provisional and finished 2026-09-24. Pearl millet, wheat and
-tobacco were added as app crops the same day so their models are reachable
-(seeded without varieties, stages or rules). All twelve are served to the app
-through `serving/` (see "Serving" below). Seven were
-trained, measured and rejected: soil fertility, unscoped disease Q&A, leaf
-condition from photo for sugarcane (2026-09-23), wheat canopy segmentation
-(2026-09-24; its heading output alone ships as 14b), soybean seed yield
-(2026-09-24), and the vegetable variety/size classifier (2026-09-24). One more (sugarcane yield, model 16) clears its bar but is never
-served: its data is synthetic.
-The rest were never trained because the data to train them does not exist.
+Models for the Sustainable Farming app (Chiguru Nele): offline training in
+`training/`, inference functions in `algorithms/`, and a FastAPI sidecar in
+`serving/` that the Node backend calls. See the [root README](../README.md) for
+the system overview.
+
+**Roster at a glance** (metrics and verdicts are in `MODEL_RESULTS.md`; every
+model is provisional):
+
+- **22 models ship.** They cover crop recommendation (from N/P/K + weather, and
+  from soil type), the fertilizer target lookup, crop-scoped disease Q&A, soil
+  fertility (5b; its data's provenance is unverified), yield as a percentile
+  band, soil type from photo, insect detection (YOLOv8), leaf-condition
+  classifiers (rice, pearl millet, and models 20-27 for coffee, tea,
+  cauliflower leaf/curd, onion leaf/bulb, potato and tomato fruit), wheat
+  heading, wheat kernel damage (28), tobacco lesion severity, and the Karnataka
+  mandi price outlook (forecast for 8 of 13 commodities).
+- **21 are served** through `serving/` (see "Serving" below). Wheat kernels
+  (28) is held in `serving/holds.py` until a lighting check passes.
+- **Six were trained, measured and rejected** (models 4, 5, 10, 14, 15, 19 in
+  `MODEL_RESULTS.md`): unscoped disease Q&A, the original soil fertility model
+  (5b replaces it), leaf condition for sugarcane, wheat canopy segmentation
+  (its heading output alone ships as 14b), soybean seed yield, and the
+  vegetable variety/size classifier.
+- **Sugarcane yield (16)** clears its bar but is never served: its data is
+  synthetic.
+- **The rest were never trained** because the data to train them does not exist.
+
+Models 20-28 were added 2026-09-26 and are not yet app crops, except wheat.
+Pearl millet, wheat and tobacco were added as app crops earlier (seeded without
+varieties, stages or rules), so their models are reachable.
 
 Read in this order:
 
