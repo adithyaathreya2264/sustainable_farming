@@ -1,21 +1,26 @@
 import "../global.css";
 import "../lib/i18n";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { AnimatedSplash } from "../components/AnimatedSplash";
 import { SessionProvider } from "../context/SessionContext";
 import { LanguageProvider } from "../context/LanguageContext";
 import { ToastProvider } from "../context/ToastContext";
 import { hydrate } from "../store/appStore";
 import { useAppState } from "../hooks/useAppState";
 import { useRefreshTriggers } from "../hooks/useRefreshTriggers";
-import { colors } from "../theme";
+
+// Keep the native splash up until AnimatedSplash has drawn the same logo.
+SplashScreen.preventAutoHideAsync().catch(() => {});
 
 function AppShell() {
   const hydrated = useAppState((s) => s.hydrated);
+  const [splashDone, setSplashDone] = useState(false);
 
   useEffect(() => {
     hydrate();
@@ -23,14 +28,26 @@ function AppShell() {
 
   useRefreshTriggers();
 
-  if (!hydrated) {
-    return <View style={{ flex: 1, backgroundColor: colors.background }} />;
-  }
+  const hideNativeSplash = useCallback(() => {
+    SplashScreen.hideAsync().catch(() => {});
+  }, []);
+  const finishSplash = useCallback(() => setSplashDone(true), []);
 
+  return (
+    <View style={{ flex: 1 }}>
+      <StatusBar style={splashDone ? "dark" : "light"} />
+      {hydrated && <AppContent />}
+      {!splashDone && (
+        <AnimatedSplash ready={hydrated} onLogoReady={hideNativeSplash} onFinish={finishSplash} />
+      )}
+    </View>
+  );
+}
+
+function AppContent() {
   return (
     <LanguageProvider>
       <ToastProvider>
-        <StatusBar style="dark" />
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(auth)" />
           <Stack.Screen name="(onboarding)" />
