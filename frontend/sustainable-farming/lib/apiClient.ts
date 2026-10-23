@@ -1,14 +1,17 @@
 import { getState } from "../store/appStore";
+import Constants from "expo-constants";
 
 /**
- * Base URL for the real backend (backend/, Slice 2/3). Set via a `.env` file
- * (`EXPO_PUBLIC_API_BASE_URL=http://<lan-ip>:8000`) — Expo inlines any env
- * var prefixed `EXPO_PUBLIC_` at build time, no extra package needed. Falls
- * back to the Android emulator's host-loopback alias, which is wrong for a
- * physical device — set the env var for real-device testing.
+ * Use Expo's current dev-server host for physical devices, so a changing LAN
+ * IP does not need to be copied into .env. EXPO_PUBLIC_API_BASE_URL remains an
+ * override for simulators, tunnels, and production builds.
  */
-export const API_BASE_URL =
-  process.env.EXPO_PUBLIC_API_BASE_URL ?? "http://10.0.2.2:8000";
+const expoHost = Constants.expoConfig?.hostUri
+  ? new URL(`http://${Constants.expoConfig.hostUri}`).hostname
+  : undefined;
+
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ||
+  (expoHost ? `http://${expoHost}:8000` : "http://10.0.2.2:8000");
 
 export class ApiError extends Error {
   status: number;

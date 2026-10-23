@@ -22,16 +22,19 @@ Prerequisites: Node ≥ 20, the backend running (see [backend/README-ops.md](../
 npm install
 ```
 
-Create `.env` in this folder:
+Create `.env` in this folder for the optional map key or an API URL override:
 
 ```
-EXPO_PUBLIC_API_BASE_URL=http://<PC-LAN-IP>:8000
 EXPO_PUBLIC_MAP_TILER_API_KEY=<your MapTiler key>
 ```
 
+When running in Expo Go, the API defaults to the current Expo dev-server host
+on port 8000, so a changing PC LAN IP does not need a `.env` update. Set
+`EXPO_PUBLIC_API_BASE_URL` only to override that default.
+
 | `EXPO_PUBLIC_API_BASE_URL` for | Value |
 |---|---|
-| Physical phone, same Wi-Fi as the PC | `http://<PC-LAN-IP>:8000` |
+| Physical phone, same Wi-Fi as the PC | Detected from the Expo dev-server host |
 | Android emulator | `http://10.0.2.2:8000` |
 | iOS simulator | `http://localhost:8000` |
 | Phone on mobile data | a tunnel URL, e.g. from `npx localtunnel --port 8000` |
