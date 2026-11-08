@@ -313,9 +313,7 @@ This project is honest about what is not verified. Do not remove these caveats w
 | [documentation/MODEL_CARDS.md](documentation/MODEL_CARDS.md) | One card per shipped model: data, metrics, limits, out-of-scope uses |
 | [PRIVACY.md](PRIVACY.md) | What is collected, photo consent, retention and deletion, security gaps (draft) |
 | [DISCLAIMER.md](DISCLAIMER.md) | Advice is unverified and not a substitute for an agronomist |
-| [STATE_OF_THE_SYSTEM.md](STATE_OF_THE_SYSTEM.md) | Baseline snapshot and the not-production-ready list |
 | [DATASETS_STATUS.md](DATASETS_STATUS.md) | Data-integrity findings that constrain how numbers are shown |
-| [FRONTEND_BACKEND_GAP_ANALYSIS.md](FRONTEND_BACKEND_GAP_ANALYSIS.md) | Frontend/backend integration audit (§10 is current) |
 | [backend/README-ops.md](backend/README-ops.md) | Running the API, batch jobs, migrations, seeding |
 | [frontend/sustainable-farming/README.md](frontend/sustainable-farming/README.md) | Mobile app guide |
 | [ml/README.md](ml/README.md) | ML roster, rules, training and serving |
